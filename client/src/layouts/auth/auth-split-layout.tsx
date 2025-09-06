@@ -14,12 +14,12 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
         <div className="inset-0 bg-zinc-900 absolute" />
         <Link to="/" className="text-lg font-medium relative z-20 flex items-center">
           <Layers className="mr-2 size-8 text-white" />
-          Flowable Forms
+          Flowy Form
         </Link>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">&ldquo;Build beautiful forms with ease&rdquo;</p>
-            <footer className="text-sm text-neutral-300">Flowable Forms Team</footer>
+            <footer className="text-sm text-neutral-300">Flowy Form Team</footer>
           </blockquote>
         </div>
       </div>

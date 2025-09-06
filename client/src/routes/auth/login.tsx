@@ -26,7 +26,7 @@ function GitHubLogin() {
           <div className="text-center mb-4">
             <div className="d-flex align-items-center justify-content-center mb-3">
               <Layers size={32} className="text-primary me-2" />
-              <h2 className="h4 mb-0 text-dark fw-bold">Flowable Forms</h2>
+              <h2 className="h4 mb-0 text-dark fw-bold">Flowy Form</h2>
             </div>
             <Badge bg="primary" className="px-3 py-2">
               Secure Authentication

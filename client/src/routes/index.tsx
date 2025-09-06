@@ -4,10 +4,10 @@ import { ArrowRight, Check, GitBranch, GitCommit, GitCompare, Layers, MousePoint
 import { Badge, Button, Card, Col, Container, Nav, Navbar, Row } from 'react-bootstrap';
 
 export const Route = createFileRoute('/')({
-  component: FlowableLanding,
+  component: FlowyFormLanding,
 });
 
-function FlowableLanding() {
+function FlowyFormLanding() {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
       <Header />
@@ -40,7 +40,7 @@ function Header() {
           >
             <Layers size={20} color="#fff" />
           </div>
-          <strong className="text-dark">Flowable Forms</strong>
+          <strong className="text-dark">Flowy Form</strong>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
@@ -353,7 +353,7 @@ function Footer() {
               >
                 <Layers size={20} color="#fff" />
               </div>
-              <strong className="ms-2">Flowable Forms</strong>
+              <strong className="ms-2">Flowy Form</strong>
             </div>
             <p className="text-white">The first form builder with git-like version control for modern development teams.</p>
           </Col>
@@ -397,7 +397,7 @@ function Footer() {
             </ul>
           </Col>
         </Row>
-        <div className="text-center text-white mt-4 border-top pt-3">&copy; {new Date().getFullYear()} Flowable Forms. All rights reserved.</div>
+        <div className="text-center text-white mt-4 border-top pt-3">&copy; {new Date().getFullYear()} Flowy Form. All rights reserved.</div>
       </Container>
     </footer>
   );

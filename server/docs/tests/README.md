@@ -1,6 +1,6 @@
 # Test Suite Documentation Index
 
-This directory contains documentation for all API endpoint test suites in the DevelForm server.
+This directory contains documentation for all API endpoint test suites in the Flowy Form server.
 
 ## Test Documentation Files
 

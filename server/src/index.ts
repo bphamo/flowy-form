@@ -26,7 +26,7 @@ app.use(
 
 // Health check
 app.get('/', (c) => {
-  return c.json({ message: 'DevelForm API is running', status: 'ok' });
+  return c.json({ message: 'Flowy Form API is running', status: 'ok' });
 });
 
 // Routes

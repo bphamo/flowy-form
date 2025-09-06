@@ -37,7 +37,7 @@ export default function AppHeaderLayout({
               >
                 <Layers size={20} color="#fff" />
               </div>
-              <strong className="text-dark">Flowable Forms</strong>
+              <strong className="text-dark">Flowy Form</strong>
             </Navbar.Brand>
 
             <Navbar.Toggle aria-controls="navbar-nav" />
