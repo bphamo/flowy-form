@@ -54,9 +54,9 @@ function FormsSubmit() {
       const validThemes: Appearance[] = ['light', 'dark', 'system'];
       const theme = validThemes.includes(embedTheme as Appearance) ? (embedTheme as Appearance) : 'system';
 
-      // Apply theme directly for embedded forms
+      // Apply theme directly for embedded forms using React Bootstrap data-bs-theme approach
       const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
     }
   }, [isEmbedded, embedTheme]);
 

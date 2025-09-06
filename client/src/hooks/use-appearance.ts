@@ -21,8 +21,9 @@ const setCookie = (name: string, value: string, days = 365) => {
 
 const applyTheme = (appearance: Appearance) => {
   const isDark = appearance === 'dark' || (appearance === 'system' && prefersDark());
-
-  document.documentElement.classList.toggle('dark', isDark);
+  
+  // Use React Bootstrap's data-bs-theme attribute approach
+  document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
 };
 
 const mediaQuery = () => {
