@@ -58,7 +58,7 @@ function VersionPreviewPage() {
 
   // Component for embedded view rendering
   const EmbeddedPreview = () => (
-    <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+    <div className="border rounded p-3" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
       <div className="small text-muted mb-3 text-center">
         <Monitor size={16} className="me-1" />
         This is how your form appears when embedded on external websites
@@ -194,7 +194,7 @@ function VersionPreviewPage() {
 
   return (
     <AppLayout>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #f8fafc, #e2e8f0)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-gray-100), var(--bs-gray-200))' }}>
         <Container className="py-4">
           {/* Header */}
           <div className="mb-4">

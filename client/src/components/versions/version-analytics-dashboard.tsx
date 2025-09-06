@@ -44,7 +44,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
           <div className="d-flex align-items-center">
             <div
               className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-              style={{ width: 40, height: 40, backgroundColor: '#e3f2fd' }}
+              style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
             >
               <BarChart3 size={20} className="text-primary" />
             </div>
@@ -149,7 +149,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                   top: '0',
                   bottom: '0',
                   width: '2px',
-                  backgroundColor: '#e9ecef',
+                  backgroundColor: 'var(--bs-gray-200)',
                   zIndex: 1,
                 }}
               />
@@ -179,7 +179,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                           style={{
                             width: '6px',
                             height: '6px',
-                            backgroundColor: version.isPublished ? '#198754' : '#6c757d',
+                            backgroundColor: version.isPublished ? 'var(--bs-success)' : 'var(--bs-secondary)',
                           }}
                         />
                       </div>

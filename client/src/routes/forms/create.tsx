@@ -80,7 +80,7 @@ function FormsCreate() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: Plus, text: 'Create New Form' }}
@@ -138,7 +138,7 @@ function FormsCreate() {
                     </div>
 
                     <div className="mb-4">
-                      <Card className="border-0" style={{ backgroundColor: '#f8f9fa' }}>
+                      <Card className="border-0" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
                         <Card.Body className="p-3">
                           <div className="d-flex align-items-start">
                             <div className="me-3">
@@ -210,7 +210,7 @@ function FormsCreate() {
                       <div className="me-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
-                          style={{ width: 32, height: 32, backgroundColor: '#dbeafe' }}
+                          style={{ width: 32, height: 32, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                         >
                           <span className="fw-bold text-primary small">1</span>
                         </div>
@@ -224,7 +224,7 @@ function FormsCreate() {
                       <div className="me-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
-                          style={{ width: 32, height: 32, backgroundColor: '#dcfce7' }}
+                          style={{ width: 32, height: 32, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                         >
                           <span className="fw-bold text-success small">2</span>
                         </div>
@@ -238,7 +238,7 @@ function FormsCreate() {
                       <div className="me-3">
                         <div
                           className="d-flex align-items-center justify-content-center rounded-circle"
-                          style={{ width: 32, height: 32, backgroundColor: '#ede9fe' }}
+                          style={{ width: 32, height: 32, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                         >
                           <span className="fw-bold text-purple small">3</span>
                         </div>

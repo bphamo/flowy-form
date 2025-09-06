@@ -121,7 +121,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
               top: '-20px',
               width: '2px',
               height: '20px',
-              background: 'linear-gradient(to bottom, #6c757d, #0d6efd)',
+              background: 'linear-gradient(to bottom, var(--bs-secondary), var(--bs-primary))',
               zIndex: 1,
             }}
           >
@@ -163,7 +163,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
               height: '40px',
               backgroundColor: statusInfo.iconColor,
               border: '3px solid white',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              boxShadow: '0 2px 8px var(--bs-box-shadow)',
               zIndex: 2,
               position: 'relative',
             }}
@@ -270,7 +270,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
         <Card.Body className="text-center py-5">
           <div
             className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-            style={{ width: 64, height: 64, backgroundColor: '#f8f9fa' }}
+            style={{ width: 64, height: 64, backgroundColor: 'var(--bs-gray-100)' }}
           >
             <GitBranch size={24} className="text-muted" />
           </div>
@@ -289,7 +289,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
             <div className="d-flex align-items-center">
               <div
                 className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                style={{ width: 40, height: 40, backgroundColor: '#e3f2fd' }}
+                style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
               >
                 <GitBranch size={20} className="text-primary" />
               </div>

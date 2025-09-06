@@ -20,14 +20,14 @@ export default function AppHeaderLayout({
   return (
     <div className="d-flex flex-column min-vh-100">
       {!hideHeader && (
-        <Navbar expand="lg" className="shadow-sm border-bottom" style={{ backgroundColor: '#ffffff' }}>
+        <Navbar expand="lg" className="shadow-sm border-bottom" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
           <Container fluid>
             <Navbar.Brand as={Link} to="/" className="d-flex align-items-center text-decoration-none">
               <div
                 style={{
                   width: '2rem',
                   height: '2rem',
-                  background: 'linear-gradient(to right, #2563eb, #4f46e5)',
+                  background: 'linear-gradient(to right, var(--bs-primary), var(--bs-info))',
                   borderRadius: '0.5rem',
                   display: 'flex',
                   alignItems: 'center',
@@ -60,7 +60,7 @@ export default function AppHeaderLayout({
                     <div className="d-flex align-items-center">
                       <div
                         className="d-inline-flex align-items-center justify-content-center rounded-circle me-2"
-                        style={{ width: 32, height: 32, backgroundColor: '#dbeafe' }}
+                        style={{ width: 32, height: 32, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                       >
                         <User size={16} className="text-primary" />
                       </div>
@@ -98,7 +98,7 @@ export default function AppHeaderLayout({
       )}
 
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <div className="border-bottom" style={{ backgroundColor: '#f8f9fa' }}>
+        <div className="border-bottom" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
           <Container fluid className="pt-2">
             <Breadcrumb className="mb-0">
               <Breadcrumb.Item onClick={() => navigate({ to: '/dashboard' })} className="d-flex align-items-center text-decoration-none">
@@ -120,7 +120,7 @@ export default function AppHeaderLayout({
         </div>
       )}
 
-      <main className="flex-fill" style={{ backgroundColor: '#ffffff' }}>
+      <main className="flex-fill" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
         {children}
       </main>
     </div>

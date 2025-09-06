@@ -247,7 +247,7 @@ function FormsSubmit() {
   // Full layout for non-embedded forms
   return (
     <AppLayout hideHeader>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="d-flex align-items-center justify-content-center min-vh-100">
           <div className="w-100">
             {/* Error Alert */}
@@ -310,7 +310,7 @@ function FormsSubmit() {
                 <div className="d-flex align-items-start">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
-                    style={{ width: 40, height: 40, backgroundColor: '#dcfce7' }}
+                    style={{ width: 40, height: 40, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                   >
                     <Shield size={20} className="text-success" />
                   </div>

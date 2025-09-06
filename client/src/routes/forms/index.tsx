@@ -43,7 +43,7 @@ function FormsIndex() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'Form Management' }}
@@ -70,7 +70,7 @@ function FormsIndex() {
                 <div className="text-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
-                    style={{ width: 80, height: 80, backgroundColor: '#f8f9fa' }}
+                    style={{ width: 80, height: 80, backgroundColor: 'var(--bs-gray-100)' }}
                   >
                     <FileText size={32} className="text-muted" />
                   </div>
@@ -101,7 +101,7 @@ function FormsIndex() {
                             <div className="d-flex align-items-start justify-content-between mb-3">
                               <div
                                 className="d-inline-flex align-items-center justify-content-center rounded-circle"
-                                style={{ width: 40, height: 40, backgroundColor: '#dbeafe' }}
+                                style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                               >
                                 <FileText size={16} className="text-primary" />
                               </div>
@@ -164,7 +164,7 @@ function FormsIndex() {
                             <div className="d-flex align-items-center">
                               <div
                                 className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                                style={{ width: 32, height: 32, backgroundColor: '#dbeafe' }}
+                                style={{ width: 32, height: 32, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                               >
                                 <FileText size={14} className="text-primary" />
                               </div>

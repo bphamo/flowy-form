@@ -52,7 +52,7 @@ function SettingsAppearance() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: Palette, text: 'Appearance Settings' }}
@@ -66,7 +66,7 @@ function SettingsAppearance() {
                 <div className="d-flex align-items-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                    style={{ width: 40, height: 40, backgroundColor: '#ede9fe' }}
+                    style={{ width: 40, height: 40, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                   >
                     <Palette size={20} className="text-purple" />
                   </div>
@@ -108,7 +108,7 @@ function SettingsAppearance() {
                     })}
                   </div>
 
-                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: '#f8f9fa' }}>
+                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
                     <h6 className="fw-semibold mb-2">Coming Soon</h6>
                     <p className="text-muted small mb-0">
                       Additional appearance customization options including custom colors, fonts, and layouts will be available in future updates.

@@ -66,7 +66,7 @@ function FormsManage() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: Settings, text: 'Form Management' }}
@@ -226,7 +226,7 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#dbeafe' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                         >
                           <Send size={20} className="text-primary" />
                         </div>
@@ -240,7 +240,7 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#dcfce7' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                         >
                           <Eye size={20} className="text-success" />
                         </div>
@@ -254,7 +254,7 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#ede9fe' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                         >
                           <BarChart3 size={20} className="text-purple" />
                         </div>
@@ -268,7 +268,7 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#ffedd5' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-warning-bg-subtle)' }}
                         >
                           <Calendar size={20} className="text-warning" />
                         </div>

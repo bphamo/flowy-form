@@ -89,7 +89,7 @@ function FormSubmissions() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'Form Submissions' }}
@@ -121,7 +121,7 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#dbeafe' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                   >
                     <FileText size={20} className="text-primary" />
                   </div>
@@ -137,7 +137,7 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#dcfce7' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                   >
                     <Users size={20} className="text-success" />
                   </div>
@@ -153,7 +153,7 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#fef3c7' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-warning-bg-subtle)' }}
                   >
                     <User size={20} className="text-warning" />
                   </div>
@@ -169,7 +169,7 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#ede9fe' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                   >
                     <Calendar size={20} className="text-purple" />
                   </div>

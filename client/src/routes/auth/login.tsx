@@ -19,7 +19,7 @@ function GitHubLogin() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
       <Container className="d-flex align-items-center justify-content-center min-vh-100">
         <div style={{ width: '100%', maxWidth: '400px' }}>
           {/* Header */}
