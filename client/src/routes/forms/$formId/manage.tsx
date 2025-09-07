@@ -136,7 +136,7 @@ function FormsManage() {
             {/* Quick Actions Card */}
             <Col lg={4}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Quick Actions</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
@@ -211,7 +211,7 @@ function FormsManage() {
           <Row className="g-4 mt-4">
             <Col lg={12}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0 fw-bold">Form Analytics</h5>
                     <Button variant="outline-primary" size="sm" className="d-flex align-items-center">

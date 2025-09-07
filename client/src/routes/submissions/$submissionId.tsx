@@ -96,7 +96,7 @@ function SubmissionDetail() {
             {/* Submission Info */}
             <Col lg={4}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Submission Information</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
@@ -168,7 +168,7 @@ function SubmissionDetail() {
             {/* Submission Data */}
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Submitted Data</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
@@ -215,7 +215,7 @@ function SubmissionDetail() {
 
               {/* Additional Actions */}
               <Card className="shadow-sm border-0 mt-4">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Actions</h5>
                 </Card.Header>
                 <Card.Body className="p-4">

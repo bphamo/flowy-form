@@ -162,7 +162,7 @@ function FormSubmissions() {
 
           {/* Submissions Table */}
           <Card className="shadow-sm border-0">
-            <Card.Header className="bg-white py-3">
+            <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
               <div className="d-flex justify-content-between align-items-center">
                 <h5 className="mb-0 fw-bold">All Submissions</h5>
                 <Badge bg="light" text="dark" className="fs-6">

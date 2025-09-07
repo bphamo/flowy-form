@@ -92,7 +92,7 @@ function FormsCreate() {
           <Row className="justify-content-center">
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-4">
+                <Card.Header className="py-4" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <div className="d-flex align-items-center">
                     <Link to="/forms" className="text-decoration-none me-3">
                       <Button variant="outline-secondary" size="sm" className="d-flex align-items-center">
@@ -201,7 +201,7 @@ function FormsCreate() {
           <Row className="justify-content-center mt-4">
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h6 className="mb-0 fw-bold">What's Next?</h6>
                 </Card.Header>
                 <Card.Body className="p-4">

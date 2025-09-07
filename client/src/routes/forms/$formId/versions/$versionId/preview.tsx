@@ -66,11 +66,12 @@ function VersionPreviewPage() {
 
       {/* Simulated iframe container with embedded styling */}
       <div
-        className="mx-auto bg-white border rounded shadow-sm"
+        className="mx-auto border rounded shadow-sm"
         style={{
           maxWidth: '600px',
           fontFamily: 'system-ui, -apple-system, sans-serif',
           minHeight: '400px',
+          backgroundColor: 'var(--bs-body-bg)',
         }}
       >
         <div className="p-3">
@@ -129,7 +130,7 @@ function VersionPreviewPage() {
       {/* Form Preview */}
       <div className="col-lg-8">
         <Card className="shadow-sm border-0">
-          <Card.Header className="bg-white py-3">
+          <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
             <h5 className="mb-0 fw-semibold">Form Preview</h5>
             <small className="text-muted">This is how the form looked in this version</small>
           </Card.Header>
@@ -163,7 +164,7 @@ function VersionPreviewPage() {
       {/* Submission Data (if any) */}
       <div className="col-lg-4">
         <Card className="shadow-sm border-0">
-          <Card.Header className="bg-white py-3">
+          <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
             <h6 className="mb-0 fw-semibold">Preview Submission Data</h6>
             <small className="text-muted">Data from form interactions</small>
           </Card.Header>

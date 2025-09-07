@@ -186,7 +186,7 @@ function FormsSuccess() {
             </div>
 
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <div className="d-flex align-items-center">
                   <span className="text-muted">Submission ID:</span>
                   <Badge bg="light" text="dark" className="fw-bold">
@@ -235,7 +235,7 @@ function FormsSuccess() {
 
             {/* Submitted Data Preview */}
             <Card className="shadow-sm border-0 mt-4">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <h5 className="mb-0 fw-bold">Your Submission</h5>
               </Card.Header>
               <Card.Body className="p-4">
