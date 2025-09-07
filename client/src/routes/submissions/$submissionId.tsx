@@ -1,13 +1,17 @@
-import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
+import { createFileRoute, Link, useLoaderData, useRouter } from '@tanstack/react-router';
 
 import { PageHeader } from '@/components/common/page-header';
+import { SubmissionStatusBadge } from '@/components/common/submission-status-badge';
+import { SubmissionStatusDropdown } from '@/components/common/submission-status-dropdown';
 import AppLayout from '@/layouts/app-layout';
 import { api } from '@/lib/api';
 import { requireAuth } from '@/lib/auth-utils';
 import { type BreadcrumbItem } from '@/types';
 import type { SubmissionDetail } from '@/types/api';
+import type { SubmissionStatus } from '@/components/common/submission-status-badge';
 import { ArrowLeft, Calendar, FileText, User, Users } from 'lucide-react';
-import { Alert, Badge, Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { useState } from 'react';
+import { Alert, Badge, Button, Card, Col, Container, Row, Toast, ToastContainer } from 'react-bootstrap';
 
 export const Route = createFileRoute('/submissions/$submissionId')({
   beforeLoad: ({ context }) => {
@@ -31,8 +35,37 @@ export const Route = createFileRoute('/submissions/$submissionId')({
 });
 
 function SubmissionDetail() {
-  const { submission } = useLoaderData({ from: '/submissions/$submissionId' }) as {
+  const { submission: initialSubmission } = useLoaderData({ from: '/submissions/$submissionId' }) as {
     submission: SubmissionDetail;
+  };
+  const router = useRouter();
+  
+  const [submission, setSubmission] = useState<SubmissionDetail>(initialSubmission);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState<'success' | 'danger'>('success');
+
+  const handleStatusChange = async (newStatus: SubmissionStatus) => {
+    try {
+      const response = await api.submissions.updateStatus(submission.id, { status: newStatus });
+      
+      setSubmission(prev => ({
+        ...prev,
+        status: response.data.status,
+      }));
+      
+      setToastMessage(`Status updated to ${newStatus.toLowerCase().replace('_', ' ')}`);
+      setToastVariant('success');
+      setShowToast(true);
+
+      // Refresh the page data to ensure consistency
+      router.invalidate();
+    } catch (error) {
+      console.error('Error updating submission status:', error);
+      setToastMessage('Failed to update submission status');
+      setToastVariant('danger');
+      setShowToast(true);
+    }
   };
 
   if (!submission) {
@@ -119,6 +152,19 @@ function SubmissionDetail() {
                         <Calendar size={14} className="me-1" />
                         {new Date(submission.createdAt).toLocaleString()}
                       </div>
+                    </div>
+
+                    <div>
+                      <div className="fw-semibold text-dark small">Status</div>
+                      {submission.isFormOwner ? (
+                        <SubmissionStatusDropdown
+                          currentStatus={submission.status}
+                          onStatusChange={handleStatusChange}
+                          size="normal"
+                        />
+                      ) : (
+                        <SubmissionStatusBadge status={submission.status} size="normal" />
+                      )}
                     </div>
 
                     {submission.version && (
@@ -243,6 +289,21 @@ function SubmissionDetail() {
           </Row>
         </Container>
       </div>
+      
+      {/* Toast notifications */}
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          bg={toastVariant}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className="text-white">
+            {toastMessage}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </AppLayout>
   );
 }
