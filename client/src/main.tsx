@@ -8,7 +8,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './css/app.css';
 import { initializeTheme } from './hooks/use-appearance';
-import { useAuth } from './hooks/use-auth';
+import { signIn, signOut, useSession } from './lib/auth-client';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
@@ -21,7 +21,32 @@ const queryClient = new QueryClient();
 
 // Router component that has access to auth context
 function RouterWithAuth() {
-  const auth = useAuth();
+  const { data: session, isPending: loading } = useSession();
+
+  // Create auth context compatible with the router
+  const auth = {
+    user: session?.user || null,
+    loading,
+    login: (redirectUrl?: string) => {
+      signIn.social({
+        provider: 'github',
+        callbackURL: redirectUrl || window.location.origin + '/dashboard',
+      });
+    },
+    logout: async () => {
+      await signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            window.location.href = '/';
+          },
+        },
+      });
+    },
+    refetchUser: async () => {
+      // BetterAuth handles session refetching automatically
+      window.location.reload();
+    },
+  };
 
   // Create a new router instance with auth context
   const router = createRouter({

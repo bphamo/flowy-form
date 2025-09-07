@@ -8,13 +8,12 @@ export interface TestResponse<T = unknown> {
   message?: string;
   errors?: Record<string, string[]>;
   user?: {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    githubId: string;
-    avatarUrl: string;
+    image: string | null;
+    emailVerified: boolean;
   };
-  token?: string;
   pagination?: {
     page: number;
     limit: number;
@@ -22,15 +21,14 @@ export interface TestResponse<T = unknown> {
   };
 }
 
-// Mock user interface
+// Mock user interface (updated for BetterAuth compatibility)
 export interface MockUser {
   id: number;
   name: string;
   email: string;
-  githubId: string;
-  avatarUrl: string;
-  emailVerifiedAt: Date | null;
-  rememberToken: string | null;
+  emailVerified: boolean;
+  image: string | null;
+  avatarUrl?: string; // Keep for backward compatibility in tests
   createdAt: Date;
   updatedAt: Date;
 }

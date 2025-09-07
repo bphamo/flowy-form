@@ -1,6 +1,6 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router';
 
-import { useAuth } from '@/hooks/use-auth';
+import { signIn } from '@/lib/auth-client';
 import { Github, Layers } from 'lucide-react';
 import { Badge, Button, Card, Container } from 'react-bootstrap';
 
@@ -9,13 +9,15 @@ export const Route = createFileRoute('/auth/login')({
 });
 
 function GitHubLogin() {
-  const { login } = useAuth();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const redirectParam = urlParams.get('redirect');
 
   const handleGitHubLogin = () => {
-    login(redirectParam || undefined);
+    signIn.social({
+      provider: 'github',
+      callbackURL: redirectParam || window.location.origin + '/dashboard',
+    });
   };
 
   return (

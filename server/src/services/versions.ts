@@ -25,7 +25,7 @@ export const getFormVersions = async (db: Database, formId: number) => {
         id: users.id,
         name: users.name,
         email: users.email,
-        avatarUrl: users.avatarUrl,
+        image: users.image,
       },
     })
     .from(formVersions)

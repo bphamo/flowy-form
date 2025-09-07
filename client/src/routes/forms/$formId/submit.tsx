@@ -3,9 +3,9 @@ import { useRef, useState } from 'react';
 
 import { IconCard } from '@/components/common/icon-card';
 import { VersionShaDisplay } from '@/components/common/version-sha-display';
-import { useAuth } from '@/hooks/use-auth';
 import AppLayout from '@/layouts/app-layout';
 import { api } from '@/lib/api';
+import { useSession } from '@/lib/auth-client';
 import type { FormSchema } from '@/types/api';
 import { Form } from '@formio/react';
 import { FileText, Info, Shield, User } from 'lucide-react';
@@ -32,7 +32,8 @@ function FormsSubmit() {
   const { form, isEmbedded } = useLoaderData({ from: '/forms/$formId/submit' }) as { form: FormSchema; isEmbedded: boolean };
   const { formId } = useParams({ from: '/forms/$formId/submit' });
   const navigate = useNavigate({ from: '/forms/$formId/submit' });
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [submitting, setSubmitting] = useState(false);
   const formSchema = useRef(form?.schema || { components: [] });
   const [submissionData, setSubmissionData] = useState<Record<string, unknown>>({});

@@ -6,10 +6,8 @@ export const mockUser: MockUser = {
   id: 1,
   name: 'Test User',
   email: 'test@example.com',
-  githubId: '123456',
-  avatarUrl: 'https://avatars.githubusercontent.com/u/123456',
-  emailVerifiedAt: null,
-  rememberToken: null,
+  emailVerified: true,
+  image: 'https://avatars.githubusercontent.com/u/123456',
   createdAt: new Date('2024-01-01T00:00:00Z'),
   updatedAt: new Date('2024-01-01T00:00:00Z'),
 };
@@ -123,12 +121,18 @@ export const createMockBetterAuthSession = (user: MockUser = mockUser) => ({
     id: user.id.toString(),
     name: user.name,
     email: user.email,
-    image: user.avatarUrl,
+    emailVerified: user.emailVerified,
+    image: user.image,
   },
   session: {
     id: 'mock-session-id',
     userId: user.id.toString(),
     expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    token: 'mock-token',
+    ipAddress: '127.0.0.1',
+    userAgent: 'test-agent',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 });
 

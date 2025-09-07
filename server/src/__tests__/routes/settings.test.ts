@@ -18,14 +18,12 @@ const createTestSettingsApp = () => {
     }
 
     const profile = {
-      id: mockUser.id,
+      id: mockUser.id.toString(),
       name: mockUser.name,
       email: mockUser.email,
-      githubId: mockUser.githubId,
-      avatarUrl: mockUser.avatarUrl,
-      emailVerifiedAt: mockUser.emailVerifiedAt,
+      image: mockUser.image,
+      emailVerified: mockUser.emailVerified,
       createdAt: mockUser.createdAt,
-      updatedAt: mockUser.updatedAt,
     };
 
     return c.json({ data: profile });
@@ -105,7 +103,7 @@ describe('Settings Routes', () => {
 
       expect(res.status).toBe(200);
       expect(data.data).toBeDefined();
-      expect((data.data as any).id).toBe(mockUser.id);
+      expect((data.data as any).id).toBe(mockUser.id.toString());
       expect((data.data as any).name).toBe(mockUser.name);
       expect((data.data as any).email).toBe(mockUser.email);
     });

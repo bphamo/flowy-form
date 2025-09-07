@@ -13,9 +13,9 @@ export const authMiddleware = async (c: Context, next: Next) => {
     }
 
     // Set user and session data in context for use in routes
-    c.set('user', session.user as any); // BetterAuth user type differs from our DB schema
-    c.set('session', session.session as any); // BetterAuth session type differs from our DB schema
-    
+    c.set('user', session.user);
+    c.set('session', session.session);
+
     await next();
   } catch (error) {
     console.error('Auth error:', error);
@@ -31,13 +31,13 @@ export const optionalAuthMiddleware = async (c: Context, next: Next) => {
     });
 
     if (session) {
-      c.set('user', session.user as any); // BetterAuth user type differs from our DB schema
-      c.set('session', session.session as any); // BetterAuth session type differs from our DB schema
+      c.set('user', session.user);
+      c.set('session', session.session);
     } else {
       c.set('user', null);
       c.set('session', null);
     }
-    
+
     await next();
   } catch (error) {
     console.error('Auth error:', error);
