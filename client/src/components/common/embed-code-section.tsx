@@ -20,7 +20,7 @@ export function EmbedCodeSection({ formId, formName }: EmbedCodeSectionProps) {
   height="600"
   frameborder="0"
   scrolling="auto"
-  style="border: 1px solid #ddd; border-radius: 8px;">
+  style="border: 1px solid var(--bs-border-color); border-radius: 8px;">
 </iframe>
 
 <!-- With specific theme (optional) -->
@@ -38,7 +38,7 @@ function EmbeddedForm() {
       frameBorder="0"
       scrolling="auto"
       style={{
-        border: '1px solid #ddd',
+        border: '1px solid var(--bs-border-color)',
         borderRadius: '8px'
       }}
       title="${formName} Form"
@@ -61,7 +61,7 @@ function EmbeddedForm() {
   height="600"
   frameborder="0"
   scrolling="auto"
-  style="border: 1px solid #ddd; border-radius: 8px;">
+  style="border: 1px solid var(--bs-border-color); border-radius: 8px;">
 </iframe>
 
 <!-- Theme options (add to URL):

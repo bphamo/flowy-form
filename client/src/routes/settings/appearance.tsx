@@ -29,7 +29,7 @@ function SettingsAppearance() {
       name: 'Light Theme',
       description: 'Bright and clean interface',
       icon: Sun,
-      iconBg: '#dbeafe',
+      iconBg: 'var(--bs-primary-bg-subtle)',
       iconColor: 'text-primary',
     },
     {
@@ -37,7 +37,7 @@ function SettingsAppearance() {
       name: 'Dark Theme',
       description: 'Easy on the eyes',
       icon: Moon,
-      iconBg: '#f3f4f6',
+      iconBg: 'var(--bs-gray-100)',
       iconColor: 'text-muted',
     },
     {
@@ -45,7 +45,7 @@ function SettingsAppearance() {
       name: 'Auto',
       description: 'Matches system settings',
       icon: Monitor,
-      iconBg: '#f3f4f6',
+      iconBg: 'var(--bs-gray-100)',
       iconColor: 'text-muted',
     },
   ];
@@ -62,7 +62,7 @@ function SettingsAppearance() {
 
           <SettingsLayout>
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <div className="d-flex align-items-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"

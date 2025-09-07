@@ -1,19 +1,7 @@
 /* Bootstrap 5 CSS */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-:root {
-  --white: #ffffff;
-  --theme-colors: (
-    'light': #d2eae7,
-    'dark': #000305,
-    'primary': #225366,
-    'secondary': #e32171,
-    'info': #0cd9b1,
-    'success': #03af5a,
-    'warning': #ebcc02,
-    'danger': #fa011b
-  );
-}
+/* Custom CSS variables removed - now using Bootstrap CSS variables for dark mode compatibility */
 
 /* Custom utility classes for Bootstrap compatibility */
 .h-16 {

@@ -169,7 +169,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                           left: '12px',
                           width: '16px',
                           height: '16px',
-                          borderColor: version.isPublished ? '#198754' : '#6c757d',
+                          borderColor: version.isPublished ? 'var(--bs-success)' : 'var(--bs-secondary)',
                           borderWidth: '2px',
                           zIndex: 2,
                         }}

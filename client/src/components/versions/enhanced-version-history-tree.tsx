@@ -53,8 +53,8 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
       return {
         badge: 'LIVE',
         badgeColor: 'success',
-        iconColor: '#198754',
-        borderColor: '#198754',
+        iconColor: 'var(--bs-success)',
+        borderColor: 'var(--bs-success)',
       };
     }
 
@@ -62,16 +62,16 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
       return {
         badge: 'PUBLISHED',
         badgeColor: 'primary',
-        iconColor: '#0d6efd',
-        borderColor: '#0d6efd',
+        iconColor: 'var(--bs-primary)',
+        borderColor: 'var(--bs-primary)',
       };
     }
 
     return {
       badge: 'DRAFT',
       badgeColor: 'secondary',
-      iconColor: '#6c757d',
-      borderColor: '#dee2e6',
+      iconColor: 'var(--bs-secondary)',
+      borderColor: 'var(--bs-border-color)',
     };
   };
 
@@ -135,7 +135,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
                 height: 0,
                 borderLeft: '4px solid transparent',
                 borderRight: '4px solid transparent',
-                borderTop: '6px solid #0d6efd',
+                borderTop: '6px solid var(--bs-primary)',
               }}
             />
           </div>

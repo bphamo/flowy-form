@@ -272,11 +272,11 @@ function FormsSubmit() {
 
             {/* Form Card */}
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-4">
+              <Card.Header className="py-4" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <IconCard
                   icon={FileText}
                   iconColor="text-primary"
-                  iconBg="#dbeafe"
+                  iconBg="var(--bs-primary-bg-subtle)"
                   title={formData.name}
                   description="Complete all required fields and submit your response"
                 />

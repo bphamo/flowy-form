@@ -88,11 +88,11 @@ function FormsManage() {
             {/* Form Details Card */}
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <IconCard
                     icon={FileText}
                     iconColor="text-primary"
-                    iconBg="#dbeafe"
+                    iconBg="var(--bs-primary-bg-subtle)"
                     title="Form Details"
                     description="Basic information about your form"
                   />
