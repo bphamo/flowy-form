@@ -24,6 +24,8 @@ import type {
   UpdateFormResponse,
   UpdateProfileRequest,
   UpdateProfileResponse,
+  UpdateSubmissionStatusRequest,
+  UpdateSubmissionStatusResponse,
   UpdateVersionRequest,
   UpdateVersionResponse,
 } from '../types/api';
@@ -127,6 +129,11 @@ class ApiClient {
     },
     getByForm: (formId: number) => this.request<GetSubmissionsByFormResponse>(`/submissions/form/${formId}`),
     getByUser: () => this.request<GetUserSubmissionsResponse>('/submissions'),
+    updateStatus: (id: number, data: UpdateSubmissionStatusRequest) =>
+      this.request<UpdateSubmissionStatusResponse>(`/submissions/${id}/status`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
   };
 
   // Settings methods

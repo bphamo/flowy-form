@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
 
 import { PageHeader } from '@/components/common/page-header';
+import { SubmissionStatusBadge } from '@/components/common/submission-status-badge';
 import AppLayout from '@/layouts/app-layout';
 import { api } from '@/lib/api';
 import { requireAuth } from '@/lib/auth-utils';
@@ -75,6 +76,7 @@ function Submissions() {
                     <tr>
                       <th className="border-0 py-3 px-4">Form Name</th>
                       <th className="border-0 py-3 px-4">Submission ID</th>
+                      <th className="border-0 py-3 px-4">Status</th>
                       <th className="border-0 py-3 px-4">Submitted At</th>
                       <th className="border-0 py-3 px-4">Actions</th>
                     </tr>
@@ -90,6 +92,9 @@ function Submissions() {
                         </td>
                         <td className="py-3 px-4">
                           <small className="text-muted">#{submission.id}</small>
+                        </td>
+                        <td className="py-3 px-4">
+                          <SubmissionStatusBadge status={submission.status} size="small" />
                         </td>
                         <td className="py-3 px-4">
                           <div className="d-flex align-items-center text-muted">
