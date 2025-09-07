@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { JwtPayload, MockDb, MockForm, MockFormVersion, MockSubmission, MockSubmissionToken, MockUser } from './types';
+import { MockDb, MockForm, MockFormVersion, MockSubmission, MockSubmissionToken, MockUser } from './types';
 
 // Mock data for testing
 export const mockUser: MockUser = {
@@ -117,18 +117,19 @@ export const createMockDb = (): MockDb => {
   };
 };
 
-// Helper to create JWT payload
-export const createMockJwtPayload = (user: MockUser = mockUser): JwtPayload => ({
-  sub: user.id.toString(),
+// Helper to create mock BetterAuth session
+export const createMockBetterAuthSession = (user: MockUser = mockUser) => ({
   user: {
-    id: user.id,
+    id: user.id.toString(),
     name: user.name,
     email: user.email,
-    githubId: user.githubId,
-    avatarUrl: user.avatarUrl,
+    image: user.avatarUrl,
   },
-  iat: Math.floor(Date.now() / 1000),
-  exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1 hour
+  session: {
+    id: 'mock-session-id',
+    userId: user.id.toString(),
+    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+  },
 });
 
 // Helper to mock successful database response

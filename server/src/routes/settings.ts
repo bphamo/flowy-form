@@ -25,7 +25,10 @@ const updateProfileSchema = z.object({
  */
 settingsRoutes.get('/profile', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
 
     const userProfile = await authService.getUserProfile(db, user.id);
 
@@ -54,7 +57,10 @@ settingsRoutes.get('/profile', authMiddleware, async (c) => {
  */
 settingsRoutes.patch('/profile', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     const body = await c.req.json();
 
     const validatedData = updateProfileSchema.parse(body);
@@ -84,7 +90,10 @@ settingsRoutes.patch('/profile', authMiddleware, async (c) => {
  */
 settingsRoutes.delete('/profile', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
 
     // Note: In a real application, you might want to handle this more gracefully
     // by anonymizing data instead of hard deleting, depending on your data retention policies

@@ -4,14 +4,13 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Toaster } from 'sonner';
 
 interface User {
-  id: number;
+  id: string; // Changed to string for BetterAuth compatibility
   name: string;
-  email: string | null;
-  githubId: string | null;
-  avatarUrl: string | null;
-  email_verified_at: string | null;
-  created_at: string;
-  updated_at: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface AuthContext {

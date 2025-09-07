@@ -38,7 +38,7 @@ export default [
     },
   },
   {
-    ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr'],
+    ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', '**/dist/**', '**/build/**', '**/*.generated.ts', '**/*.gen.ts'],
   },
   prettier, // Turn off all rules that might conflict with Prettier
 ];
