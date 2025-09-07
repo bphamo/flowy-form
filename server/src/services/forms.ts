@@ -7,7 +7,7 @@ import { createVersion } from './versions';
  * Retrieves all forms created by a specific user
  * Returns basic form metadata without schema for performance
  */
-export const getUserForms = async (db: Database, userId: number) => {
+export const getUserForms = async (db: Database, userId: string) => {
   return await db
     .select({
       id: forms.id,
@@ -64,7 +64,7 @@ export const createForm = async (
     isPublic?: boolean;
     schema?: unknown;
   },
-  userId: number,
+  userId: string,
 ) => {
   return await db.transaction(async (tx) => {
     // Create the form without schema (stored in versions)
@@ -116,7 +116,7 @@ export const createForm = async (
  * Retrieves a form only if the user is the owner
  * Used for ownership verification before updates or deletions
  */
-export const getFormByIdAndOwner = async (db: Database, formId: number, userId: number) => {
+export const getFormByIdAndOwner = async (db: Database, formId: number, userId: string) => {
   return await db
     .select()
     .from(forms)
@@ -131,7 +131,7 @@ export const getFormByIdAndOwner = async (db: Database, formId: number, userId: 
 export const updateForm = async (
   db: Database,
   formId: number,
-  userId: number,
+  userId: string,
   updateData: {
     name?: string;
     description?: string;
@@ -154,7 +154,7 @@ export const updateForm = async (
  * Creates a new version with updated schema
  * Schema updates now create new versions instead of modifying forms directly
  */
-export const updateFormSchema = async (db: Database, formId: number, userId: number, schema: unknown, description?: string, publish = false) => {
+export const updateFormSchema = async (db: Database, formId: number, userId: string, schema: unknown, description?: string, publish = false) => {
   return await createVersion(
     db,
     {

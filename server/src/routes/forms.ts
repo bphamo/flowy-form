@@ -35,7 +35,10 @@ const updateFormSchema = z.object({
  */
 formRoutes.get('/', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
 
     const userForms = await formsService.getUserForms(db, user.id);
 
@@ -60,7 +63,7 @@ formRoutes.get('/', authMiddleware, async (c) => {
 formRoutes.get('/:id', optionalAuthMiddleware, async (c) => {
   try {
     const formId = parseInt(c.req.param('id'));
-    const user = c.get('jwtPayload')?.user;
+    const user = c.get('user');
 
     if (isNaN(formId)) {
       return c.json({ error: 'Invalid form ID' }, 400);
@@ -103,7 +106,7 @@ formRoutes.get('/:id', optionalAuthMiddleware, async (c) => {
 formRoutes.get('/:id/submit', optionalAuthMiddleware, async (c) => {
   try {
     const formId = parseInt(c.req.param('id'));
-    const user = c.get('jwtPayload')?.user;
+    const user = c.get('user');
     const isEmbedded = c.req.query('embed') === 'true';
 
     if (isNaN(formId)) {
@@ -156,7 +159,10 @@ formRoutes.get('/:id/submit', optionalAuthMiddleware, async (c) => {
  */
 formRoutes.post('/', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     const body = await c.req.json();
 
     const validatedData = createFormSchema.parse(body);
@@ -188,7 +194,10 @@ formRoutes.post('/', authMiddleware, async (c) => {
 formRoutes.patch('/:id', authMiddleware, formWriteCheckMiddleware, async (c) => {
   try {
     const formId = parseInt(c.req.param('id'));
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     const body = await c.req.json();
 
     if (isNaN(formId)) {

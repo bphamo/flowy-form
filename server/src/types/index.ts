@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface AuthUser {
-  id: number;
+  id: string;
   name: string;
   email: string | null;
   githubId: string | null;

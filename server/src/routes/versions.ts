@@ -111,7 +111,10 @@ versionRoutes.get('/forms/:formId/versions/:sha', authMiddleware, formWriteCheck
 versionRoutes.post('/forms/:formId/versions', authMiddleware, formWriteCheckMiddleware, async (c) => {
   try {
     const formId = parseInt(c.req.param('formId'));
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     const body = await c.req.json();
 
     if (isNaN(formId)) {
@@ -397,7 +400,10 @@ versionRoutes.post('/forms/:formId/versions/:sha/make-latest', authMiddleware, f
   try {
     const formId = parseInt(c.req.param('formId'));
     const versionSha = c.req.param('sha');
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     const body = await c.req.json();
 
     if (isNaN(formId)) {

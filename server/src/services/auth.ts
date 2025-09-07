@@ -1,3 +1,4 @@
+import { createId } from '@paralleldrive/cuid2';
 import { eq } from 'drizzle-orm';
 import type { Database } from '../db/index';
 import { users } from '../db/schema';
@@ -31,7 +32,10 @@ export const createUser = async (
     avatarUrl?: string | null;
   },
 ) => {
-  return await db.insert(users).values(userData).returning();
+  return await db.insert(users).values({
+    id: createId(),
+    ...userData,
+  }).returning();
 };
 
 /**
@@ -40,7 +44,7 @@ export const createUser = async (
  */
 export const updateUserWithGithubData = async (
   db: Database,
-  userId: number,
+  userId: string,
   githubData: {
     githubId: string;
     avatarUrl?: string | null;
@@ -60,7 +64,7 @@ export const updateUserWithGithubData = async (
  * Retrieves user profile information for settings page
  * Returns safe user data without sensitive fields like password
  */
-export const getUserProfile = async (db: Database, userId: number) => {
+export const getUserProfile = async (db: Database, userId: string) => {
   return await db
     .select({
       id: users.id,
@@ -81,7 +85,7 @@ export const getUserProfile = async (db: Database, userId: number) => {
  */
 export const updateUserProfile = async (
   db: Database,
-  userId: number,
+  userId: string,
   profileData: {
     name?: string;
     email?: string;
@@ -107,6 +111,6 @@ export const updateUserProfile = async (
  * Permanently deletes a user account
  * Cascading deletes will handle related forms and submissions
  */
-export const deleteUser = async (db: Database, userId: number) => {
+export const deleteUser = async (db: Database, userId: string) => {
   return await db.delete(users).where(eq(users.id, userId));
 };

@@ -30,14 +30,12 @@ export interface SharedData {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string | null;
-  githubId: string | null;
-  avatarUrl: string | null;
-  avatar?: string;
-  email_verified_at: string | null;
-  created_at: string;
-  updated_at: string;
+  emailVerified: boolean;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
   [key: string]: unknown; // This allows for additional properties...
 }

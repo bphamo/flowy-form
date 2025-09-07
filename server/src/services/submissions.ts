@@ -74,8 +74,8 @@ export const createSubmission = async (
     formId: number;
     versionSha: string;
     data: unknown;
-    createdBy?: number | null;
-    updatedBy?: number | null;
+    createdBy?: string | null;
+    updatedBy?: string | null;
   },
 ) => {
   return await db.insert(submissions).values(submissionData).returning();
@@ -99,7 +99,7 @@ export const createSubmissionToken = async (
  * Retrieves all submissions made by a specific user
  * Includes form information and submission data for user's own submissions
  */
-export const getSubmissionsByUser = async (db: Database, userId: number) => {
+export const getSubmissionsByUser = async (db: Database, userId: string) => {
   return await db
     .select({
       id: submissions.id,

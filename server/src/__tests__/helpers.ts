@@ -1,6 +1,5 @@
 import { jest } from '@jest/globals';
 import { Hono } from 'hono';
-import { createMockJwtPayload } from './mocks';
 import { MockContext, MockUser } from './types';
 
 // Create test app factory
@@ -16,11 +15,24 @@ export const createTestApp = () => {
   return app;
 };
 
-// Mock authentication middleware
+// Mock BetterAuth session middleware
 export const mockAuthMiddleware = (user?: MockUser) => {
   return jest.fn(async (c, next) => {
     if (user) {
-      c.set('jwtPayload', createMockJwtPayload(user));
+      // Mock BetterAuth session data structure
+      c.set('session', {
+        user: {
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.avatarUrl,
+        },
+        session: {
+          id: 'mock-session-id',
+          userId: user.id.toString(),
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        },
+      });
     } else {
       return c.json({ error: 'Unauthorized' }, 401);
     }
@@ -32,9 +44,22 @@ export const mockAuthMiddleware = (user?: MockUser) => {
 export const mockOptionalAuthMiddleware = (user?: MockUser) => {
   return jest.fn(async (c, next) => {
     if (user) {
-      c.set('jwtPayload', createMockJwtPayload(user));
+      // Mock BetterAuth session data structure
+      c.set('session', {
+        user: {
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+          image: user.avatarUrl,
+        },
+        session: {
+          id: 'mock-session-id',
+          userId: user.id.toString(),
+          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+        },
+      });
     } else {
-      c.set('jwtPayload', null);
+      c.set('session', null);
     }
     await next();
   });
@@ -57,7 +82,7 @@ export const createMockContext = (
     body?: unknown;
     headers?: Record<string, string>;
     cookies?: Record<string, string>;
-    jwtPayload?: unknown;
+    session?: unknown;
   } = {},
 ): MockContext => {
   const context = {
@@ -71,13 +96,32 @@ export const createMockContext = (
       data,
     })),
     get: jest.fn((key: string) => {
-      if (key === 'jwtPayload') return options.jwtPayload;
+      if (key === 'session') return options.session;
       return undefined;
     }),
     set: jest.fn(),
   };
 
   return context;
+};
+
+// Helper to create mock BetterAuth session
+export const createMockSession = (user?: MockUser) => {
+  if (!user) return null;
+  
+  return {
+    user: {
+      id: user.id.toString(),
+      name: user.name,
+      email: user.email,
+      image: user.avatarUrl,
+    },
+    session: {
+      id: 'mock-session-id',
+      userId: user.id.toString(),
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    },
+  };
 };
 
 // Helper to test route handlers
@@ -94,7 +138,7 @@ export const testRouteHandler = async (
     params: options.params,
     body: options.body,
     headers: options.headers,
-    jwtPayload: options.user ? createMockJwtPayload(options.user) : undefined,
+    session: options.user ? createMockSession(options.user) : null,
   });
 
   const result = await handler(context);
