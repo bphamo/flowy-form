@@ -48,6 +48,7 @@ export const getFormSubmissionsByOwner = async (db: Database, formId: number) =>
     .select({
       id: submissions.id,
       data: submissions.data,
+      status: submissions.status,
       createdAt: submissions.createdAt,
       creator: users,
     })
@@ -107,6 +108,7 @@ export const getSubmissionsByUser = async (db: Database, userId: string) => {
       formName: forms.name,
       formDescription: forms.description,
       data: submissions.data,
+      status: submissions.status,
       createdAt: submissions.createdAt,
       versionSha: submissions.versionSha,
       formOwner: {
@@ -120,4 +122,25 @@ export const getSubmissionsByUser = async (db: Database, userId: string) => {
     .leftJoin(users, eq(forms.createdBy, users.id))
     .where(eq(submissions.createdBy, userId))
     .orderBy(desc(submissions.createdAt));
+};
+
+/**
+ * Updates the status of a submission
+ * Used by form owners to manage the submission workflow
+ */
+export const updateSubmissionStatus = async (
+  db: Database,
+  submissionId: number,
+  status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED',
+  updatedBy: string,
+) => {
+  return await db
+    .update(submissions)
+    .set({ 
+      status, 
+      updatedBy,
+      updatedAt: new Date() 
+    })
+    .where(eq(submissions.id, submissionId))
+    .returning();
 };

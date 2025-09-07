@@ -1,4 +1,12 @@
-import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
+import { boolean, index, integer, jsonb, pgEnum, pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
+
+// Submission status enum
+export const submissionStatusEnum = pgEnum('submission_status', [
+  'SUBMITTED',
+  'REVIEWING', 
+  'PENDING_UPDATES',
+  'COMPLETED'
+]);
 
 // BetterAuth users table
 export const users = pgTable('users', {
@@ -117,6 +125,7 @@ export const submissions = pgTable('submissions', {
     .notNull(),
   versionSha: text('version_sha').references(() => formVersions.versionSha),
   data: jsonb('data').notNull(),
+  status: submissionStatusEnum('status').default('SUBMITTED').notNull(),
   createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
   updatedBy: text('updated_by').references(() => users.id, { onDelete: 'set null' }),
   createdAt: timestamp('created_at').defaultNow(),
