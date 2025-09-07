@@ -84,7 +84,7 @@ function Submissions() {
                       <tr key={submission.id}>
                         <td className="py-3 px-4">
                           <div>
-                            <div className="fw-semibold text-dark">{submission.formName}</div>
+                            <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submission.formName}</div>
                             {submission.formDescription && <div className="text-muted small">{submission.formDescription}</div>}
                           </div>
                         </td>

@@ -103,7 +103,7 @@ function FormSubmissions() {
                   >
                     <FileText size={20} className="text-primary" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {totalSubmissions}
                   </div>
                   <div className="text-muted small">Total Submissions</div>
@@ -119,7 +119,7 @@ function FormSubmissions() {
                   >
                     <Users size={20} className="text-success" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {authenticatedSubmissions}
                   </div>
                   <div className="text-muted small">Authenticated</div>
@@ -135,7 +135,7 @@ function FormSubmissions() {
                   >
                     <User size={20} className="text-warning" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {anonymousSubmissions}
                   </div>
                   <div className="text-muted small">Anonymous</div>
@@ -151,7 +151,7 @@ function FormSubmissions() {
                   >
                     <Calendar size={20} className="text-purple" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {recentSubmissions}
                   </div>
                   <div className="text-muted small">This Week</div>
@@ -173,7 +173,7 @@ function FormSubmissions() {
             <Card.Body className="p-0">
               {sortedSubmissions.length > 0 ? (
                 <Table responsive className="mb-0">
-                  <thead className="bg-light">
+                  <thead style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <tr>
                       <th className="border-0 py-3 px-4">ID</th>
                       <th className="border-0 py-3 px-4">Submitter</th>
@@ -193,7 +193,7 @@ function FormSubmissions() {
                         <td className="py-3 px-4">
                           {submission.submitterInformation ? (
                             <div>
-                              <div className="fw-semibold text-dark">{submission.submitterInformation.name}</div>
+                              <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submission.submitterInformation.name}</div>
                               {submission.submitterInformation.email && (
                                 <div className="text-muted small">{submission.submitterInformation.email}</div>
                               )}

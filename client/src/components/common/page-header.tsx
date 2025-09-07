@@ -20,7 +20,7 @@ export function PageHeader({ badge, title, description }: PageHeaderProps) {
           {badge.text}
         </Badge>
       )}
-      <h1 className="display-6 fw-bold text-dark">{title}</h1>
+      <h1 className="display-6 fw-bold" style={{ color: 'var(--bs-body-color)' }}>{title}</h1>
       {description && <p className="lead text-muted">{description}</p>}
     </div>
   );

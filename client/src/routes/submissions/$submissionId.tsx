@@ -102,19 +102,19 @@ function SubmissionDetail() {
                 <Card.Body className="p-4">
                   <div className="d-flex flex-column gap-3">
                     <div>
-                      <div className="fw-semibold text-dark small">Submission ID</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submission ID</div>
                       <Badge bg="light" text="dark" className="fw-bold">
                         #{submission.id}
                       </Badge>
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark small">Form</div>
-                      <div className="text-dark">{submission.formName || 'Unknown Form'}</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Form</div>
+                      <div style={{ color: 'var(--bs-body-color)' }}>{submission.formName || 'Unknown Form'}</div>
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark small">Submitted</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submitted</div>
                       <div className="d-flex align-items-center text-muted">
                         <Calendar size={14} className="me-1" />
                         {new Date(submission.createdAt).toLocaleString()}
@@ -123,8 +123,8 @@ function SubmissionDetail() {
 
                     {submission.version && (
                       <div>
-                        <div className="fw-semibold text-dark small">Form Version</div>
-                        <div className="text-dark">
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Form Version</div>
+                        <div style={{ color: 'var(--bs-body-color)' }}>
                           <Badge bg="secondary" className="me-2">
                             {submission.version.sha.substring(0, 8)}
                           </Badge>
@@ -134,7 +134,7 @@ function SubmissionDetail() {
                     )}
 
                     <div>
-                      <div className="fw-semibold text-dark small">Submission Type</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submission Type</div>
                       <Badge bg={isAnonymous ? 'warning' : 'success'} className="d-flex align-items-center w-fit">
                         {isAnonymous ? <User size={14} className="me-1" /> : <Users size={14} className="me-1" />}
                         {isAnonymous ? 'Anonymous' : 'Authenticated'}
@@ -143,8 +143,8 @@ function SubmissionDetail() {
 
                     {submission.submitterInformation && (
                       <div>
-                        <div className="fw-semibold text-dark small">Submitter</div>
-                        <div className="text-dark">
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submitter</div>
+                        <div style={{ color: 'var(--bs-body-color)' }}>
                           <div>{submission.submitterInformation.name}</div>
                           {submission.submitterInformation.email && <div className="text-muted small">{submission.submitterInformation.email}</div>}
                         </div>

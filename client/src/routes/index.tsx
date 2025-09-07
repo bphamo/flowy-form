@@ -40,7 +40,7 @@ function Header() {
           >
             <Layers size={20} color="#fff" />
           </div>
-          <strong className="text-dark">Flowy Form</strong>
+          <strong style={{ color: 'var(--bs-body-color)' }}>Flowy Form</strong>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
@@ -75,7 +75,7 @@ function Hero() {
           <Star size={16} className="me-2" />
           Git-Powered Form Builder
         </Badge>
-        <h1 className="display-4 fw-bold text-dark">
+        <h1 className="display-4 fw-bold" style={{ color: 'var(--bs-body-color)' }}>
           Build Forms with{' '}
           <span style={{ background: 'linear-gradient(to right, #2563eb, #4f46e5)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
             Git-Like Versioning
@@ -99,10 +99,10 @@ function Hero() {
 
 function Features() {
   return (
-    <section id="features" className="py-5 bg-white">
+    <section id="features" className="py-5" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
       <Container>
         <div className="text-center mb-5">
-          <h2 className="display-5 fw-bold text-dark">Powerful Features for Modern Form Development</h2>
+          <h2 className="display-5 fw-bold" style={{ color: 'var(--bs-body-color)' }}>Powerful Features for Modern Form Development</h2>
           <p className="lead text-muted mx-auto" style={{ maxWidth: '700px' }}>
             Everything you need to build, version, and deploy forms with confidence
           </p>
@@ -159,7 +159,7 @@ function GitWorkflow() {
     <section className="py-5 bg-light">
       <Container>
         <div className="text-center mb-5">
-          <h2 className="display-5 fw-bold text-dark">Familiar Git Workflow</h2>
+          <h2 className="display-5 fw-bold" style={{ color: 'var(--bs-body-color)' }}>Familiar Git Workflow</h2>
           <p className="lead text-muted mx-auto" style={{ maxWidth: '700px' }}>
             Use the same version control concepts you know and love from software development
           </p>
@@ -204,7 +204,7 @@ function GitWorkflow() {
                   {step.number}
                 </div>
                 <div>
-                  <h5 className="fw-semibold text-dark mb-1">{step.title}</h5>
+                  <h5 className="fw-semibold mb-1" style={{ color: 'var(--bs-body-color)' }}>{step.title}</h5>
                   <p className="text-muted mb-0">{step.desc}</p>
                 </div>
               </div>
@@ -225,7 +225,7 @@ function GitWorkflow() {
                   <div key={idx} className="d-flex align-items-center p-2 mb-2 rounded" style={{ backgroundColor: '#f8f9fa' }}>
                     <div className="me-3" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: commit.color }} />
                     <div>
-                      <div className="fw-medium text-dark small">{commit.text}</div>
+                      <div className="fw-medium small" style={{ color: 'var(--bs-body-color)' }}>{commit.text}</div>
                       <div className="text-muted small">{commit.time}</div>
                     </div>
                   </div>
@@ -241,10 +241,10 @@ function GitWorkflow() {
 
 function Pricing() {
   return (
-    <section id="pricing" className="py-5 bg-white">
+    <section id="pricing" className="py-5" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
       <Container>
         <div className="text-center mb-5">
-          <h2 className="display-5 fw-bold text-dark">Simple, Transparent Pricing</h2>
+          <h2 className="display-5 fw-bold" style={{ color: 'var(--bs-body-color)' }}>Simple, Transparent Pricing</h2>
           <p className="lead text-muted mx-auto" style={{ maxWidth: '700px' }}>
             Choose the plan that fits your team's needs
           </p>
@@ -286,7 +286,7 @@ function Pricing() {
                 )}
                 <Card.Body className="text-center">
                   <Card.Title className="fs-4 fw-bold">{plan.title}</Card.Title>
-                  <div className="fs-2 fw-bold text-dark">
+                  <div className="fs-2 fw-bold" style={{ color: 'var(--bs-body-color)' }}>
                     {plan.price}
                     {plan.price !== 'Custom' && <span className="fs-6 text-muted">/month</span>}
                   </div>

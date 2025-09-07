@@ -217,7 +217,7 @@ function FormsSuccess() {
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="text-muted">Submitter</span>
                       <div className="text-end">
-                        <div className="fw-semibold text-dark">{submissionDetails.submitterInformation.name}</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submissionDetails.submitterInformation.name}</div>
                         <div className="text-muted small">{submissionDetails.submitterInformation.email}</div>
                       </div>
                     </div>
@@ -246,7 +246,7 @@ function FormsSuccess() {
             </Card>
             <div className="d-flex justify-content-end align-items-center">
               <span className="text-muted">Created at: </span>
-              <span className="text-dark">{new Date(submissionDetails.createdAt).toLocaleString()}</span>
+              <span style={{ color: 'var(--bs-body-color)' }}>{new Date(submissionDetails.createdAt).toLocaleString()}</span>
             </div>
 
             {/* Version SHA Display */}
