@@ -27,6 +27,8 @@ export const mockAuthMiddleware = (user?: MockUser) => {
         email: user.email,
         emailVerified: user.emailVerified,
         image: user.image,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       });
       c.set('session', {
         id: 'mock-session-id',
@@ -56,6 +58,8 @@ export const mockOptionalAuthMiddleware = (user?: MockUser) => {
         email: user.email,
         emailVerified: user.emailVerified,
         image: user.image,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       });
       c.set('session', {
         id: 'mock-session-id',
@@ -127,6 +131,8 @@ export const createMockUser = (user?: MockUser) => {
     email: user.email,
     emailVerified: user.emailVerified,
     image: user.image,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   };
 };
 
