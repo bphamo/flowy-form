@@ -40,7 +40,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
   return (
     <div>
       <Card className="border-0 shadow-sm mb-4">
-        <Card.Header className="bg-white py-3">
+        <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
           <div className="d-flex align-items-center">
             <div
               className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
@@ -61,28 +61,28 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
             <Col md={3}>
               <div className="text-center p-3 bg-light rounded">
                 <GitCommit size={24} className="text-primary mb-2" />
-                <div className="fw-bold text-dark h4 mb-1">{totalVersions}</div>
+                <div className="fw-bold h4 mb-1" style={{ color: 'var(--bs-body-color)' }}>{totalVersions}</div>
                 <div className="small text-muted">Total Versions</div>
               </div>
             </Col>
             <Col md={3}>
               <div className="text-center p-3 bg-light rounded">
                 <Eye size={24} className="text-success mb-2" />
-                <div className="fw-bold text-dark h4 mb-1">{publishedVersions}</div>
+                <div className="fw-bold h4 mb-1" style={{ color: 'var(--bs-body-color)' }}>{publishedVersions}</div>
                 <div className="small text-muted">Published</div>
               </div>
             </Col>
             <Col md={3}>
               <div className="text-center p-3 bg-light rounded">
                 <Users size={24} className="text-info mb-2" />
-                <div className="fw-bold text-dark h4 mb-1">{submissionStats?.totalSubmissions || 0}</div>
+                <div className="fw-bold h4 mb-1" style={{ color: 'var(--bs-body-color)' }}>{submissionStats?.totalSubmissions || 0}</div>
                 <div className="small text-muted">Total Submissions</div>
               </div>
             </Col>
             <Col md={3}>
               <div className="text-center p-3 bg-light rounded">
                 <Clock size={24} className="text-warning mb-2" />
-                <div className="fw-bold text-dark h4 mb-1">{liveVersion ? getVersionAge(liveVersion.createdAt) : 0}</div>
+                <div className="fw-bold h4 mb-1" style={{ color: 'var(--bs-body-color)' }}>{liveVersion ? getVersionAge(liveVersion.createdAt) : 0}</div>
                 <div className="small text-muted">Days Since Live</div>
               </div>
             </Col>
@@ -91,7 +91,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
           {/* Version Performance Breakdown */}
           {topVersions.length > 0 && (
             <div className="mb-4">
-              <h6 className="fw-bold text-dark mb-3">
+              <h6 className="fw-bold mb-3" style={{ color: 'var(--bs-body-color)' }}>
                 <TrendingUp size={18} className="me-2" />
                 Top Performing Versions
               </h6>
@@ -110,7 +110,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                           #{index + 1}
                         </Badge>
                         <code className="me-2">{version.versionSha.slice(0, 8)}</code>
-                        <span className="text-dark">{version.description || 'No description'}</span>
+                        <span style={{ color: 'var(--bs-body-color)' }}>{version.description || 'No description'}</span>
                         {version.isPublished && (
                           <Badge bg="success" className="ms-2">
                             LIVE
@@ -118,7 +118,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                         )}
                       </div>
                       <div className="text-end">
-                        <div className="fw-bold text-dark">{versionStat.submissionCount} submissions</div>
+                        <div className="fw-bold" style={{ color: 'var(--bs-body-color)' }}>{versionStat.submissionCount} submissions</div>
                         <div className="small text-muted">{percentage.toFixed(1)}% of total</div>
                       </div>
                     </div>
@@ -135,7 +135,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
 
           {/* Version Timeline */}
           <div className="mb-4">
-            <h6 className="fw-bold text-dark mb-3">
+            <h6 className="fw-bold mb-3" style={{ color: 'var(--bs-body-color)' }}>
               <Clock size={18} className="me-2" />
               Version Timeline
             </h6>
@@ -164,11 +164,12 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                     <div key={version.versionSha} className="position-relative d-flex align-items-center mb-3">
                       {/* Timeline node */}
                       <div
-                        className="position-absolute d-flex align-items-center justify-content-center rounded-circle bg-white border"
+                        className="position-absolute d-flex align-items-center justify-content-center rounded-circle border"
                         style={{
                           left: '12px',
                           width: '16px',
                           height: '16px',
+                          backgroundColor: 'var(--bs-body-bg)',
                           borderColor: version.isPublished ? 'var(--bs-success)' : 'var(--bs-secondary)',
                           borderWidth: '2px',
                           zIndex: 2,
@@ -195,7 +196,7 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
                                   LIVE
                                 </Badge>
                               )}
-                              <span className="fw-semibold text-dark">{version.description || 'No description'}</span>
+                              <span className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{version.description || 'No description'}</span>
                             </div>
                             <div className="small text-muted">
                               {new Date(version.createdAt).toLocaleDateString()} • {version.author.name}
@@ -214,8 +215,8 @@ export const VersionAnalyticsDashboard = ({ versions, submissionStats }: Version
           </div>
 
           {/* Insights */}
-          <div className="bg-light p-3 rounded">
-            <h6 className="fw-bold text-dark mb-2">
+          <div style={{ backgroundColor: 'var(--bs-secondary-bg)' }} className="p-3 rounded">
+            <h6 className="fw-bold mb-2" style={{ color: 'var(--bs-body-color)' }}>
               <TrendingUp size={16} className="me-2" />
               Key Insights
             </h6>

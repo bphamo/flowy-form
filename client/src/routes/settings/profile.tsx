@@ -80,7 +80,7 @@ function SettingsProfile() {
               {/* Profile Information Card */}
               <Col lg={8}>
                 <Card className="shadow-sm border-0">
-                  <Card.Header className="bg-white py-3">
+                  <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                     <div className="d-flex align-items-center">
                       <div
                         className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
@@ -192,7 +192,7 @@ function SettingsProfile() {
               {/* Account Status Card */}
               <Col lg={4}>
                 <Card className="shadow-sm border-0">
-                  <Card.Header className="bg-white py-3">
+                  <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                     <div className="d-flex align-items-center">
                       <div
                         className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"

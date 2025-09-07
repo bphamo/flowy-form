@@ -91,7 +91,7 @@ function EmbeddedForm() {
 
   return (
     <Card className="shadow-sm border-0">
-      <Card.Header className="bg-white py-3">
+      <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
         <div className="d-flex align-items-center">
           <Code size={20} className="text-primary me-2" />
           <div>

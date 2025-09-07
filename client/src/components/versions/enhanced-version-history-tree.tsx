@@ -284,7 +284,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
   return (
     <div>
       <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white py-3">
+        <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
               <div

@@ -65,13 +65,13 @@ function Submissions() {
 
           {/* Submissions Table */}
           <Card className="shadow-sm border-0">
-            <Card.Header className="bg-white py-3">
+            <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
               <h5 className="mb-0 fw-bold">All My Submissions</h5>
             </Card.Header>
             <Card.Body className="p-0">
               {userSubmissions.length > 0 ? (
                 <Table responsive className="mb-0">
-                  <thead className="bg-light">
+                  <thead style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <tr>
                       <th className="border-0 py-3 px-4">Form Name</th>
                       <th className="border-0 py-3 px-4">Submission ID</th>
