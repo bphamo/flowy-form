@@ -1,4 +1,4 @@
-// API Response Types for FlowableForms
+// API Response Types for Flowy Form
 // This file contains type definitions for all API endpoints based on server route handlers
 
 import { FormType } from '@formio/react';

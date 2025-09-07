@@ -1,4 +1,4 @@
-# DevelForm - Form Builder Application
+# Flowy Form - Form Builder Application
 
 A modern form builder application with a React frontend and Hono backend, supporting GitHub OAuth authentication and dynamic form creation.
 
@@ -30,7 +30,7 @@ A modern form builder application with a React frontend and Hono backend, suppor
 1. **Server Configuration** (`server/.env`):
 
    ```env
-   DATABASE_URL=postgresql://username:password@localhost:5432/develform
+   DATABASE_URL=postgresql://username:password@localhost:5432/flowyform
    JWT_SECRET=your-super-secret-jwt-key
    GITHUB_CLIENT_ID=your-github-client-id
    GITHUB_CLIENT_SECRET=your-github-client-secret
