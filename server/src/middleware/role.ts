@@ -5,7 +5,10 @@ import * as formsService from '../services/forms';
 export const formWriteCheckMiddleware = async (c: Context, next: Next) => {
   try {
     const formId = parseInt(c.req.param('formId'));
-    const user = c.get('jwtPayload').user;
+    const user = c.get('user');
+    if (!user) {
+      return c.json({ error: 'User not found' }, 401);
+    }
     if (isNaN(formId)) {
       throw new Error('Invalid form ID');
     }

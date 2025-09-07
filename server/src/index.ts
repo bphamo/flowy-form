@@ -4,11 +4,12 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
-import authRoutes from './routes/auth';
+import { auth } from './lib/auth';
 import formRoutes from './routes/forms';
 import settingsRoutes from './routes/settings';
 import submissionRoutes from './routes/submissions';
 import versionRoutes from './routes/versions';
+import './types/hono'; // Import Hono context type extensions
 
 dotenv.config();
 
@@ -29,8 +30,11 @@ app.get('/', (c) => {
   return c.json({ message: 'DevelForm API is running', status: 'ok' });
 });
 
-// Routes
-app.route('/api/auth', authRoutes);
+app.on(['POST', 'GET'], '/api/auth/*', (c) => {
+  return auth.handler(c.req.raw);
+});
+
+// API Routes
 app.route('/api/forms', formRoutes);
 app.route('/api/submissions', submissionRoutes);
 app.route('/api/settings', settingsRoutes);

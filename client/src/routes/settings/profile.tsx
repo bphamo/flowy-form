@@ -143,7 +143,7 @@ function SettingsProfile() {
                         </div>
                       </div>
 
-                      {mustVerifyEmail && !user.email_verified_at && (
+                      {mustVerifyEmail && !user.emailVerified && (
                         <div className="alert alert-warning d-flex align-items-start mb-4">
                           <AlertTriangle size={20} className="me-2 mt-1 flex-shrink-0" />
                           <div>
@@ -210,7 +210,7 @@ function SettingsProfile() {
                     <div className="d-flex flex-column gap-3">
                       <div className="d-flex align-items-center justify-content-between">
                         <span className="text-muted small">Email Status</span>
-                        {user.email_verified_at ? (
+                        {user.emailVerified ? (
                           <Badge bg="success" className="d-flex align-items-center">
                             <CheckCircle size={12} className="me-1" />
                             Verified
@@ -224,7 +224,7 @@ function SettingsProfile() {
                       </div>
                       <div className="d-flex align-items-center justify-content-between">
                         <span className="text-muted small">Member Since</span>
-                        <span className="small">{user.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}</span>
+                        <span className="small">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'}</span>
                       </div>
                     </div>
                   </Card.Body>

@@ -32,7 +32,7 @@ submissionRoutes.get('/:id', optionalAuthMiddleware, async (c) => {
     const submissionId = parseInt(c.req.param('id'));
     const token = c.req.query('token');
     const isEmbedded = c.req.query('embed') === 'true';
-    const user = c.get('jwtPayload')?.user;
+    const user = c.get('user');
 
     if (isNaN(submissionId)) {
       return c.json({ error: 'Invalid submission ID' }, 400);
@@ -153,7 +153,7 @@ submissionRoutes.get('/form/:formId', authMiddleware, formWriteCheckMiddleware, 
  */
 submissionRoutes.get('/', authMiddleware, async (c) => {
   try {
-    const user = c.get('jwtPayload')?.user;
+    const user = c.get('user');
 
     if (!user) {
       return c.json({ error: 'Authentication required' }, 401);
@@ -194,7 +194,7 @@ submissionRoutes.get('/', authMiddleware, async (c) => {
 submissionRoutes.post('/form/:formId', optionalAuthMiddleware, async (c) => {
   try {
     const formId = parseInt(c.req.param('formId'));
-    const user = c.get('jwtPayload')?.user;
+    const user = c.get('user');
     const body = await c.req.json();
 
     const validatedData = createSubmissionSchema.parse(body);

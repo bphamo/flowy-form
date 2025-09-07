@@ -136,16 +136,17 @@ export interface MockTable {
   delete: jest.Mock;
 }
 
-// JWT Payload interface
-export interface JwtPayload {
-  sub: string;
+// BetterAuth Session interface
+export interface MockBetterAuthSession {
   user: {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    githubId: string;
-    avatarUrl: string;
+    image: string;
   };
-  iat: number;
-  exp: number;
+  session: {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+  };
 }

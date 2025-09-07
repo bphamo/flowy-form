@@ -72,7 +72,7 @@ export const createVersion = async (
     baseVersionSha?: string;
     auditDescription?: string;
   },
-  userId: number,
+  userId: string,
 ) => {
   const versionSha = createId();
 
@@ -293,7 +293,7 @@ export const makeVersionLive = async (db: Database, formId: number, targetSha: s
  * Create a new latest version based on an old version
  * Duplicates the old schema as a new version
  */
-export const makeVersionLatest = async (db: Database, formId: number, targetSha: string, userId: number, description?: string) => {
+export const makeVersionLatest = async (db: Database, formId: number, targetSha: string, userId: string, description?: string) => {
   return await db.transaction(async (tx) => {
     // Get the target version schema
     const targetVersion = await tx

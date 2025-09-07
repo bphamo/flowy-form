@@ -1,5 +1,5 @@
 import { Code, Eye, GitCompare } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Alert, Button, Modal, Tab, Tabs } from 'react-bootstrap';
 import { api } from '../../lib/api';
 import { FormVersion } from '../../types/api';
@@ -28,13 +28,7 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
 
   const [olderVersion, newerVersion] = versions.sort((a, b) => new Date(a.createdAt!).getTime() - new Date(b.createdAt!).getTime());
 
-  useEffect(() => {
-    if (show && versions.length === 2) {
-      calculateDiff();
-    }
-  }, [show, versions]);
-
-  const calculateDiff = async () => {
+  const calculateDiff = useCallback(async () => {
     // Simple schema comparison logic
     // TODO: Implement more sophisticated schema diffing
     try {
@@ -44,11 +38,11 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
         api.versions.get(formId, newerVersion.versionSha),
       ]);
 
-      const oldSchema = oldVersionResponse.data.schema as any;
-      const newSchema = newVersionResponse.data.schema as any;
+      const oldSchema = oldVersionResponse.data.schema as Record<string, unknown>;
+      const newSchema = newVersionResponse.data.schema as Record<string, unknown>;
 
-      const oldComponents = oldSchema?.components || [];
-      const newComponents = newSchema?.components || [];
+      const oldComponents = (oldSchema?.components as Record<string, unknown>[]) || [];
+      const newComponents = (newSchema?.components as Record<string, unknown>[]) || [];
 
       const added: string[] = [];
       const removed: string[] = [];
@@ -59,12 +53,12 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
       const oldComponentMap = new Map();
       const newComponentMap = new Map();
 
-      oldComponents.forEach((comp: any) => {
+      oldComponents.forEach((comp: Record<string, unknown>) => {
         const key = comp.key || comp.label || comp.type;
         oldComponentMap.set(key, comp);
       });
 
-      newComponents.forEach((comp: any) => {
+      newComponents.forEach((comp: Record<string, unknown>) => {
         const key = comp.key || comp.label || comp.type;
         newComponentMap.set(key, comp);
       });
@@ -100,9 +94,15 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
       console.error('Failed to fetch schemas for comparison:', error);
       setDiff({ added: [], removed: [], modified: [], unchanged: [] });
     }
-  };
+  }, [formId, olderVersion.versionSha, newerVersion.versionSha]);
 
-  const renderSchemaJson = (schema: any, title: string) => (
+  useEffect(() => {
+    if (show && versions.length === 2) {
+      calculateDiff();
+    }
+  }, [show, versions, calculateDiff]);
+
+  const renderSchemaJson = (schema: Record<string, unknown>, title: string) => (
     <div className="h-100">
       <h6 className="fw-bold mb-3">{title}</h6>
       <div className="bg-dark text-light p-3 rounded" style={{ maxHeight: '400px', overflow: 'auto' }}>

@@ -1,17 +1,58 @@
 import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
 
-// Users table
+// BetterAuth users table (updated to be compatible with BetterAuth)
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: text('id').primaryKey(), // Changed from serial to text for BetterAuth compatibility
   name: text('name').notNull(),
   email: text('email').unique(),
+  emailVerified: boolean('email_verified').default(false).notNull(), // BetterAuth required field
+  image: text('image'), // BetterAuth field (replaces avatarUrl for compatibility)
   password: text('password'),
-  githubId: text('github_id').unique(),
-  avatarUrl: text('avatar_url'),
-  emailVerifiedAt: timestamp('email_verified_at'),
-  rememberToken: text('remember_token'),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
+  githubId: text('github_id').unique(), // Keep for data migration compatibility
+  avatarUrl: text('avatar_url'), // Keep for data migration compatibility
+  emailVerifiedAt: timestamp('email_verified_at'), // Keep for data migration compatibility
+  rememberToken: text('remember_token'), // Keep for data migration compatibility
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+});
+
+// BetterAuth sessions table
+export const sessions = pgTable('sessions', {
+  id: text('id').primaryKey(),
+  expiresAt: timestamp('expires_at').notNull(),
+  token: text('token').notNull().unique(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').$onUpdate(() => new Date()).notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+});
+
+// BetterAuth accounts table (for OAuth providers)
+export const accounts = pgTable('accounts', {
+  id: text('id').primaryKey(),
+  accountId: text('account_id').notNull(),
+  providerId: text('provider_id').notNull(),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  accessToken: text('access_token'),
+  refreshToken: text('refresh_token'),
+  idToken: text('id_token'),
+  accessTokenExpiresAt: timestamp('access_token_expires_at'),
+  refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+  scope: text('scope'),
+  password: text('password'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').$onUpdate(() => new Date()).notNull(),
+});
+
+// BetterAuth verification tokens table
+export const verificationTokens = pgTable('verification_tokens', {
+  id: text('id').primaryKey(),
+  identifier: text('identifier').notNull(),
+  value: text('value').notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
 });
 
 // Forms table
@@ -22,10 +63,10 @@ export const forms = pgTable('forms', {
   isPublic: boolean('is_public').default(true),
   schema: jsonb('schema'),
   liveVersionId: integer('live_version_id'),
-  createdBy: integer('created_by')
+  createdBy: text('created_by')
     .references(() => users.id)
     .notNull(),
-  updatedBy: integer('updated_by')
+  updatedBy: text('updated_by')
     .references(() => users.id)
     .notNull(),
   createdAt: timestamp('created_at').defaultNow(),
@@ -46,7 +87,7 @@ export const formVersions = pgTable(
     isPublished: boolean('is_published').default(false),
     publishedAt: timestamp('published_at'),
     metadata: jsonb('metadata'),
-    createdBy: integer('created_by')
+    createdBy: text('created_by')
       .references(() => users.id)
       .notNull(),
     createdAt: timestamp('created_at').defaultNow(),
@@ -67,8 +108,8 @@ export const submissions = pgTable('submissions', {
     .notNull(),
   versionSha: text('version_sha').references(() => formVersions.versionSha),
   data: jsonb('data').notNull(),
-  createdBy: integer('created_by').references(() => users.id, { onDelete: 'set null' }),
-  updatedBy: integer('updated_by').references(() => users.id, { onDelete: 'set null' }),
+  createdBy: text('created_by').references(() => users.id, { onDelete: 'set null' }),
+  updatedBy: text('updated_by').references(() => users.id, { onDelete: 'set null' }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
@@ -97,6 +138,12 @@ export const jobs = pgTable('jobs', {
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;
+export type Account = typeof accounts.$inferSelect;
+export type NewAccount = typeof accounts.$inferInsert;
+export type VerificationToken = typeof verificationTokens.$inferSelect;
+export type NewVerificationToken = typeof verificationTokens.$inferInsert;
 export type Form = typeof forms.$inferSelect;
 export type NewForm = typeof forms.$inferInsert;
 export type FormVersion = typeof formVersions.$inferSelect;
