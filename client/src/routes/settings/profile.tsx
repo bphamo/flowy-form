@@ -68,7 +68,7 @@ function SettingsProfile() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: User, text: 'Profile Settings' }}
@@ -81,11 +81,11 @@ function SettingsProfile() {
               {/* Profile Information Card */}
               <Col lg={8}>
                 <Card className="shadow-sm border-0">
-                  <Card.Header className="bg-white py-3">
+                  <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                     <div className="d-flex align-items-center">
                       <div
                         className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                        style={{ width: 40, height: 40, backgroundColor: '#dbeafe' }}
+                        style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                       >
                         <User size={20} className="text-primary" />
                       </div>
@@ -193,11 +193,11 @@ function SettingsProfile() {
               {/* Account Status Card */}
               <Col lg={4}>
                 <Card className="shadow-sm border-0">
-                  <Card.Header className="bg-white py-3">
+                  <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                     <div className="d-flex align-items-center">
                       <div
                         className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                        style={{ width: 40, height: 40, backgroundColor: '#dcfce7' }}
+                        style={{ width: 40, height: 40, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                       >
                         <Shield size={20} className="text-success" />
                       </div>
@@ -239,7 +239,7 @@ function SettingsProfile() {
                 <div className="d-flex align-items-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                    style={{ width: 40, height: 40, backgroundColor: '#fef2f2' }}
+                    style={{ width: 40, height: 40, backgroundColor: 'var(--bs-danger-bg-subtle)' }}
                   >
                     <Trash2 size={20} className="text-danger" />
                   </div>
@@ -272,39 +272,6 @@ function SettingsProfile() {
 export const Route = createFileRoute('/settings/profile')({
   beforeLoad: ({ context }) => {
     requireAuth(context, '/settings/profile');
-  },
-  loader: async () => {
-    try {
-      const response = await fetch('/api/user/profile', {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return { profile: data.data || data };
-      } else {
-        // Return default profile data if API not available
-        return {
-          profile: {
-            name: '',
-            email: '',
-            bio: '',
-            location: '',
-            website: '',
-          },
-        };
-      }
-    } catch (error) {
-      console.error('Error fetching profile data:', error);
-      return {
-        profile: {
-          name: '',
-          email: '',
-          bio: '',
-          location: '',
-          website: '',
-        },
-      };
-    }
   },
   component: SettingsProfile,
 });

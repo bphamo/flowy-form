@@ -113,7 +113,7 @@ export const VersionSelector = ({ versions, currentVersionSha, liveVersionSha, o
                         className="rounded-circle d-flex align-items-center justify-content-center"
                         style={{ width: '16px', height: '16px', backgroundColor: 'currentColor' }}
                       >
-                        <div className="rounded-circle bg-white" style={{ width: '6px', height: '6px' }} />
+                        <div className="rounded-circle" style={{ width: '6px', height: '6px', backgroundColor: 'var(--bs-body-bg)' }} />
                       </div>
                     </div>
                   )}

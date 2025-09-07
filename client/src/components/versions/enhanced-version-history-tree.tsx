@@ -53,8 +53,8 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
       return {
         badge: 'LIVE',
         badgeColor: 'success',
-        iconColor: '#198754',
-        borderColor: '#198754',
+        iconColor: 'var(--bs-success)',
+        borderColor: 'var(--bs-success)',
       };
     }
 
@@ -62,16 +62,16 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
       return {
         badge: 'PUBLISHED',
         badgeColor: 'primary',
-        iconColor: '#0d6efd',
-        borderColor: '#0d6efd',
+        iconColor: 'var(--bs-primary)',
+        borderColor: 'var(--bs-primary)',
       };
     }
 
     return {
       badge: 'DRAFT',
       badgeColor: 'secondary',
-      iconColor: '#6c757d',
-      borderColor: '#dee2e6',
+      iconColor: 'var(--bs-secondary)',
+      borderColor: 'var(--bs-border-color)',
     };
   };
 
@@ -121,7 +121,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
               top: '-20px',
               width: '2px',
               height: '20px',
-              background: 'linear-gradient(to bottom, #6c757d, #0d6efd)',
+              background: 'linear-gradient(to bottom, var(--bs-secondary), var(--bs-primary))',
               zIndex: 1,
             }}
           >
@@ -135,7 +135,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
                 height: 0,
                 borderLeft: '4px solid transparent',
                 borderRight: '4px solid transparent',
-                borderTop: '6px solid #0d6efd',
+                borderTop: '6px solid var(--bs-primary)',
               }}
             />
           </div>
@@ -163,7 +163,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
               height: '40px',
               backgroundColor: statusInfo.iconColor,
               border: '3px solid white',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              boxShadow: '0 2px 8px var(--bs-box-shadow)',
               zIndex: 2,
               position: 'relative',
             }}
@@ -270,7 +270,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
         <Card.Body className="text-center py-5">
           <div
             className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-            style={{ width: 64, height: 64, backgroundColor: '#f8f9fa' }}
+            style={{ width: 64, height: 64, backgroundColor: 'var(--bs-gray-100)' }}
           >
             <GitBranch size={24} className="text-muted" />
           </div>
@@ -284,12 +284,12 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
   return (
     <div>
       <Card className="border-0 shadow-sm">
-        <Card.Header className="bg-white py-3">
+        <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
           <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
               <div
                 className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                style={{ width: 40, height: 40, backgroundColor: '#e3f2fd' }}
+                style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
               >
                 <GitBranch size={20} className="text-primary" />
               </div>
