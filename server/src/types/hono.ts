@@ -1,6 +1,8 @@
+import { Session, User } from '../db/schema';
+
 declare module 'hono' {
   interface ContextVariableMap {
-    user: any;
-    session: any;
+    user: User | null;
+    session: Session | null;
   }
 }
