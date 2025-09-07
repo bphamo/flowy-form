@@ -1,4 +1,4 @@
-// API Response Types for FlowableForms
+// API Response Types for Flowy Form
 // This file contains type definitions for all API endpoints based on server route handlers
 
 import { FormType } from '@formio/react';
@@ -19,16 +19,14 @@ export interface AuthUser {
   id: number;
   name: string;
   email: string | null;
-  githubId: string | null;
-  avatarUrl: string | null;
+  image: string | null;
 }
 
 export interface UserProfile {
   id: number;
   name: string;
   email: string | null;
-  githubId: string | null;
-  avatarUrl: string | null;
+  image: string | null;
   createdAt: string;
 }
 
@@ -52,7 +50,7 @@ export interface FormVersion {
     id: number;
     name: string;
     email: string | null;
-    avatarUrl: string | null;
+    image: string | null;
   };
 }
 
@@ -160,15 +158,6 @@ export interface UserSubmission {
 
 // API Response Types
 
-// Auth endpoints
-export interface GetUserResponse {
-  user: AuthUser;
-}
-
-export interface LogoutResponse {
-  message: string;
-}
-
 // Form endpoints
 export interface GetFormsResponse {
   data: FormSummary[];
@@ -261,8 +250,7 @@ export interface UpdateProfileResponse {
     id: number;
     name: string;
     email: string | null;
-    githubId: string | null;
-    avatarUrl: string | null;
+    image: string | null;
   };
 }
 
@@ -271,17 +259,12 @@ export interface DeleteAccountResponse {
 }
 
 // Union types for error responses
-export type AuthApiResponse<T> = T | ApiError;
 export type FormApiResponse<T> = T | ApiError;
 export type SubmissionApiResponse<T> = T | ApiError;
 export type SettingsApiResponse<T> = T | ApiError;
 
 // Complete API interface mapping
 export interface ApiResponses {
-  // Auth
-  'GET /auth/user': AuthApiResponse<GetUserResponse>;
-  'POST /auth/logout': AuthApiResponse<LogoutResponse>;
-
   // Forms
   'GET /forms': FormApiResponse<GetFormsResponse>;
   'GET /forms/:id': FormApiResponse<GetFormResponse>;

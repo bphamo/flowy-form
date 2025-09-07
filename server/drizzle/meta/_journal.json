@@ -29,6 +29,13 @@
       "when": 1757198782560,
       "tag": "0003_freezing_nighthawk",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1757212873748,
+      "tag": "0004_flippant_magma",
+      "breakpoints": true
     }
   ]
 }

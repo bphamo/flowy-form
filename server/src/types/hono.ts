@@ -1,4 +1,4 @@
-import type { User, Session } from '../db/schema';
+import { Session, User } from '../db/schema';
 
 declare module 'hono' {
   interface ContextVariableMap {

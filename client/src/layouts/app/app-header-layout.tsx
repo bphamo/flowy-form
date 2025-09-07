@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/use-auth';
+import { signOut, useSession } from '@/lib/auth-client';
 import { type BreadcrumbItem } from '@/types';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { FileText, Home, Layers, LogOut, Settings as SettingsIcon, User } from 'lucide-react';
@@ -10,11 +10,18 @@ export default function AppHeaderLayout({
   breadcrumbs,
   hideHeader,
 }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[]; hideHeader?: boolean }>) {
-  const { user, logout } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = '/';
+        },
+      },
+    });
   };
 
   return (
@@ -37,7 +44,7 @@ export default function AppHeaderLayout({
               >
                 <Layers size={20} color="#fff" />
               </div>
-              <strong style={{ color: 'var(--bs-body-color)' }}>Flowable Forms</strong>
+              <strong className="text-dark">Flowy Form</strong>
             </Navbar.Brand>
 
             <Navbar.Toggle aria-controls="navbar-nav" />

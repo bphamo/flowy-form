@@ -16,9 +16,7 @@ import type {
   GetProfileResponse,
   GetSubmissionResponse,
   GetSubmissionsByFormResponse,
-  GetUserResponse,
   GetUserSubmissionsResponse,
-  LogoutResponse,
   PublishVersionResponse,
   RevertVersionRequest,
   RevertVersionResponse,
@@ -56,12 +54,6 @@ class ApiClient {
 
     return response.json();
   }
-
-  // Auth methods
-  auth = {
-    getUser: () => this.request<GetUserResponse>('/auth/user'),
-    logout: () => this.request<LogoutResponse>('/auth/logout', { method: 'POST' }),
-  };
 
   // Forms methods
   forms = {

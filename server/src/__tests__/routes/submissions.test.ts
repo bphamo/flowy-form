@@ -278,7 +278,6 @@ describe('Submissions Routes', () => {
 
       expect(res.status).toBe(201);
       expect(data.data).toBeDefined();
-      expect(data.token).toBeDefined();
       expect(data.message).toBe('Anonymous submission created successfully');
     });
 

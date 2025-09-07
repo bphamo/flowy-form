@@ -258,7 +258,7 @@ function FormsSuccess() {
 
             {/* Footer */}
             <div className="text-center mt-5">
-              <p className="text-muted">Thank you for using Flowable Forms. If you have any questions, please contact support.</p>
+              <p className="text-muted">Thank you for using Flowy Form. If you have any questions, please contact support.</p>
             </div>
           </div>
         </Container>

@@ -3,9 +3,9 @@ import { FormEvent, useState } from 'react';
 
 import { LoadingSpinner } from '@/components/common/loading-spinner';
 import { PageHeader } from '@/components/common/page-header';
-import { useAuth } from '@/hooks/use-auth';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { useSession } from '@/lib/auth-client';
 import { requireAuth } from '@/lib/auth-utils';
 import { type BreadcrumbItem } from '@/types';
 import { AlertTriangle, CheckCircle, Mail, Shield, Trash2, User } from 'lucide-react';
@@ -24,7 +24,8 @@ type ProfileForm = {
 };
 
 function SettingsProfile() {
-  const { user } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const [data, setData] = useState<ProfileForm>({
     name: user?.name || '',
     email: user?.email || '',
