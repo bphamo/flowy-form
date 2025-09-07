@@ -128,34 +128,5 @@ export const Route = createFileRoute('/settings/appearance')({
   beforeLoad: ({ context }) => {
     requireAuth(context, '/settings/appearance');
   },
-  loader: async () => {
-    try {
-      const response = await fetch('/api/user/appearance', {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return { appearance: data.data || data };
-      } else {
-        // Return default appearance settings
-        return {
-          appearance: {
-            theme: 'light',
-            language: 'en',
-            timezone: 'UTC',
-          },
-        };
-      }
-    } catch (error) {
-      console.error('Error fetching appearance settings:', error);
-      return {
-        appearance: {
-          theme: 'light',
-          language: 'en',
-          timezone: 'UTC',
-        },
-      };
-    }
-  },
   component: SettingsAppearance,
 });

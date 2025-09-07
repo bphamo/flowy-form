@@ -272,38 +272,5 @@ export const Route = createFileRoute('/settings/profile')({
   beforeLoad: ({ context }) => {
     requireAuth(context, '/settings/profile');
   },
-  loader: async () => {
-    try {
-      const response = await fetch('/api/user/profile', {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return { profile: data.data || data };
-      } else {
-        // Return default profile data if API not available
-        return {
-          profile: {
-            name: '',
-            email: '',
-            bio: '',
-            location: '',
-            website: '',
-          },
-        };
-      }
-    } catch (error) {
-      console.error('Error fetching profile data:', error);
-      return {
-        profile: {
-          name: '',
-          email: '',
-          bio: '',
-          location: '',
-          website: '',
-        },
-      };
-    }
-  },
   component: SettingsProfile,
 });
