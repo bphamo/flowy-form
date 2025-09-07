@@ -16,7 +16,7 @@ function Login() {
   const handleGitHubLogin = () => {
     signIn.social({
       provider: 'github',
-      callbackURL: redirectParam || window.location.origin + '/dashboard',
+      callbackURL: window.location.origin + (redirectParam ?? '/dashboard'),
     });
   };
 
