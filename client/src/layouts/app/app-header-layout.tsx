@@ -1,4 +1,4 @@
-import { useAuth } from '@/hooks/use-auth';
+import { signOut, useSession } from '@/lib/auth-client';
 import { type BreadcrumbItem } from '@/types';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { FileText, Home, Layers, LogOut, Settings as SettingsIcon, User } from 'lucide-react';
@@ -10,11 +10,18 @@ export default function AppHeaderLayout({
   breadcrumbs,
   hideHeader,
 }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[]; hideHeader?: boolean }>) {
-  const { user, logout } = useAuth();
+  const { data: session } = useSession();
+  const user = session?.user;
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          window.location.href = '/';
+        },
+      },
+    });
   };
 
   return (

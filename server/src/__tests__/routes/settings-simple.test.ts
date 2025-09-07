@@ -20,7 +20,7 @@ describe('Settings Routes', () => {
       id: 1,
       name: 'Test User',
       email: 'test@example.com',
-      avatarUrl: 'https://avatars.githubusercontent.com/u/123456',
+      image: 'https://avatars.githubusercontent.com/u/123456',
       createdAt: new Date('2024-01-01'),
       updatedAt: new Date('2024-01-01'),
     };
@@ -51,24 +51,20 @@ describe('Settings Routes', () => {
         id: 1,
         name: 'Test User',
         email: 'test@example.com',
-        password: 'hashed-password', // This should not be included in profile
-        githubId: '123456',
-        avatarUrl: 'https://avatars.githubusercontent.com/u/123456',
-        rememberToken: 'secret-token', // This should not be included
+        image: 'https://avatars.githubusercontent.com/u/123456',
         createdAt: new Date(),
         updatedAt: new Date(),
       };
 
       const extractSafeProfile = (userData: any) => {
-        const { password, rememberToken, ...safeData } = userData;
-        return safeData;
+        // All fields are safe with BetterAuth
+        return userData;
       };
 
       const safeProfile = extractSafeProfile(fullUserData);
-      expect(safeProfile).not.toHaveProperty('password');
-      expect(safeProfile).not.toHaveProperty('rememberToken');
       expect(safeProfile).toHaveProperty('name');
       expect(safeProfile).toHaveProperty('email');
+      expect(safeProfile).toHaveProperty('image');
     });
   });
 
@@ -82,7 +78,7 @@ describe('Settings Routes', () => {
       id: 1,
       name: 'Updated Name',
       email: 'updated@example.com',
-      avatarUrl: 'https://avatars.githubusercontent.com/u/123456',
+      image: 'https://avatars.githubusercontent.com/u/123456',
       updatedAt: new Date(),
     };
 
@@ -183,8 +179,7 @@ describe('Settings Routes', () => {
         id: 1,
         name: 'Original Name',
         email: 'original@example.com',
-        githubId: '123456',
-        avatarUrl: 'https://example.com/avatar.jpg',
+        image: 'https://example.com/avatar.jpg',
         createdAt: new Date('2024-01-01'),
         updatedAt: new Date('2024-01-01'),
       };
@@ -193,7 +188,6 @@ describe('Settings Routes', () => {
         name: 'New Name',
         email: 'new@example.com',
         id: 999, // Should not be updatable
-        githubId: 'hacker', // Should not be updatable
         createdAt: new Date(), // Should not be updatable
       };
 
@@ -213,7 +207,6 @@ describe('Settings Routes', () => {
       const result = applyUpdate(originalProfile, updateData);
 
       expect(result.id).toBe(1); // Original ID preserved
-      expect(result.githubId).toBe('123456'); // Original githubId preserved
       expect(result.createdAt).toEqual(originalProfile.createdAt); // Original createdAt preserved
       expect(result.name).toBe('New Name'); // Name updated
       expect(result.email).toBe('new@example.com'); // Email updated
@@ -337,33 +330,22 @@ describe('Settings Routes', () => {
   describe('Profile Security', () => {
     it('should not expose sensitive information', () => {
       const createProfileResponse = (userData: any) => {
-        // Never include sensitive fields in profile responses
-        const sensitiveFields = ['password', 'rememberToken', 'githubId'];
-        const safeData = { ...userData };
-
-        sensitiveFields.forEach((field) => {
-          delete safeData[field];
-        });
-
-        return safeData;
+        // With BetterAuth, all user fields are safe to return
+        return userData;
       };
 
       const userData = {
         id: 1,
         name: 'Test User',
         email: 'test@example.com',
-        password: 'hashed-password',
-        rememberToken: 'secret',
-        githubId: '123456',
+        image: 'https://example.com/avatar.jpg',
       };
 
       const response = createProfileResponse(userData);
 
       expect(response).toHaveProperty('name');
       expect(response).toHaveProperty('email');
-      expect(response).not.toHaveProperty('password');
-      expect(response).not.toHaveProperty('rememberToken');
-      expect(response).not.toHaveProperty('githubId');
+      expect(response).toHaveProperty('image');
     });
 
     it('should validate user ownership', () => {

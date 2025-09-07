@@ -1,19 +1,17 @@
 import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
 
-// BetterAuth users table (updated to be compatible with BetterAuth)
+// BetterAuth users table
 export const users = pgTable('users', {
-  id: text('id').primaryKey(), // Changed from serial to text for BetterAuth compatibility
+  id: text('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').unique(),
-  emailVerified: boolean('email_verified').default(false).notNull(), // BetterAuth required field
-  image: text('image'), // BetterAuth field (replaces avatarUrl for compatibility)
-  password: text('password'),
-  githubId: text('github_id').unique(), // Keep for data migration compatibility
-  avatarUrl: text('avatar_url'), // Keep for data migration compatibility
-  emailVerifiedAt: timestamp('email_verified_at'), // Keep for data migration compatibility
-  rememberToken: text('remember_token'), // Keep for data migration compatibility
+  emailVerified: boolean('email_verified').default(false).notNull(),
+  image: text('image'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 // BetterAuth sessions table
@@ -22,10 +20,14 @@ export const sessions = pgTable('sessions', {
   expiresAt: timestamp('expires_at').notNull(),
   token: text('token').notNull().unique(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp('updated_at')
+    .$onUpdate(() => new Date())
+    .notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
 });
 
 // BetterAuth accounts table (for OAuth providers)
@@ -33,7 +35,9 @@ export const accounts = pgTable('accounts', {
   id: text('id').primaryKey(),
   accountId: text('account_id').notNull(),
   providerId: text('provider_id').notNull(),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
   idToken: text('id_token'),
@@ -42,7 +46,9 @@ export const accounts = pgTable('accounts', {
   scope: text('scope'),
   password: text('password'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp('updated_at')
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 // BetterAuth verification tokens table
@@ -52,7 +58,10 @@ export const verificationTokens = pgTable('verification_tokens', {
   value: text('value').notNull(),
   expiresAt: timestamp('expires_at').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });
 
 // Forms table

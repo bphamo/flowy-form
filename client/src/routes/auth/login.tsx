@@ -1,21 +1,23 @@
 import { createFileRoute, useLocation } from '@tanstack/react-router';
 
-import { useAuth } from '@/hooks/use-auth';
-import { Github, Layers } from 'lucide-react';
+import { signIn } from '@/lib/auth-client';
+import { Layers } from 'lucide-react';
 import { Badge, Button, Card, Container } from 'react-bootstrap';
 
 export const Route = createFileRoute('/auth/login')({
-  component: GitHubLogin,
+  component: Login,
 });
 
-function GitHubLogin() {
-  const { login } = useAuth();
+function Login() {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const redirectParam = urlParams.get('redirect');
 
   const handleGitHubLogin = () => {
-    login(redirectParam || undefined);
+    signIn.social({
+      provider: 'github',
+      callbackURL: window.location.origin + (redirectParam ?? '/dashboard'),
+    });
   };
 
   return (
@@ -36,8 +38,8 @@ function GitHubLogin() {
           <Card className="border-0 shadow-sm">
             <Card.Body className="p-4">
               <div className="text-center mb-4">
-                <h1 className="h4 text-dark fw-semibold mb-2">Welcome back</h1>
-                <p className="text-muted mb-0">Sign in to your account using GitHub</p>
+                <h1 className="h4 text-dark fw-semibold mb-2">Welcome!</h1>
+                <p className="text-muted mb-0">Sign in to your account</p>
               </div>
 
               <div className="d-grid gap-3">
@@ -48,7 +50,7 @@ function GitHubLogin() {
                   className="d-flex align-items-center justify-content-center"
                   style={{ minHeight: '48px' }}
                 >
-                  <Github size={20} className="me-2" />
+                  <img height="20" className="me-2" src="https://cdn.simpleicons.org/github?viewbox=auto" />
                   Continue with GitHub
                 </Button>
               </div>
