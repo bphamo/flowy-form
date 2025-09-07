@@ -192,7 +192,7 @@ function FormsSubmit() {
 
         {/* Form Card - Minimal styling for embedding */}
         <Card className="border-0 shadow-sm">
-          <Card.Header className="bg-light border-bottom py-3">
+          <Card.Header style={{ backgroundColor: 'var(--bs-secondary-bg)' }} className="border-bottom py-3">
             <div className="d-flex align-items-center">
               <div>
                 <h5 className="mb-0 fw-bold">{formData.name}</h5>
@@ -315,7 +315,7 @@ function FormsSubmit() {
                     <Shield size={20} className="text-success" />
                   </div>
                   <div>
-                    <h6 className="fw-bold text-dark mb-2">Your Privacy & Security</h6>
+                    <h6 className="fw-bold mb-2" style={{ color: 'var(--bs-body-color)' }}>Your Privacy & Security</h6>
                     <div className="text-muted small">
                       <ul className="mb-0 ps-3">
                         <li>We only collect the information you provide in this form</li>

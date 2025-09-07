@@ -101,27 +101,27 @@ function FormsManage() {
                   <div className="d-flex flex-column gap-3">
                     <div className="d-flex align-items-center justify-content-between">
                       <div>
-                        <div className="fw-semibold text-dark">Form Name</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Form Name</div>
                         <div className="text-muted">{form.name}</div>
                       </div>
                       <StatusBadge isPublic={form.isPublic} />
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark">Description</div>
+                      <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Description</div>
                       <div className="text-muted">{form.description || 'No description provided'}</div>
                     </div>
 
                     <div className="d-flex align-items-center gap-4">
                       <div>
-                        <div className="fw-semibold text-dark small">Created</div>
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Created</div>
                         <div className="text-muted small d-flex align-items-center">
                           <Calendar size={14} className="me-1" />
                           {new Date(form.createdAt).toLocaleDateString()}
                         </div>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark small">Last Updated</div>
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Last Updated</div>
                         <div className="text-muted small d-flex align-items-center">
                           <Calendar size={14} className="me-1" />
                           {new Date(form.updatedAt).toLocaleDateString()}
@@ -230,7 +230,7 @@ function FormsManage() {
                         >
                           <Send size={20} className="text-primary" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">Total Submissions</div>
@@ -244,7 +244,7 @@ function FormsManage() {
                         >
                           <Eye size={20} className="text-success" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">Total Views</div>
@@ -258,7 +258,7 @@ function FormsManage() {
                         >
                           <BarChart3 size={20} className="text-purple" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0%
                         </div>
                         <div className="text-muted small">Conversion Rate</div>
@@ -272,7 +272,7 @@ function FormsManage() {
                         >
                           <Calendar size={20} className="text-warning" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">This Week</div>

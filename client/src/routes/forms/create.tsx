@@ -216,7 +216,7 @@ function FormsCreate() {
                         </div>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark">Design Your Form</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Design Your Form</div>
                         <div className="text-muted small">Use the form builder to add fields and customize the layout</div>
                       </div>
                     </div>
@@ -230,7 +230,7 @@ function FormsCreate() {
                         </div>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark">Test & Preview</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Test & Preview</div>
                         <div className="text-muted small">Preview your form and test all functionality before publishing</div>
                       </div>
                     </div>
@@ -244,7 +244,7 @@ function FormsCreate() {
                         </div>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark">Share & Collect</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Share & Collect</div>
                         <div className="text-muted small">Share your form link and start collecting submissions</div>
                       </div>
                     </div>

@@ -114,7 +114,7 @@ function Dashboard() {
                     >
                       {stat.icon}
                     </div>
-                    <h3 className="fw-bold text-dark mb-1">{stat.value}</h3>
+                    <h3 className="fw-bold mb-1" style={{ color: 'var(--bs-body-color)' }}>{stat.value}</h3>
                     <p className="text-muted mb-2">{stat.title}</p>
                     <Badge bg="light" text="dark" className="text-success">
                       {stat.change}
@@ -158,7 +158,7 @@ function Dashboard() {
                     <div key={idx} className="d-flex align-items-center p-3 mb-2 rounded" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
                       <div className="me-3">{activity.icon}</div>
                       <div className="flex-grow-1">
-                        <div className="fw-medium text-dark">{activity.title}</div>
+                        <div className="fw-medium" style={{ color: 'var(--bs-body-color)' }}>{activity.title}</div>
                         <div className="text-muted small d-flex align-items-center">
                           <Clock size={14} className="me-1" />
                           {activity.time}
