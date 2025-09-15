@@ -107,8 +107,7 @@ function SettingsAppearance() {
                       );
                     })}
                   </div>
-
-                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
+                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <h6 className="fw-semibold mb-2">Coming Soon</h6>
                     <p className="text-muted small mb-0">
                       Additional appearance customization options including custom colors, fonts, and layouts will be available in future updates.
