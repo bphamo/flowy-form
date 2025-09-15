@@ -112,6 +112,7 @@ export interface SubmitterInformation {
 export interface SubmissionSummary {
   id: number;
   data: unknown;
+  status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED';
   createdAt: string;
   submitterInformation: SubmitterInformation | null;
   isAnonymous: boolean;
@@ -122,6 +123,7 @@ export interface SubmissionDetail {
   formId: number;
   formName: string | null;
   data: Submission | undefined;
+  status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED';
   schema: FormType | undefined;
   versionSha: string | null;
   version: {
@@ -147,6 +149,7 @@ export interface UserSubmission {
   formName: string;
   formDescription: string | null;
   data: unknown;
+  status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED';
   createdAt: string;
   versionSha: string | null;
   formOwner: {
@@ -240,6 +243,14 @@ export interface GetUserSubmissionsResponse {
   data: UserSubmission[];
 }
 
+export interface UpdateSubmissionStatusResponse {
+  data: {
+    id: number;
+    status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED';
+    updatedAt: string;
+  };
+}
+
 // Settings endpoints
 export interface GetProfileResponse {
   data: UserProfile;
@@ -280,6 +291,7 @@ export interface ApiResponses {
   'GET /submissions/form/:formId': SubmissionApiResponse<GetSubmissionsByFormResponse>;
   'GET /submissions/user': SubmissionApiResponse<GetUserSubmissionsResponse>;
   'POST /submissions/form/:formId': SubmissionApiResponse<CreateSubmissionResponse>;
+  'PUT /submissions/:id/status': SubmissionApiResponse<UpdateSubmissionStatusResponse>;
 
   // Settings
   'GET /settings/profile': SettingsApiResponse<GetProfileResponse>;
@@ -335,4 +347,8 @@ export interface UpdateVersionRequest {
 
 export interface RevertVersionRequest {
   description?: string;
+}
+
+export interface UpdateSubmissionStatusRequest {
+  status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED';
 }

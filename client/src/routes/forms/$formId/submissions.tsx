@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useLoaderData } from '@tanstack/react-router';
 
 import { PageHeader } from '@/components/common/page-header';
+import { SubmissionStatusBadge } from '@/components/common/submission-status-badge';
 import AppLayout from '@/layouts/app-layout';
 import { api } from '@/lib/api';
 import { requireAuth } from '@/lib/auth-utils';
@@ -178,6 +179,7 @@ function FormSubmissions() {
                       <th className="border-0 py-3 px-4">ID</th>
                       <th className="border-0 py-3 px-4">Submitter</th>
                       <th className="border-0 py-3 px-4">Type</th>
+                      <th className="border-0 py-3 px-4">Status</th>
                       <th className="border-0 py-3 px-4">Submitted</th>
                       <th className="border-0 py-3 px-4">Actions</th>
                     </tr>
@@ -204,6 +206,9 @@ function FormSubmissions() {
                         </td>
                         <td className="py-3 px-4">
                           <Badge bg={submission.isAnonymous ? 'warning' : 'success'}>{submission.isAnonymous ? 'Anonymous' : 'Authenticated'}</Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <SubmissionStatusBadge status={submission.status} size="small" />
                         </td>
                         <td className="py-3 px-4">
                           <div className="d-flex align-items-center text-muted small">
