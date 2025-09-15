@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 import { db } from '../db/index';
 import { authMiddleware, optionalAuthMiddleware } from '../middleware/auth';
-import { formWriteCheckMiddleware } from '../middleware/role';
+import { formWriteCheckMiddleware, submissionStatusUpdateCheckMiddleware } from '../middleware/role';
 import * as submissionsService from '../services/submissions';
 
 const submissionRoutes = new Hono();
@@ -275,35 +275,13 @@ submissionRoutes.post('/form/:formId', optionalAuthMiddleware, async (c) => {
  * Body: { status: 'SUBMITTED' | 'REVIEWING' | 'PENDING_UPDATES' | 'COMPLETED' }
  * Response: { id, status, updatedAt }
  */
-submissionRoutes.put('/:id/status', authMiddleware, async (c) => {
+submissionRoutes.put('/:id/status', authMiddleware, submissionStatusUpdateCheckMiddleware, async (c) => {
   try {
     const submissionId = parseInt(c.req.param('id'));
     const user = c.get('user');
     const body = await c.req.json();
 
-    if (isNaN(submissionId)) {
-      return c.json({ error: 'Invalid submission ID' }, 400);
-    }
-
-    if (!user) {
-      return c.json({ error: 'Authentication required' }, 401);
-    }
-
     const validatedData = updateStatusSchema.parse(body);
-
-    // Get submission and verify ownership
-    const submission = await submissionsService.getSubmissionById(db, submissionId);
-
-    if (submission.length === 0) {
-      return c.json({ error: 'Submission not found' }, 404);
-    }
-
-    const data = submission[0];
-
-    // Only form owner can update status
-    if (data.form?.createdBy !== user.id) {
-      return c.json({ error: 'Access denied. Only form owners can update submission status.' }, 403);
-    }
 
     // Update submission status
     const updatedSubmission = await submissionsService.updateSubmissionStatus(

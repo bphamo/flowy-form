@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useLoaderData, useRouter } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { PageHeader } from '@/components/common/page-header';
 import { SubmissionStatusBadge } from '@/components/common/submission-status-badge';
@@ -11,7 +12,7 @@ import type { SubmissionDetail } from '@/types/api';
 import type { SubmissionStatus } from '@/components/common/submission-status-badge';
 import { ArrowLeft, Calendar, FileText, User, Users } from 'lucide-react';
 import { useState } from 'react';
-import { Alert, Badge, Button, Card, Col, Container, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { Alert, Badge, Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 export const Route = createFileRoute('/submissions/$submissionId')({
   beforeLoad: ({ context }) => {
@@ -41,9 +42,6 @@ function SubmissionDetail() {
   const router = useRouter();
   
   const [submission, setSubmission] = useState<SubmissionDetail>(initialSubmission);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastVariant, setToastVariant] = useState<'success' | 'danger'>('success');
 
   const handleStatusChange = async (newStatus: SubmissionStatus) => {
     try {
@@ -54,17 +52,13 @@ function SubmissionDetail() {
         status: response.data.status,
       }));
       
-      setToastMessage(`Status updated to ${newStatus.toLowerCase().replace('_', ' ')}`);
-      setToastVariant('success');
-      setShowToast(true);
+      toast.success(`Status updated to ${newStatus.toLowerCase().replace('_', ' ')}`);
 
       // Refresh the page data to ensure consistency
       router.invalidate();
     } catch (error) {
       console.error('Error updating submission status:', error);
-      setToastMessage('Failed to update submission status');
-      setToastVariant('danger');
-      setShowToast(true);
+      toast.error('Failed to update submission status');
     }
   };
 
@@ -289,21 +283,6 @@ function SubmissionDetail() {
           </Row>
         </Container>
       </div>
-      
-      {/* Toast notifications */}
-      <ToastContainer position="top-end" className="p-3">
-        <Toast
-          show={showToast}
-          onClose={() => setShowToast(false)}
-          bg={toastVariant}
-          delay={3000}
-          autohide
-        >
-          <Toast.Body className="text-white">
-            {toastMessage}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </AppLayout>
   );
 }
