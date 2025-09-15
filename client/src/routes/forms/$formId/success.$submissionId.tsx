@@ -135,7 +135,7 @@ function FormsSuccess() {
         </Card>
 
         {/* Security notice */}
-        <div className="mt-3 p-2 bg-light rounded">
+        <div className="mt-3 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
           <div className="d-flex align-items-start">
             <Shield size={16} className="text-success me-2 mt-1 flex-shrink-0" />
             <div className="small text-muted">

@@ -110,7 +110,7 @@ export const VersionRevertModal = ({ show, onHide, version, onRevert }: VersionR
           <>
             <div className="mb-4">
               <h6 className="fw-bold">Version Information</h6>
-              <div className="bg-light p-3 rounded">
+              <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                 <div className="d-flex justify-content-between">
                   <div>
                     <strong>SHA:</strong> <code>{version.versionSha}</code>
@@ -132,7 +132,10 @@ export const VersionRevertModal = ({ show, onHide, version, onRevert }: VersionR
             {revertOptions.map((option) => (
               <div
                 key={option.id}
-                className={`border rounded p-3 mb-3 cursor-pointer ${selectedOperation === option.id ? 'border-primary bg-light' : 'border-light'}`}
+                className={`border rounded p-3 mb-3 cursor-pointer ${selectedOperation === option.id ? 'border-primary' : 'border-light'}`}
+                style={{
+                  backgroundColor: selectedOperation === option.id ? 'var(--bs-secondary-bg)' : 'transparent'
+                }}
                 onClick={() => setSelectedOperation(option.id)}
                 role="button"
               >
@@ -187,7 +190,7 @@ export const VersionRevertModal = ({ show, onHide, version, onRevert }: VersionR
               <Form.Text className="text-muted">This description will be recorded for audit purposes.</Form.Text>
             </div>
 
-            <div className="bg-light p-3 rounded">
+            <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
               <h6 className="mb-2">Target Version</h6>
               <div>
                 <strong>SHA:</strong> <code>{version.versionSha}</code>

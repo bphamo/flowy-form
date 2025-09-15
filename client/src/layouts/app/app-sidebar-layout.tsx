@@ -6,7 +6,7 @@ export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWi
   return (
     <div className="container-fluid">
       <div className="row">
-        <nav className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <nav className="col-md-3 col-lg-2 d-md-block sidebar collapse" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
           <div className="position-sticky pt-3">
             <div className="sidebar-sticky">
               <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Navigation</h6>

@@ -184,7 +184,7 @@ function SubmissionDetail() {
                             </small>
                           </Alert>
                           {/* This would be rendered with FormioForm component if available */}
-                          <div className="bg-light p-3 rounded">
+                          <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                             <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
                               {JSON.stringify(submission.data, null, 2)}
                             </pre>
@@ -195,7 +195,7 @@ function SubmissionDetail() {
                           <Alert variant="warning" className="mb-3">
                             <small>Form schema not available. Displaying raw submission data.</small>
                           </Alert>
-                          <div className="bg-light p-3 rounded">
+                          <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                             <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
                               {JSON.stringify(submission.data, null, 2)}
                             </pre>

@@ -156,7 +156,7 @@ function Features() {
 
 function GitWorkflow() {
   return (
-    <section className="py-5 bg-light">
+    <section className="py-5" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
       <Container>
         <div className="text-center mb-5">
           <h2 className="display-5 fw-bold" style={{ color: 'var(--bs-body-color)' }}>Familiar Git Workflow</h2>

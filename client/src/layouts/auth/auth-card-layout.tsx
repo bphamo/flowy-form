@@ -11,7 +11,7 @@ export default function AuthCardLayout({
   description?: string;
 }>) {
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center min-vh-100 bg-light p-4">
+    <div className="d-flex flex-column align-items-center justify-content-center min-vh-100 p-4" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
       <div className="w-100 d-flex flex-column gap-4" style={{ maxWidth: '400px' }}>
         <Link to="/" className="d-flex align-items-center justify-content-center gap-2 fw-medium text-decoration-none">
           <div

@@ -147,7 +147,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
             <div className="d-flex align-items-center text-muted small">
               <ArrowDownRight size={14} className="me-2 text-primary" />
               <span>
-                From <code className="bg-light px-1 rounded">{baseVersionSha?.slice(0, 8)}</code>
+                From <code className="px-1 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>{baseVersionSha?.slice(0, 8)}</code>
                 {version.metadata?.auditDescription && <span className="ms-2 text-muted fst-italic">• {version.metadata.auditDescription}</span>}
               </span>
             </div>
@@ -181,7 +181,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
                     <Badge bg={statusInfo.badgeColor} className="me-2 fs-6">
                       {statusInfo.badge}
                     </Badge>
-                    <code className="bg-light px-2 py-1 rounded me-2 text-primary">{shortSha}</code>
+                    <code className="px-2 py-1 rounded me-2 text-primary" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>{shortSha}</code>
                   </div>
 
                   <h6 className="mb-2 fw-semibold text-dark">{version.description || 'No description provided'}</h6>
@@ -198,7 +198,7 @@ export const EnhancedVersionHistoryTree = ({ formId, versions, liveVersionSha }:
 
                   {/* Metadata Display */}
                   {version.metadata && (
-                    <div className="mt-2 p-2 bg-light rounded">
+                    <div className="mt-2 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                       <div className="d-flex align-items-start">
                         <Info size={14} className="me-2 mt-1 text-muted flex-shrink-0" />
                         <div className="small text-muted">

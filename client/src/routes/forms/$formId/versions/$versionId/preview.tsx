@@ -77,7 +77,7 @@ function VersionPreviewPage() {
         <div className="p-3">
           {/* Embedded form header - minimal styling */}
           <Card className="border-0 shadow-sm">
-            <Card.Header className="bg-light border-bottom py-3">
+            <Card.Header className="border-bottom py-3" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
               <div className="d-flex align-items-center">
                 <FileText size={20} className="text-primary me-2" />
                 <div>
@@ -113,7 +113,7 @@ function VersionPreviewPage() {
           </Card>
 
           {/* Minimal security notice for embedded preview */}
-          <div className="mt-3 p-2 bg-light rounded">
+          <div className="mt-3 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
             <div className="d-flex align-items-start">
               <Shield size={16} className="text-success me-2 mt-1 flex-shrink-0" />
               <div className="small text-muted">Embedded form with secure submission handling</div>
@@ -174,7 +174,7 @@ function VersionPreviewPage() {
                 <Alert variant="success" className="mb-3">
                   <strong>Form Submitted!</strong> This is preview data only.
                 </Alert>
-                <div className="bg-light p-3 rounded">
+                <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                   <pre className="mb-0 small">
                     <code>{JSON.stringify(submissionData, null, 2)}</code>
                   </pre>

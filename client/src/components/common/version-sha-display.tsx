@@ -16,7 +16,7 @@ export const VersionShaDisplay = ({ versionSha, className = '' }: VersionShaDisp
     <div className={`d-flex align-items-center justify-content-center text-muted small py-2 ${className}`}>
       <GitCommit size={14} className="me-2" />
       <span>
-        Version <code className="bg-light px-1 rounded text-primary">{shortSha}</code>
+        Version <code className="px-1 rounded text-primary" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>{shortSha}</code>
       </span>
     </div>
   );
