@@ -37,16 +37,16 @@ function SettingsAppearance() {
       name: 'Dark Theme',
       description: 'Easy on the eyes',
       icon: Moon,
-      iconBg: 'var(--bs-gray-100)',
-      iconColor: 'text-muted',
+      iconBg: 'var(--bs-primary-bg-subtle)',
+      iconColor: 'text-primary',
     },
     {
       id: 'system' as Appearance,
       name: 'Auto',
       description: 'Matches system settings',
       icon: Monitor,
-      iconBg: 'var(--bs-gray-100)',
-      iconColor: 'text-muted',
+      iconBg: 'var(--bs-primary-bg-subtle)',
+      iconColor: 'text-primary',
     },
   ];
 

@@ -10,6 +10,7 @@ import type { FormSchema } from '@/types/api';
 import { Form } from '@formio/react';
 import { FileText, Info, Shield, User } from 'lucide-react';
 import { Alert, Card, Container } from 'react-bootstrap';
+import { Appearance } from '@/hooks/use-appearance';
 
 export const Route = createFileRoute('/forms/$formId/submit')({
   loader: async ({ params, location }) => {

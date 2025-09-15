@@ -100,7 +100,7 @@ function EmbeddedForm() {
           </div>
         </div>
       </Card.Header>
-      <Card.Body className="p-4">
+      <Card.Body className="p-4" >
         <Row className="g-4">
           {/* HTML */}
           <div className="border rounded p-3">
@@ -125,14 +125,14 @@ function EmbeddedForm() {
                 {copied === selectedTab ? 'Copied!' : 'Copy'}
               </Button>
             </div>
-            <pre className="bg-light p-2 rounded small" style={{ fontSize: '0.75rem', maxHeight: '400px', overflow: 'auto' }}>
+            <pre className="p-2 rounded small" style={{ fontSize: '0.75rem', maxHeight: '400px', overflow: 'auto', backgroundColor: 'var(--bs-secondary-bg)' }}>
               <code>{returnEmbed(selectedTab)}</code>
             </pre>
           </div>
         </Row>
 
         {/* Usage Notes */}
-        <div className="mt-4 p-3 bg-light rounded">
+        <div className="mt-4 p-3" style={{ backgroundColor: 'var(--bs-light-bg)', borderRadius: '0.375rem' }}>
           <h6 className="fw-bold mb-2">📝 Usage Notes</h6>
           <ul className="mb-0 small text-muted">
             <li>

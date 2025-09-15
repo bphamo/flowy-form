@@ -105,7 +105,7 @@ export default function AppHeaderLayout({
       )}
 
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <div className="border-bottom" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
+        <div className="border-bottom" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
           <Container fluid className="pt-2">
             <Breadcrumb className="mb-0">
               <Breadcrumb.Item onClick={() => navigate({ to: '/dashboard' })} className="d-flex align-items-center text-decoration-none">
