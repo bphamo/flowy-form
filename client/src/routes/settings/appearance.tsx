@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
 
 import { PageHeader } from '@/components/common/page-header';
+import { useAppearance, type Appearance } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { requireAuth } from '@/lib/auth-utils';
@@ -16,47 +16,43 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-type Theme = 'light' | 'dark' | 'auto';
-
 function SettingsAppearance() {
-  const [currentTheme, setCurrentTheme] = useState<Theme>('light');
+  const { appearance, updateAppearance } = useAppearance();
 
-  const handleThemeChange = (theme: Theme) => {
-    setCurrentTheme(theme);
-    // TODO: Implement theme change logic
-    console.log('Changing theme to:', theme);
+  const handleThemeChange = (theme: Appearance) => {
+    updateAppearance(theme);
   };
 
   const themes = [
     {
-      id: 'light' as Theme,
+      id: 'light' as Appearance,
       name: 'Light Theme',
       description: 'Bright and clean interface',
       icon: Sun,
-      iconBg: '#dbeafe',
+      iconBg: 'var(--bs-primary-bg-subtle)',
       iconColor: 'text-primary',
     },
     {
-      id: 'dark' as Theme,
+      id: 'dark' as Appearance,
       name: 'Dark Theme',
       description: 'Easy on the eyes',
       icon: Moon,
-      iconBg: '#f3f4f6',
-      iconColor: 'text-muted',
+      iconBg: 'var(--bs-primary-bg-subtle)',
+      iconColor: 'text-primary',
     },
     {
-      id: 'auto' as Theme,
+      id: 'system' as Appearance,
       name: 'Auto',
       description: 'Matches system settings',
       icon: Monitor,
-      iconBg: '#f3f4f6',
-      iconColor: 'text-muted',
+      iconBg: 'var(--bs-primary-bg-subtle)',
+      iconColor: 'text-primary',
     },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: Palette, text: 'Appearance Settings' }}
@@ -66,11 +62,11 @@ function SettingsAppearance() {
 
           <SettingsLayout>
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <div className="d-flex align-items-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                    style={{ width: 40, height: 40, backgroundColor: '#ede9fe' }}
+                    style={{ width: 40, height: 40, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                   >
                     <Palette size={20} className="text-purple" />
                   </div>
@@ -85,7 +81,7 @@ function SettingsAppearance() {
                   <div className="d-flex gap-3">
                     {themes.map((theme) => {
                       const Icon = theme.icon;
-                      const isActive = currentTheme === theme.id;
+                      const isActive = appearance === theme.id;
 
                       return (
                         <Card key={theme.id} className={`border-2 ${isActive ? 'border-primary' : 'border'}`} style={{ width: '200px' }}>
@@ -111,8 +107,7 @@ function SettingsAppearance() {
                       );
                     })}
                   </div>
-
-                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: '#f8f9fa' }}>
+                  <div className="mt-4 p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <h6 className="fw-semibold mb-2">Coming Soon</h6>
                     <p className="text-muted small mb-0">
                       Additional appearance customization options including custom colors, fonts, and layouts will be available in future updates.
@@ -131,35 +126,6 @@ function SettingsAppearance() {
 export const Route = createFileRoute('/settings/appearance')({
   beforeLoad: ({ context }) => {
     requireAuth(context, '/settings/appearance');
-  },
-  loader: async () => {
-    try {
-      const response = await fetch('/api/user/appearance', {
-        credentials: 'include',
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return { appearance: data.data || data };
-      } else {
-        // Return default appearance settings
-        return {
-          appearance: {
-            theme: 'light',
-            language: 'en',
-            timezone: 'UTC',
-          },
-        };
-      }
-    } catch (error) {
-      console.error('Error fetching appearance settings:', error);
-      return {
-        appearance: {
-          theme: 'light',
-          language: 'en',
-          timezone: 'UTC',
-        },
-      };
-    }
   },
   component: SettingsAppearance,
 });

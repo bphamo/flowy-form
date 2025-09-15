@@ -55,7 +55,7 @@ function Submissions() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'My Submissions' }}
@@ -65,13 +65,13 @@ function Submissions() {
 
           {/* Submissions Table */}
           <Card className="shadow-sm border-0">
-            <Card.Header className="bg-white py-3">
+            <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
               <h5 className="mb-0 fw-bold">All My Submissions</h5>
             </Card.Header>
             <Card.Body className="p-0">
               {userSubmissions.length > 0 ? (
                 <Table responsive className="mb-0">
-                  <thead className="bg-light">
+                  <thead style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <tr>
                       <th className="border-0 py-3 px-4">Form Name</th>
                       <th className="border-0 py-3 px-4">Submission ID</th>
@@ -84,7 +84,7 @@ function Submissions() {
                       <tr key={submission.id}>
                         <td className="py-3 px-4">
                           <div>
-                            <div className="fw-semibold text-dark">{submission.formName}</div>
+                            <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submission.formName}</div>
                             {submission.formDescription && <div className="text-muted small">{submission.formDescription}</div>}
                           </div>
                         </td>

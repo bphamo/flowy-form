@@ -90,7 +90,7 @@ function FormsSuccess() {
         <div className="text-center mb-4">
           <div
             className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-            style={{ width: 64, height: 64, backgroundColor: '#dcfce7' }}
+            style={{ width: 64, height: 64, backgroundColor: 'var(--bs-success-bg-subtle)' }}
           >
             <CheckCircle size={32} className="text-success" />
           </div>
@@ -135,7 +135,7 @@ function FormsSuccess() {
         </Card>
 
         {/* Security notice */}
-        <div className="mt-3 p-2 bg-light rounded">
+        <div className="mt-3 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
           <div className="d-flex align-items-start">
             <Shield size={16} className="text-success me-2 mt-1 flex-shrink-0" />
             <div className="small text-muted">
@@ -151,7 +151,7 @@ function FormsSuccess() {
   // Full layout for non-embedded forms
   return (
     <AppLayout hideHeader>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="d-flex align-items-center justify-content-center min-vh-100">
           <div className="w-100">
             <PageHeader badge={{ icon: CheckCircle, text: 'Submission Successful', variant: 'success' }} title="Thank You!" />
@@ -186,7 +186,7 @@ function FormsSuccess() {
             </div>
 
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <div className="d-flex align-items-center">
                   <span className="text-muted">Submission ID:</span>
                   <Badge bg="light" text="dark" className="fw-bold">
@@ -217,7 +217,7 @@ function FormsSuccess() {
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="text-muted">Submitter</span>
                       <div className="text-end">
-                        <div className="fw-semibold text-dark">{submissionDetails.submitterInformation.name}</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submissionDetails.submitterInformation.name}</div>
                         <div className="text-muted small">{submissionDetails.submitterInformation.email}</div>
                       </div>
                     </div>
@@ -235,7 +235,7 @@ function FormsSuccess() {
 
             {/* Submitted Data Preview */}
             <Card className="shadow-sm border-0 mt-4">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <h5 className="mb-0 fw-bold">Your Submission</h5>
               </Card.Header>
               <Card.Body className="p-4">
@@ -246,7 +246,7 @@ function FormsSuccess() {
             </Card>
             <div className="d-flex justify-content-end align-items-center">
               <span className="text-muted">Created at: </span>
-              <span className="text-dark">{new Date(submissionDetails.createdAt).toLocaleString()}</span>
+              <span style={{ color: 'var(--bs-body-color)' }}>{new Date(submissionDetails.createdAt).toLocaleString()}</span>
             </div>
 
             {/* Version SHA Display */}

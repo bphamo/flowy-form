@@ -25,7 +25,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     <Row className="g-4">
       <Col lg={3} md={4}>
         <Card className="shadow-sm border-0 sticky-top" style={{ top: '20px' }}>
-          <Card.Header className="bg-white py-3 border-bottom">
+          <Card.Header className="py-3 border-bottom" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
             <h5 className="mb-0 fw-bold">Settings</h5>
             <p className="text-muted small mb-0">Manage your account</p>
           </Card.Header>
@@ -40,11 +40,22 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     as={Link}
                     to={item.href}
                     className={`d-flex align-items-center py-3 px-4 border-0 text-decoration-none ${
-                      isActive ? 'bg-primary text-white' : 'text-muted hover-bg-light'
+                      isActive ? 'bg-primary text-white' : 'text-muted'
                     }`}
                     style={{
                       borderRadius: '0',
                       transition: 'all 0.2s ease',
+                      ...(isActive ? {} : { backgroundColor: 'transparent' }),
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'var(--bs-secondary-bg)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }
                     }}
                   >
                     {IconComponent && <IconComponent size={18} className={`me-3 ${isActive ? 'text-white' : 'text-muted'}`} />}

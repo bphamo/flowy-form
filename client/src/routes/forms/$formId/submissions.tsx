@@ -67,7 +67,7 @@ function FormSubmissions() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'Form Submissions' }}
@@ -99,11 +99,11 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#dbeafe' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                   >
                     <FileText size={20} className="text-primary" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {totalSubmissions}
                   </div>
                   <div className="text-muted small">Total Submissions</div>
@@ -115,11 +115,11 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#dcfce7' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                   >
                     <Users size={20} className="text-success" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {authenticatedSubmissions}
                   </div>
                   <div className="text-muted small">Authenticated</div>
@@ -131,11 +131,11 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#fef3c7' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-warning-bg-subtle)' }}
                   >
                     <User size={20} className="text-warning" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {anonymousSubmissions}
                   </div>
                   <div className="text-muted small">Anonymous</div>
@@ -147,11 +147,11 @@ function FormSubmissions() {
                 <Card.Body className="text-center p-4">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-3"
-                    style={{ width: 48, height: 48, backgroundColor: '#ede9fe' }}
+                    style={{ width: 48, height: 48, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                   >
                     <Calendar size={20} className="text-purple" />
                   </div>
-                  <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                  <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                     {recentSubmissions}
                   </div>
                   <div className="text-muted small">This Week</div>
@@ -162,7 +162,7 @@ function FormSubmissions() {
 
           {/* Submissions Table */}
           <Card className="shadow-sm border-0">
-            <Card.Header className="bg-white py-3">
+            <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
               <div className="d-flex justify-content-between align-items-center">
                 <h5 className="mb-0 fw-bold">All Submissions</h5>
                 <Badge bg="light" text="dark" className="fs-6">
@@ -173,7 +173,7 @@ function FormSubmissions() {
             <Card.Body className="p-0">
               {sortedSubmissions.length > 0 ? (
                 <Table responsive className="mb-0">
-                  <thead className="bg-light">
+                  <thead style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                     <tr>
                       <th className="border-0 py-3 px-4">ID</th>
                       <th className="border-0 py-3 px-4">Submitter</th>
@@ -193,7 +193,7 @@ function FormSubmissions() {
                         <td className="py-3 px-4">
                           {submission.submitterInformation ? (
                             <div>
-                              <div className="fw-semibold text-dark">{submission.submitterInformation.name}</div>
+                              <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{submission.submitterInformation.name}</div>
                               {submission.submitterInformation.email && (
                                 <div className="text-muted small">{submission.submitterInformation.email}</div>
                               )}

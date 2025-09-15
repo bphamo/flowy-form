@@ -264,7 +264,7 @@ function EditFormVersion() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-4" fluid="xxl">
           <PageHeader
             badge={{ icon: Code, text: 'Form Builder' }}
@@ -335,7 +335,7 @@ function EditFormVersion() {
 
           {/* Form Builder Card */}
           <Card className="shadow-sm border-0 mb-4">
-            <Card.Header className="bg-white border-bottom-0 py-3">
+            <Card.Header className="border-bottom-0 py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
               <div className="d-flex justify-content-between align-items-center">
                 <div>
                   <h5 className="mb-0 fw-bold">

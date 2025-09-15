@@ -20,8 +20,13 @@ export function EmbedCodeSection({ formId, formName }: EmbedCodeSectionProps) {
   height="600"
   frameborder="0"
   scrolling="auto"
-  style="border: 1px solid #ddd; border-radius: 8px;">
-</iframe>`,
+  style="border: 1px solid var(--bs-border-color); border-radius: 8px;">
+</iframe>
+
+<!-- With specific theme (optional) -->
+<!-- Light theme: add &theme=light to URL -->
+<!-- Dark theme: add &theme=dark to URL -->
+<!-- System theme: add &theme=system to URL (default) -->`,
 
     react: `// React Component for ${formName}
 function EmbeddedForm() {
@@ -33,13 +38,18 @@ function EmbeddedForm() {
       frameBorder="0"
       scrolling="auto"
       style={{
-        border: '1px solid #ddd',
+        border: '1px solid var(--bs-border-color)',
         borderRadius: '8px'
       }}
       title="${formName} Form"
     />
   );
-}`,
+}
+
+// With theme parameter (optional):
+// &theme=light - Force light theme
+// &theme=dark - Force dark theme  
+// &theme=system - Use system preference (default)`,
 
     wordpress: `<!-- WordPress Shortcode for ${formName} -->
 [iframe src="${baseUrl}/forms/${formId}/submit?embed=true" width="100%" height="600" scrolling="auto"]
@@ -51,8 +61,13 @@ function EmbeddedForm() {
   height="600"
   frameborder="0"
   scrolling="auto"
-  style="border: 1px solid #ddd; border-radius: 8px;">
-</iframe>`,
+  style="border: 1px solid var(--bs-border-color); border-radius: 8px;">
+</iframe>
+
+<!-- Theme options (add to URL):
+&theme=light - Force light theme
+&theme=dark - Force dark theme
+&theme=system - Use system preference (default) -->`,
   };
 
   const returnEmbed = (type: 'html' | 'react' | 'wordpress') => {
@@ -76,7 +91,7 @@ function EmbeddedForm() {
 
   return (
     <Card className="shadow-sm border-0">
-      <Card.Header className="bg-white py-3">
+      <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
         <div className="d-flex align-items-center">
           <Code size={20} className="text-primary me-2" />
           <div>
@@ -85,7 +100,7 @@ function EmbeddedForm() {
           </div>
         </div>
       </Card.Header>
-      <Card.Body className="p-4">
+      <Card.Body className="p-4" >
         <Row className="g-4">
           {/* HTML */}
           <div className="border rounded p-3">
@@ -110,18 +125,21 @@ function EmbeddedForm() {
                 {copied === selectedTab ? 'Copied!' : 'Copy'}
               </Button>
             </div>
-            <pre className="bg-light p-2 rounded small" style={{ fontSize: '0.75rem', maxHeight: '400px', overflow: 'auto' }}>
+            <pre className="p-2 rounded small" style={{ fontSize: '0.75rem', maxHeight: '400px', overflow: 'auto', backgroundColor: 'var(--bs-secondary-bg)' }}>
               <code>{returnEmbed(selectedTab)}</code>
             </pre>
           </div>
         </Row>
 
         {/* Usage Notes */}
-        <div className="mt-4 p-3 bg-light rounded">
+        <div className="mt-4 p-3" style={{ backgroundColor: 'var(--bs-light-bg)', borderRadius: '0.375rem' }}>
           <h6 className="fw-bold mb-2">📝 Usage Notes</h6>
           <ul className="mb-0 small text-muted">
             <li>
               Forms are embedded with <code>?embed=true</code> parameter for minimal styling
+            </li>
+            <li>
+              Optional theme parameter: <code>&theme=light</code>, <code>&theme=dark</code>, or <code>&theme=system</code> (default)
             </li>
             <li>Recommended iframe height is 600px, but adjust based on your form length</li>
             <li>Forms are responsive and will adapt to iframe width</li>

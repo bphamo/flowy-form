@@ -126,7 +126,7 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
         {/* Version Info */}
         <div className="row mb-4">
           <div className="col-md-6">
-            <div className="bg-light p-3 rounded">
+            <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
               <h6 className="fw-bold text-danger">Older Version</h6>
               <div>
                 <strong>SHA:</strong> <code>{olderVersion.versionSha}</code>
@@ -142,7 +142,7 @@ export const VersionComparisonModal = ({ show, onHide, versions, formId }: Versi
             </div>
           </div>
           <div className="col-md-6">
-            <div className="bg-light p-3 rounded">
+            <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
               <h6 className="fw-bold text-success">Newer Version</h6>
               <div>
                 <strong>SHA:</strong> <code>{newerVersion.versionSha}</code>

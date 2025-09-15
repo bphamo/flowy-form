@@ -67,7 +67,7 @@ function SubmissionDetail() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'Submission Details' }}
@@ -96,25 +96,25 @@ function SubmissionDetail() {
             {/* Submission Info */}
             <Col lg={4}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Submission Information</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
                   <div className="d-flex flex-column gap-3">
                     <div>
-                      <div className="fw-semibold text-dark small">Submission ID</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submission ID</div>
                       <Badge bg="light" text="dark" className="fw-bold">
                         #{submission.id}
                       </Badge>
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark small">Form</div>
-                      <div className="text-dark">{submission.formName || 'Unknown Form'}</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Form</div>
+                      <div style={{ color: 'var(--bs-body-color)' }}>{submission.formName || 'Unknown Form'}</div>
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark small">Submitted</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submitted</div>
                       <div className="d-flex align-items-center text-muted">
                         <Calendar size={14} className="me-1" />
                         {new Date(submission.createdAt).toLocaleString()}
@@ -123,8 +123,8 @@ function SubmissionDetail() {
 
                     {submission.version && (
                       <div>
-                        <div className="fw-semibold text-dark small">Form Version</div>
-                        <div className="text-dark">
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Form Version</div>
+                        <div style={{ color: 'var(--bs-body-color)' }}>
                           <Badge bg="secondary" className="me-2">
                             {submission.version.sha.substring(0, 8)}
                           </Badge>
@@ -134,7 +134,7 @@ function SubmissionDetail() {
                     )}
 
                     <div>
-                      <div className="fw-semibold text-dark small">Submission Type</div>
+                      <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submission Type</div>
                       <Badge bg={isAnonymous ? 'warning' : 'success'} className="d-flex align-items-center w-fit">
                         {isAnonymous ? <User size={14} className="me-1" /> : <Users size={14} className="me-1" />}
                         {isAnonymous ? 'Anonymous' : 'Authenticated'}
@@ -143,8 +143,8 @@ function SubmissionDetail() {
 
                     {submission.submitterInformation && (
                       <div>
-                        <div className="fw-semibold text-dark small">Submitter</div>
-                        <div className="text-dark">
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Submitter</div>
+                        <div style={{ color: 'var(--bs-body-color)' }}>
                           <div>{submission.submitterInformation.name}</div>
                           {submission.submitterInformation.email && <div className="text-muted small">{submission.submitterInformation.email}</div>}
                         </div>
@@ -168,7 +168,7 @@ function SubmissionDetail() {
             {/* Submission Data */}
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Submitted Data</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
@@ -184,7 +184,7 @@ function SubmissionDetail() {
                             </small>
                           </Alert>
                           {/* This would be rendered with FormioForm component if available */}
-                          <div className="bg-light p-3 rounded">
+                          <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                             <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
                               {JSON.stringify(submission.data, null, 2)}
                             </pre>
@@ -195,7 +195,7 @@ function SubmissionDetail() {
                           <Alert variant="warning" className="mb-3">
                             <small>Form schema not available. Displaying raw submission data.</small>
                           </Alert>
-                          <div className="bg-light p-3 rounded">
+                          <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                             <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', fontSize: '0.9rem' }}>
                               {JSON.stringify(submission.data, null, 2)}
                             </pre>
@@ -215,7 +215,7 @@ function SubmissionDetail() {
 
               {/* Additional Actions */}
               <Card className="shadow-sm border-0 mt-4">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Actions</h5>
                 </Card.Header>
                 <Card.Body className="p-4">

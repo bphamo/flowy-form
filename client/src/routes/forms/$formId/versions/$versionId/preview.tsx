@@ -58,7 +58,7 @@ function VersionPreviewPage() {
 
   // Component for embedded view rendering
   const EmbeddedPreview = () => (
-    <div className="border rounded p-3" style={{ backgroundColor: '#f8f9fa' }}>
+    <div className="border rounded p-3" style={{ backgroundColor: 'var(--bs-gray-100)' }}>
       <div className="small text-muted mb-3 text-center">
         <Monitor size={16} className="me-1" />
         This is how your form appears when embedded on external websites
@@ -66,17 +66,18 @@ function VersionPreviewPage() {
 
       {/* Simulated iframe container with embedded styling */}
       <div
-        className="mx-auto bg-white border rounded shadow-sm"
+        className="mx-auto border rounded shadow-sm"
         style={{
           maxWidth: '600px',
           fontFamily: 'system-ui, -apple-system, sans-serif',
           minHeight: '400px',
+          backgroundColor: 'var(--bs-body-bg)',
         }}
       >
         <div className="p-3">
           {/* Embedded form header - minimal styling */}
           <Card className="border-0 shadow-sm">
-            <Card.Header className="bg-light border-bottom py-3">
+            <Card.Header className="border-bottom py-3" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
               <div className="d-flex align-items-center">
                 <FileText size={20} className="text-primary me-2" />
                 <div>
@@ -112,7 +113,7 @@ function VersionPreviewPage() {
           </Card>
 
           {/* Minimal security notice for embedded preview */}
-          <div className="mt-3 p-2 bg-light rounded">
+          <div className="mt-3 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
             <div className="d-flex align-items-start">
               <Shield size={16} className="text-success me-2 mt-1 flex-shrink-0" />
               <div className="small text-muted">Embedded form with secure submission handling</div>
@@ -129,7 +130,7 @@ function VersionPreviewPage() {
       {/* Form Preview */}
       <div className="col-lg-8">
         <Card className="shadow-sm border-0">
-          <Card.Header className="bg-white py-3">
+          <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
             <h5 className="mb-0 fw-semibold">Form Preview</h5>
             <small className="text-muted">This is how the form looked in this version</small>
           </Card.Header>
@@ -163,7 +164,7 @@ function VersionPreviewPage() {
       {/* Submission Data (if any) */}
       <div className="col-lg-4">
         <Card className="shadow-sm border-0">
-          <Card.Header className="bg-white py-3">
+          <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
             <h6 className="mb-0 fw-semibold">Preview Submission Data</h6>
             <small className="text-muted">Data from form interactions</small>
           </Card.Header>
@@ -173,7 +174,7 @@ function VersionPreviewPage() {
                 <Alert variant="success" className="mb-3">
                   <strong>Form Submitted!</strong> This is preview data only.
                 </Alert>
-                <div className="bg-light p-3 rounded">
+                <div className="p-3 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                   <pre className="mb-0 small">
                     <code>{JSON.stringify(submissionData, null, 2)}</code>
                   </pre>
@@ -194,7 +195,7 @@ function VersionPreviewPage() {
 
   return (
     <AppLayout>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #f8fafc, #e2e8f0)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-gray-100), var(--bs-gray-200))' }}>
         <Container className="py-4">
           {/* Header */}
           <div className="mb-4">

@@ -21,14 +21,14 @@ function Login() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
       <Container className="d-flex align-items-center justify-content-center min-vh-100">
         <div style={{ width: '100%', maxWidth: '400px' }}>
           {/* Header */}
           <div className="text-center mb-4">
             <div className="d-flex align-items-center justify-content-center mb-3">
               <Layers size={32} className="text-primary me-2" />
-              <h2 className="h4 mb-0 text-dark fw-bold">Flowy Form</h2>
+              <h2 className="h4 mb-0 fw-bold" style={{ color: 'var(--bs-body-color)' }}>Flowy Form</h2>
             </div>
             <Badge bg="primary" className="px-3 py-2">
               Secure Authentication
@@ -38,7 +38,7 @@ function Login() {
           <Card className="border-0 shadow-sm">
             <Card.Body className="p-4">
               <div className="text-center mb-4">
-                <h1 className="h4 text-dark fw-semibold mb-2">Welcome!</h1>
+                <h1 className="h4 fw-semibold mb-2" style={{ color: 'var(--bs-body-color)' }}>Welcome!</h1>
                 <p className="text-muted mb-0">Sign in to your account</p>
               </div>
 

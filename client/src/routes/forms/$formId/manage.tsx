@@ -66,7 +66,7 @@ function FormsManage() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: Settings, text: 'Form Management' }}
@@ -88,11 +88,11 @@ function FormsManage() {
             {/* Form Details Card */}
             <Col lg={8}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <IconCard
                     icon={FileText}
                     iconColor="text-primary"
-                    iconBg="#dbeafe"
+                    iconBg="var(--bs-primary-bg-subtle)"
                     title="Form Details"
                     description="Basic information about your form"
                   />
@@ -101,27 +101,27 @@ function FormsManage() {
                   <div className="d-flex flex-column gap-3">
                     <div className="d-flex align-items-center justify-content-between">
                       <div>
-                        <div className="fw-semibold text-dark">Form Name</div>
+                        <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Form Name</div>
                         <div className="text-muted">{form.name}</div>
                       </div>
                       <StatusBadge isPublic={form.isPublic} />
                     </div>
 
                     <div>
-                      <div className="fw-semibold text-dark">Description</div>
+                      <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>Description</div>
                       <div className="text-muted">{form.description || 'No description provided'}</div>
                     </div>
 
                     <div className="d-flex align-items-center gap-4">
                       <div>
-                        <div className="fw-semibold text-dark small">Created</div>
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Created</div>
                         <div className="text-muted small d-flex align-items-center">
                           <Calendar size={14} className="me-1" />
                           {new Date(form.createdAt).toLocaleDateString()}
                         </div>
                       </div>
                       <div>
-                        <div className="fw-semibold text-dark small">Last Updated</div>
+                        <div className="fw-semibold small" style={{ color: 'var(--bs-body-color)' }}>Last Updated</div>
                         <div className="text-muted small d-flex align-items-center">
                           <Calendar size={14} className="me-1" />
                           {new Date(form.updatedAt).toLocaleDateString()}
@@ -136,7 +136,7 @@ function FormsManage() {
             {/* Quick Actions Card */}
             <Col lg={4}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <h5 className="mb-0 fw-bold">Quick Actions</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
@@ -211,7 +211,7 @@ function FormsManage() {
           <Row className="g-4 mt-4">
             <Col lg={12}>
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0 fw-bold">Form Analytics</h5>
                     <Button variant="outline-primary" size="sm" className="d-flex align-items-center">
@@ -226,11 +226,11 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#dbeafe' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                         >
                           <Send size={20} className="text-primary" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">Total Submissions</div>
@@ -240,11 +240,11 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#dcfce7' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                         >
                           <Eye size={20} className="text-success" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">Total Views</div>
@@ -254,11 +254,11 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#ede9fe' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-info-bg-subtle)' }}
                         >
                           <BarChart3 size={20} className="text-purple" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0%
                         </div>
                         <div className="text-muted small">Conversion Rate</div>
@@ -268,11 +268,11 @@ function FormsManage() {
                       <div className="text-center">
                         <div
                           className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
-                          style={{ width: 48, height: 48, backgroundColor: '#ffedd5' }}
+                          style={{ width: 48, height: 48, backgroundColor: 'var(--bs-warning-bg-subtle)' }}
                         >
                           <Calendar size={20} className="text-warning" />
                         </div>
-                        <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                        <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                           0
                         </div>
                         <div className="text-muted small">This Week</div>

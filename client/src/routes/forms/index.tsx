@@ -43,7 +43,7 @@ function FormsIndex() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="py-5">
           <PageHeader
             badge={{ icon: FileText, text: 'Form Management' }}
@@ -54,7 +54,7 @@ function FormsIndex() {
           {/* Action Bar */}
           <div className="d-flex justify-content-between align-items-center mb-4">
             <div className="d-flex align-items-center">
-              <h4 className="mb-0 fw-semibold text-dark">All Forms ({forms.length})</h4>
+              <h4 className="mb-0 fw-semibold" style={{ color: 'var(--bs-body-color)' }}>All Forms ({forms.length})</h4>
             </div>
             <Link to="/forms/create" className="text-decoration-none">
               <Button variant="primary" className="d-flex align-items-center">
@@ -70,11 +70,11 @@ function FormsIndex() {
                 <div className="text-center">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
-                    style={{ width: 80, height: 80, backgroundColor: '#f8f9fa' }}
+                    style={{ width: 80, height: 80, backgroundColor: 'var(--bs-gray-100)' }}
                   >
                     <FileText size={32} className="text-muted" />
                   </div>
-                  <h3 className="fw-bold text-dark mb-3">No Forms Yet</h3>
+                  <h3 className="fw-bold mb-3" style={{ color: 'var(--bs-body-color)' }}>No Forms Yet</h3>
                   <p className="text-muted mb-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
                     Create your first form to get started with collecting submissions and managing your data.
                   </p>
@@ -92,7 +92,7 @@ function FormsIndex() {
               {/* Recent Forms Section */}
               {recentForms.length > 0 && (
                 <div className="mb-5">
-                  <h5 className="fw-bold text-dark mb-3">Recently Updated</h5>
+                  <h5 className="fw-bold mb-3" style={{ color: 'var(--bs-body-color)' }}>Recently Updated</h5>
                   <Row className="g-4">
                     {recentForms.map((form) => (
                       <Col md={6} lg={3} key={form.id}>
@@ -101,14 +101,14 @@ function FormsIndex() {
                             <div className="d-flex align-items-start justify-content-between mb-3">
                               <div
                                 className="d-inline-flex align-items-center justify-content-center rounded-circle"
-                                style={{ width: 40, height: 40, backgroundColor: '#dbeafe' }}
+                                style={{ width: 40, height: 40, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                               >
                                 <FileText size={16} className="text-primary" />
                               </div>
                               <StatusBadge isPublic={form.isPublic} size="small" />
                             </div>
 
-                            <h6 className="fw-bold text-dark mb-2" style={{ fontSize: '0.9rem' }}>
+                            <h6 className="fw-bold mb-2" style={{ color: 'var(--bs-body-color)', fontSize: '0.9rem' }}>
                               {form.name}
                             </h6>
                             <p className="text-muted small mb-2" style={{ height: '2.5rem', overflow: 'hidden' }}>
@@ -138,7 +138,7 @@ function FormsIndex() {
 
               {/* All Forms Table */}
               <Card className="shadow-sm border-0">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                   <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0 fw-bold">All Forms</h5>
                     <Badge bg="light" text="dark">
@@ -148,7 +148,7 @@ function FormsIndex() {
                 </Card.Header>
                 <Card.Body className="p-0">
                   <Table responsive className="mb-0">
-                    <thead className="table-light">
+                    <thead style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
                       <tr>
                         <th className="ps-4 py-3">Form</th>
                         <th className="py-3">Status</th>
@@ -159,17 +159,17 @@ function FormsIndex() {
                     </thead>
                     <tbody>
                       {forms.map((form, index) => (
-                        <tr key={form.id} className={index % 2 === 0 ? 'table-light' : ''}>
+                        <tr key={form.id} style={index % 2 === 0 ? { backgroundColor: 'var(--bs-secondary-bg)' } : {}}>
                           <td className="ps-4 py-3">
                             <div className="d-flex align-items-center">
                               <div
                                 className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-                                style={{ width: 32, height: 32, backgroundColor: '#dbeafe' }}
+                                style={{ width: 32, height: 32, backgroundColor: 'var(--bs-primary-bg-subtle)' }}
                               >
                                 <FileText size={14} className="text-primary" />
                               </div>
                               <div>
-                                <div className="fw-semibold text-dark">{form.name}</div>
+                                <div className="fw-semibold" style={{ color: 'var(--bs-body-color)' }}>{form.name}</div>
                                 <div
                                   className="text-muted small"
                                   style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
@@ -229,14 +229,14 @@ function FormsIndex() {
           {/* Stats Section */}
           {forms.length > 0 && (
             <Card className="shadow-sm border-0 mt-5">
-              <Card.Header className="bg-white py-3">
+              <Card.Header className="py-3" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <h5 className="mb-0 fw-bold">Quick Stats</h5>
               </Card.Header>
               <Card.Body>
                 <Row className="g-4">
                   <Col md={3}>
                     <div className="text-center">
-                      <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                      <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                         {forms.length}
                       </div>
                       <div className="text-muted small">Total Forms</div>
@@ -244,7 +244,7 @@ function FormsIndex() {
                   </Col>
                   <Col md={3}>
                     <div className="text-center">
-                      <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                      <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                         {forms.filter((f) => f.isPublic).length}
                       </div>
                       <div className="text-muted small">Public Forms</div>
@@ -252,7 +252,7 @@ function FormsIndex() {
                   </Col>
                   <Col md={3}>
                     <div className="text-center">
-                      <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                      <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                         {forms.filter((f) => !f.isPublic).length}
                       </div>
                       <div className="text-muted small">Private Forms</div>
@@ -260,7 +260,7 @@ function FormsIndex() {
                   </Col>
                   <Col md={3}>
                     <div className="text-center">
-                      <div className="fw-bold text-dark mb-1" style={{ fontSize: '1.5rem' }}>
+                      <div className="fw-bold mb-1" style={{ fontSize: '1.5rem', color: 'var(--bs-body-color)' }}>
                         {forms.filter((f) => new Date(f.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length}
                       </div>
                       <div className="text-muted small">Created This Week</div>

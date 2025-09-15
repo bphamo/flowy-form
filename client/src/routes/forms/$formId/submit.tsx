@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useLoaderData, useNavigate, useParams } from '@tanstack/react-router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { IconCard } from '@/components/common/icon-card';
 import { VersionShaDisplay } from '@/components/common/version-sha-display';
@@ -10,6 +10,7 @@ import type { FormSchema } from '@/types/api';
 import { Form } from '@formio/react';
 import { FileText, Info, Shield, User } from 'lucide-react';
 import { Alert, Card, Container } from 'react-bootstrap';
+import { Appearance } from '@/hooks/use-appearance';
 
 export const Route = createFileRoute('/forms/$formId/submit')({
   loader: async ({ params, location }) => {
@@ -17,7 +18,8 @@ export const Route = createFileRoute('/forms/$formId/submit')({
       const response = await api.forms.getSubmitSchema(parseInt(params.formId));
       const searchParams = new URLSearchParams(location.search);
       const isEmbedded = searchParams.get('embed') === 'true';
-      return { form: response.data, isEmbedded };
+      const embedTheme = searchParams.get('theme');
+      return { form: response.data, isEmbedded, embedTheme };
     } catch (error) {
       console.error('Error fetching form for submission:', error);
       throw error;
@@ -29,7 +31,11 @@ export const Route = createFileRoute('/forms/$formId/submit')({
 });
 
 function FormsSubmit() {
-  const { form, isEmbedded } = useLoaderData({ from: '/forms/$formId/submit' }) as { form: FormSchema; isEmbedded: boolean };
+  const { form, isEmbedded, embedTheme } = useLoaderData({ from: '/forms/$formId/submit' }) as {
+    form: FormSchema;
+    isEmbedded: boolean;
+    embedTheme: string | null;
+  };
   const { formId } = useParams({ from: '/forms/$formId/submit' });
   const navigate = useNavigate({ from: '/forms/$formId/submit' });
   const { data: session } = useSession();
@@ -42,6 +48,18 @@ function FormsSubmit() {
   const actualFormId = form?.id || (formId ? parseInt(formId) : null);
   const isLoggedIn = !!user;
   const formData = form;
+
+  // Apply embed theme if specified
+  useEffect(() => {
+    if (isEmbedded && embedTheme) {
+      const validThemes: Appearance[] = ['light', 'dark', 'system'];
+      const theme = validThemes.includes(embedTheme as Appearance) ? (embedTheme as Appearance) : 'system';
+
+      // Apply theme directly for embedded forms using React Bootstrap data-bs-theme approach
+      const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
+    }
+  }, [isEmbedded, embedTheme]);
 
   const handleChange = (value: unknown, _flags: unknown, modified: boolean) => {
     if (modified && value && typeof value === 'object' && 'data' in value) {
@@ -175,7 +193,7 @@ function FormsSubmit() {
 
         {/* Form Card - Minimal styling for embedding */}
         <Card className="border-0 shadow-sm">
-          <Card.Header className="bg-light border-bottom py-3">
+          <Card.Header style={{ backgroundColor: 'var(--bs-secondary-bg)' }} className="border-bottom py-3">
             <div className="d-flex align-items-center">
               <div>
                 <h5 className="mb-0 fw-bold">{formData.name}</h5>
@@ -206,7 +224,7 @@ function FormsSubmit() {
         </Card>
 
         {/* Minimal security notice for embedded forms */}
-        <div className="mt-3 p-2 bg-light rounded">
+        <div className="mt-3 p-2 rounded" style={{ backgroundColor: 'var(--bs-secondary-bg)' }}>
           <div className="d-flex align-items-start">
             <Shield size={16} className="text-success me-2 mt-1 flex-shrink-0" />
             <div className="small text-muted">
@@ -230,7 +248,7 @@ function FormsSubmit() {
   // Full layout for non-embedded forms
   return (
     <AppLayout hideHeader>
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #ebf4ff, #e0e7ff)' }}>
+      <div style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, var(--bs-primary-bg-subtle), var(--bs-body-bg))' }}>
         <Container className="d-flex align-items-center justify-content-center min-vh-100">
           <div className="w-100">
             {/* Error Alert */}
@@ -255,11 +273,11 @@ function FormsSubmit() {
 
             {/* Form Card */}
             <Card className="shadow-sm border-0">
-              <Card.Header className="bg-white py-4">
+              <Card.Header className="py-4" style={{ backgroundColor: 'var(--bs-body-bg)' }}>
                 <IconCard
                   icon={FileText}
                   iconColor="text-primary"
-                  iconBg="#dbeafe"
+                  iconBg="var(--bs-primary-bg-subtle)"
                   title={formData.name}
                   description="Complete all required fields and submit your response"
                 />
@@ -293,12 +311,12 @@ function FormsSubmit() {
                 <div className="d-flex align-items-start">
                   <div
                     className="d-inline-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
-                    style={{ width: 40, height: 40, backgroundColor: '#dcfce7' }}
+                    style={{ width: 40, height: 40, backgroundColor: 'var(--bs-success-bg-subtle)' }}
                   >
                     <Shield size={20} className="text-success" />
                   </div>
                   <div>
-                    <h6 className="fw-bold text-dark mb-2">Your Privacy & Security</h6>
+                    <h6 className="fw-bold mb-2" style={{ color: 'var(--bs-body-color)' }}>Your Privacy & Security</h6>
                     <div className="text-muted small">
                       <ul className="mb-0 ps-3">
                         <li>We only collect the information you provide in this form</li>
