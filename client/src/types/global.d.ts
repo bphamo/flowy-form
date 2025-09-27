@@ -1,5 +1,2 @@
-import type { route as routeFn } from 'ziggy-js';
-
-declare global {
-  const route: typeof routeFn;
-}
+// Global type declarations for the client application
+// This file is currently empty but can be used for global type definitions

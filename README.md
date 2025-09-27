@@ -1,19 +1,20 @@
-# Flowy Form - Form Builder Application
+# FlowableForms - Modern Form Builder Application
 
-A modern form builder application with a React frontend and Hono backend, supporting GitHub OAuth authentication and dynamic form creation.
+A modern form builder application with a React frontend and Hono backend, supporting GitHub OAuth authentication and dynamic form creation with version control.
 
 ## Architecture
 
-- **Frontend**: React + TypeScript + Vite (port 3000)
+- **Frontend**: React + TypeScript + TanStack Router + Vite (port 3000)
 - **Backend**: Hono + TypeScript + Drizzle ORM (port 3001)
 - **Database**: PostgreSQL
-- **Authentication**: GitHub OAuth with JWT tokens
+- **Authentication**: BetterAuth with GitHub OAuth
+- **Runtime**: Bun (JavaScript/TypeScript runtime)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
+- Bun runtime (latest version)
 - PostgreSQL database
 - GitHub OAuth App (for authentication)
 
@@ -22,35 +23,53 @@ A modern form builder application with a React frontend and Hono backend, suppor
 1. Clone the repository
 2. Install dependencies for all packages:
    ```bash
-   npm run install:all
+   bun run install:all
    ```
 
 ### Environment Setup
 
-1. **Server Configuration** (`server/.env`):
+Copy the example environment file and configure it:
 
-   ```env
-   DATABASE_URL=postgresql://username:password@localhost:5432/flowyform
-   JWT_SECRET=your-super-secret-jwt-key
-   GITHUB_CLIENT_ID=your-github-client-id
-   GITHUB_CLIENT_SECRET=your-github-client-secret
-   GITHUB_REDIRECT_URI=http://localhost:3001/api/auth/github/callback
-   PORT=3001
-   CLIENT_URL=http://localhost:3000
-   ```
+```bash
+cp .env.example .env
+```
 
-2. **Client Configuration** (`client/.env`):
-   ```env
-   VITE_API_URL=http://localhost:3001/api
-   ```
+Then edit `.env` with your actual values:
+
+```env
+# Application Configuration
+APP_NAME=FlowableForms
+NODE_ENV=development
+PORT=3001
+CLIENT_URL=http://localhost:3000
+SERVER_URL=http://localhost:3001
+
+# Database Configuration
+DATABASE_URL=postgresql://postgres:password@localhost:5432/develform
+
+# Authentication
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+JWT_SECRET=your-jwt-secret-key
+BETTER_AUTH_SECRET=your-better-auth-secret-key
+
+# Client Environment Variables (automatically used by Vite)
+VITE_APP_NAME=FlowableForms
+VITE_SERVER_URL=http://localhost:3001
+```
 
 ### Database Setup
 
-1. Create a PostgreSQL database
+1. Start PostgreSQL database using Docker:
+
+   ```bash
+   docker-compose up -d postgres
+   ```
+
 2. Generate and run migrations:
    ```bash
-   npm run db:generate
-   npm run db:migrate
+   bun run db:generate
+   bun run db:migrate
    ```
 
 ### Development
@@ -58,23 +77,23 @@ A modern form builder application with a React frontend and Hono backend, suppor
 Start both frontend and backend in development mode:
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Or start them separately:
 
 ```bash
 # Frontend only (port 3000)
-npm run dev:client
+bun run dev:client
 
 # Backend only (port 3001)
-npm run dev:server
+bun run dev:server
 ```
 
 ### Building for Production
 
 ```bash
-npm run build
+bun run build
 ```
 
 ## API Endpoints
@@ -125,11 +144,27 @@ npm run build
 
 ## Development Tools
 
-- **Database**: `npm run db:studio` - Open Drizzle Studio
-- **Linting**: `npm run lint` - Run ESLint
-- **Formatting**: `npm run format` - Run Prettier
-- **Type Checking**: `npm run types` - Run TypeScript compiler
+- **Database**: `bun run db:studio` - Open Drizzle Studio
+- **Linting**: `bun run lint` - Run ESLint
+- **Formatting**: `bun run format` - Run Prettier
+- **Type Checking**: `bun run types` - Run TypeScript compiler
 
-## Migration from Laravel
+## Architecture Migration
 
-This project was migrated from a Laravel + Inertia.js setup to a modern Hono + React architecture while maintaining all existing functionality and database compatibility.
+## Architecture Migration
+
+This project was successfully migrated from a Laravel + Inertia.js setup to a modern Bun + Hono + React architecture while maintaining all existing functionality and database compatibility. The migration included:
+
+- **Backend**: Laravel → Hono + TypeScript + Drizzle ORM
+- **Frontend**: Inertia.js → React + TanStack Router
+- **Authentication**: Laravel Sanctum → BetterAuth with GitHub OAuth
+- **Database**: Maintained PostgreSQL with improved schema management
+- **Runtime**: Node.js → Bun for better performance and package management
+- **Form Builder**: Enhanced with version control and real-time auto-save The migration included:
+
+- **Backend**: Laravel → Hono + TypeScript + Drizzle ORM
+- **Frontend**: Inertia.js → React + TanStack Router
+- **Authentication**: Laravel Sanctum → BetterAuth with GitHub OAuth
+- **Database**: Maintained PostgreSQL with improved schema management
+- **Runtime**: Node.js → Bun for better performance
+- **Form Builder**: Enhanced with version control and real-time auto-save
