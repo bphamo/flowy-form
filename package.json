@@ -23,7 +23,6 @@
     "start:server": "cd server && bun run start",
     "format": "bunx prettier --write .",
     "format:check": "bunx prettier --check .",
-    "lint": "bunx prettier --check .",
     "types": "cd client && bun run types",
     "prepare": "husky"
   },
