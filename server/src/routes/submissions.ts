@@ -283,13 +283,12 @@ submissionRoutes.put('/:id/status', authMiddleware, submissionStatusUpdateCheckM
 
     const validatedData = updateStatusSchema.parse(body);
 
+    if (!user) {
+      return c.json({ error: 'Authentication required' }, 401);
+    }
+
     // Update submission status
-    const updatedSubmission = await submissionsService.updateSubmissionStatus(
-      db,
-      submissionId,
-      validatedData.status,
-      user.id,
-    );
+    const updatedSubmission = await submissionsService.updateSubmissionStatus(db, submissionId, validatedData.status, user.id);
 
     if (updatedSubmission.length === 0) {
       return c.json({ error: 'Failed to update submission status' }, 500);

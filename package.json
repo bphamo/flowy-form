@@ -7,23 +7,24 @@
     "client",
     "server"
   ],
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
-    "dev:server": "cd server && bun run dev",
-    "dev:client": "cd client && bun run dev",
+    "dev": "concurrently --raw --max-processes 0 --handle-input --default-input-target 0 \"bun run dev:server\" \"bun run dev:client\"",
+    "dev:server": "bun run --filter 'api' dev",
+    "dev:client": "bun run --filter 'web' dev",
+    "db:migrate": "bun run --filter 'api' db:migrate",
     "build": "bun run build:server && bun run build:client",
     "build:server": "cd server && bun run build",
     "build:client": "cd client && bun run build",
     "start": "bun run start:server",
     "start:server": "cd server && bun run start",
-    "install:all": "bun install && cd client && bun install && cd ../server && bun install",
     "format": "bunx prettier --write .",
     "format:check": "bunx prettier --check .",
     "lint": "bunx prettier --check .",
-    "types": "cd client && bun run types",
-    "db:generate": "cd server && bun run db:generate",
-    "db:migrate": "cd server && bun run db:migrate",
-    "db:studio": "cd server && bun run db:studio"
+    "types": "cd client && bun run types"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

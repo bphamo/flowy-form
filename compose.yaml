@@ -5,9 +5,9 @@ services:
     container_name: flowableforms_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: develform
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${DB_NAME:-develform}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - '${DB_PORT:-5432}:5432'
@@ -17,7 +17,7 @@ services:
     networks:
       - flowableforms_network
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d develform']
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-develform}']
       interval: 10s
       timeout: 5s
       retries: 5
