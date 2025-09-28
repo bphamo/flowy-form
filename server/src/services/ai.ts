@@ -2,23 +2,31 @@
 // AI service for form development assistance
 // Note: This is a mock implementation for development.
 // Replace with actual AI integration when OpenAI SDK is properly configured.
+import type { FormType } from '@formio/react';
 import { z } from 'zod';
-import { calculateSchemaComplexity, FormioSchema, formioSchema, MAX_SCHEMA_COMPLEXITY_FOR_AI, validateFormioSchema } from '../lib/formio-validation';
+import { calculateSchemaComplexity, FormioSchema, MAX_SCHEMA_COMPLEXITY_FOR_AI, validateFormioSchema } from '../lib/formio-validation';
 
-// Request schema for AI assistance
+// Request schema for AI assistance using FormType
 export const aiAssistRequestSchema = z.object({
   message: z.string().min(1).max(1000),
-  currentSchema: formioSchema,
+  currentSchema: z.any(), // Use z.any() for FormType compatibility
 });
 
-// Response schema for AI assistance
+// Response schema for AI assistance using FormType
 export const aiAssistResponseSchema = z.object({
   markdown: z.string(),
-  schema: formioSchema,
+  schema: z.any(), // Use z.any() for FormType compatibility
 });
 
-export type AiAssistRequest = z.infer<typeof aiAssistRequestSchema>;
-export type AiAssistResponse = z.infer<typeof aiAssistResponseSchema>;
+export type AiAssistRequest = {
+  message: string;
+  currentSchema: FormType;
+};
+
+export type AiAssistResponse = {
+  markdown: string;
+  schema: FormType;
+};
 
 // Check if a schema is too complex for AI assistance
 export const isSchemaTooBigForAI = (schema: FormioSchema): boolean => {

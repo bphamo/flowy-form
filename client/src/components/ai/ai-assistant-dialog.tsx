@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { X, Wand2, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import type { FormType } from '@formio/react';
-import { useAiFormAssist, useAiLimits, calculateSchemaComplexity } from '@/lib/ai-hooks';
+import { useAiFormAssist, useAiLimits, calculateSchemaComplexity } from '@/hooks/use-ai';
 import { toast } from 'sonner';
 
 interface AiAssistantDialogProps {

@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// FormIO schema validation using existing FormType
+// FormIO schema validation using FormType from @formio/react
 import type { FormType } from '@formio/react';
-import { z } from 'zod';
 
-// Use the existing FormType from @formio/react instead of creating our own
-// We'll create a Zod schema that accepts any object for FormIO compatibility
-export const formioSchema = z.any(); // FormIO schemas are complex and dynamic
+// Use FormType from @formio/react directly
+export type FormioSchema = FormType;
 
-export type FormioSchema = FormType; // Use the same type as FormType from @formio/react
-
-// Validation function for FormIO schemas
+// Validation function for FormIO schemas using the official FormType
 export const validateFormioSchema = (schema: unknown): { valid: boolean; errors?: string[]; data?: FormioSchema } => {
   try {
     // Basic validation to ensure it's an object with components
@@ -23,7 +19,16 @@ export const validateFormioSchema = (schema: unknown): { valid: boolean; errors?
       return { valid: false, errors: ['Schema components must be an array'] };
     }
 
-    return { valid: true, data: schemaObj };
+    // Additional FormType-specific validation
+    if (schemaObj.type && schemaObj.type !== 'form' && schemaObj.type !== 'wizard') {
+      return { valid: false, errors: ['Schema type must be "form" or "wizard"'] };
+    }
+
+    if (schemaObj.display && schemaObj.display !== 'form' && schemaObj.display !== 'wizard') {
+      return { valid: false, errors: ['Schema display must be "form" or "wizard"'] };
+    }
+
+    return { valid: true, data: schemaObj as FormioSchema };
   } catch (error) {
     return { valid: false, errors: ['Schema validation failed'] };
   }
