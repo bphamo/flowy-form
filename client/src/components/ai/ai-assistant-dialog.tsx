@@ -1,9 +1,10 @@
 // AI Assistant Dialog Component
 import { useState, useRef, useEffect } from 'react';
 import { Button, Form, Alert, Spinner } from 'react-bootstrap';
-import { X, Wand2, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { X, Wand2, AlertTriangle, CheckCircle, XCircle, Eye } from 'lucide-react';
 import type { FormType } from '@formio/react';
 import { useAiFormAssist, useAiLimits, calculateSchemaComplexity } from '@/hooks/use-ai';
+import { SchemaPreviewModal } from './schema-preview-modal';
 import { toast } from 'sonner';
 
 interface AiAssistantDialogProps {
@@ -26,6 +27,7 @@ export const AiAssistantDialog = ({
   onReject,
 }: AiAssistantDialogProps) => {
   const [message, setMessage] = useState('');
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Use AI SDK hooks
@@ -106,8 +108,17 @@ export const AiAssistantDialog = ({
 
   const handleClose = () => {
     setMessage('');
+    setIsPreviewOpen(false);
     // Response is managed by the hook
     onClose();
+  };
+
+  const handleOpenPreview = () => {
+    setIsPreviewOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setIsPreviewOpen(false);
   };
 
   const { isValid: complexityValid, complexity } = checkComplexity();
@@ -235,6 +246,10 @@ export const AiAssistantDialog = ({
                   Reject
                 </Button>
                 <div>
+                  <Button variant="outline-info" onClick={handleOpenPreview} className="me-2">
+                    <Eye size={16} className="me-2" />
+                    Preview
+                  </Button>
                   <Button variant="outline-primary" onClick={handleTryAgain} className="me-2">
                     Try Again
                   </Button>
@@ -248,6 +263,16 @@ export const AiAssistantDialog = ({
           )}
         </div>
       </div>
+
+      {/* Schema Preview Modal */}
+      {response?.schema && (
+        <SchemaPreviewModal
+          isOpen={isPreviewOpen}
+          onClose={handleClosePreview}
+          schema={response.schema}
+          title="AI Generated Schema Preview"
+        />
+      )}
     </div>
   );
 };
