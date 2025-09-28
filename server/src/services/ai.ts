@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // AI service for form development assistance using Vercel AI SDK and OpenAI with tool calling
 import type { FormType } from '@formio/react';
-import { generateObject } from 'ai';
+import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { env, isAiEnabled } from '../lib/env';
 import { calculateSchemaComplexity } from '../lib/formio-validation';
 import {
   aiAssistRequestSchema,
   aiAssistResponseSchema,
-  formioSchemaResponseSchema,
 } from '../lib/ai/schemas';
 import {
   FORMIO_EXPERT_SYSTEM_PROMPT,
@@ -19,6 +18,7 @@ import {
   isSchemaTooBigForAI,
   validateAISolution,
 } from '../lib/ai/utils';
+import { aiTools } from '../lib/ai/tools';
 
 export type AiAssistRequest = {
   message: string;
@@ -66,38 +66,79 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     const currentComplexity = calculateSchemaComplexity(request.currentSchema);
     const currentComponents = request.currentSchema.components || [];
     
-    // Generate the AI response using Vercel AI SDK
-    const { object } = await generateObject({
-      model: client('gpt-4o-mini'), // Use a more capable model for form generation
-      temperature: 0.3, // Lower temperature for more consistent results
-      schema: formioSchemaResponseSchema as any, // Cast for AI SDK compatibility
+    // Generate the AI response using Vercel AI SDK with tool calling
+    const { text, toolResults } = await generateText({
+      model: client('gpt-4o-mini'),
+      temperature: 0.3,
+      maxTokens: 3000,
       system: FORMIO_EXPERT_SYSTEM_PROMPT(currentComplexity),
       prompt: createUserPrompt(request.message, currentComponents),
+      tools: aiTools,
     });
 
-    // Construct the updated schema
-    const updatedSchema: FormType = {
-      ...request.currentSchema,
-      components: object.components,
-    };
+    // Parse the AI response to extract the schema
+    let updatedSchema: FormType;
+    let explanation = text;
+    let warnings: string[] = [];
+
+    try {
+      // The AI should provide a JSON response with the updated schema
+      // Look for JSON in the response
+      const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        const jsonResponse = JSON.parse(jsonMatch[1]);
+        updatedSchema = {
+          ...request.currentSchema,
+          components: jsonResponse.components || request.currentSchema.components,
+        };
+        explanation = jsonResponse.explanation || text;
+        warnings = jsonResponse.warnings || [];
+      } else {
+        // Fallback: use original schema if no valid JSON found
+        console.warn('AI did not provide valid JSON response, using original schema');
+        updatedSchema = request.currentSchema;
+        warnings.push('AI response did not contain valid schema updates');
+      }
+    } catch (parseError) {
+      console.warn('Failed to parse AI JSON response:', parseError);
+      updatedSchema = request.currentSchema;
+      warnings.push('AI response parsing failed, no changes applied');
+    }
+
+    // Collect tool usage information
+    const toolUsage: string[] = [];
+    if (toolResults) {
+      for (const result of toolResults) {
+        if (result.toolName === 'validateSchema') {
+          toolUsage.push(`Schema validation: ${(result.result as any)?.summary || 'completed'}`);
+        } else if (result.toolName === 'reduceComplexity') {
+          toolUsage.push(`Complexity analysis: ${(result.result as any)?.summary || 'completed'}`);
+        }
+      }
+    }
 
     // Final validation using our internal validation
     const validation = validateAISolution(request.currentSchema, updatedSchema);
     if (!validation.valid && validation.issues) {
-      // If final validation fails, throw error with details
+      // If final validation fails, add to warnings but don't fail completely
       console.warn('AI generated solution failed final validation:', validation.issues);
-      throw new Error(`AI solution validation failed: ${validation.issues.join(', ')}`);
+      warnings.push(`Validation issues: ${validation.issues.join(', ')}`);
     }
 
-    // Format the markdown response
+    // Format the markdown response with tool usage information
     const markdown = formatMarkdownResponse(
-      object.explanation,
+      explanation,
       calculateSchemaComplexity(updatedSchema),
-      object.warnings
+      warnings
     );
 
+    // Add tool usage information to response
+    const enhancedMarkdown = toolUsage.length > 0 
+      ? `${markdown}\n\n### Tool Usage:\n${toolUsage.map(usage => `- ${usage}`).join('\n')}`
+      : markdown;
+
     return {
-      markdown,
+      markdown: enhancedMarkdown,
       schema: updatedSchema,
     };
 

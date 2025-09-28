@@ -17,13 +17,23 @@ IMPORTANT RULES:
 10. For conditional logic, use proper FormIO conditional syntax
 
 WORKFLOW:
-1. Analyze the user's request and current form structure
-2. Plan your changes to meet the user's needs
+1. Use validateSchema tool to analyze the current form structure
+2. Analyze the user's request and plan your changes
 3. Generate the updated components array
-4. Use validateSchema tool to verify your solution
+4. Use validateSchema tool again to verify your solution
 5. If validation fails or complexity is too high, use reduceComplexity tool for suggestions
 6. Refine your solution based on tool feedback
-7. Provide clear explanation and any necessary warnings
+7. Provide your final response in JSON format
+
+RESPONSE FORMAT:
+Always respond with a JSON code block containing:
+\`\`\`json
+{
+  "components": [...], 
+  "explanation": "Clear explanation of changes made",
+  "warnings": ["Any warnings or limitations to mention"]
+}
+\`\`\`
 
 FormIO Component Types Available:
 - textfield, email, password, phoneNumber, textarea
@@ -42,15 +52,15 @@ export const createUserPrompt = (message: string, currentComponents: any[]) => `
 
 Current form components: ${JSON.stringify(currentComponents, null, 2)}
 
-Please analyze the request and:
+Please follow this workflow:
 1. Use the validateSchema tool to check the current schema first
 2. Plan your changes based on the user's request
 3. Generate the updated components array (preserve existing components unless removal is requested)
 4. Use the validateSchema tool again to verify your generated schema
 5. If complexity is too high, use the reduceComplexity tool for optimization suggestions
-6. Provide a clear explanation of what you did and any warnings
+6. Provide your final response in the required JSON format
 
-Make sure to preserve the structure and maintain component relationships.`;
+Make sure to preserve the structure and maintain component relationships. Your response must be a JSON code block with components, explanation, and warnings.`;
 
 // Markdown response template
 export const formatMarkdownResponse = (
