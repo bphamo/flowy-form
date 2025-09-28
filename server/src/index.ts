@@ -5,6 +5,7 @@ import { cors } from 'hono/cors';
 
 import { logger } from 'hono/logger';
 import { auth } from './lib/auth';
+import aiRoutes from './routes/ai';
 import formRoutes from './routes/forms';
 import settingsRoutes from './routes/settings';
 import submissionRoutes from './routes/submissions';
@@ -41,6 +42,7 @@ app.on(['POST', 'GET'], '/api/auth/*', (c) => {
 });
 
 // API Routes
+app.route('/api/ai', aiRoutes);
 app.route('/api/forms', formRoutes);
 app.route('/api/submissions', submissionRoutes);
 app.route('/api/settings', settingsRoutes);
