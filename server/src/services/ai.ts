@@ -68,9 +68,9 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     
     // Generate the AI response using Vercel AI SDK
     const { object } = await generateObject({
-      model: client.languageModel('gpt-4o-mini'), // Use a more capable model for form generation
+      model: client('gpt-4o-mini'), // Use a more capable model for form generation
       temperature: 0.3, // Lower temperature for more consistent results
-      schema: formioSchemaResponseSchema as any, // Cast to any to resolve version mismatch
+      schema: formioSchemaResponseSchema as any, // Cast for AI SDK compatibility
       system: FORMIO_EXPERT_SYSTEM_PROMPT(currentComplexity),
       prompt: createUserPrompt(request.message, currentComponents),
     });

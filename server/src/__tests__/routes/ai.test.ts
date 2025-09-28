@@ -3,14 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals
 import aiRoutes from '../../routes/ai';
 import { mockAuthMiddleware, mockFormWriteCheckMiddleware } from '../helpers';
 
-// Mock the Vercel AI SDK with tool support
+// Mock the Vercel AI SDK
 jest.mock('ai', () => ({
   generateObject: jest.fn(),
-  tool: jest.fn().mockImplementation((toolConfig) => toolConfig),
 }));
 
-jest.mock('ai/openai', () => ({
-  openai: jest.fn(),
+jest.mock('@ai-sdk/openai', () => ({
+  createOpenAI: jest.fn().mockReturnValue(() => 'mocked-model'),
 }));
 
 // Mock the environment validation

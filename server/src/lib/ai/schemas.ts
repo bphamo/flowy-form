@@ -5,13 +5,13 @@ import { z } from 'zod';
 // Request schema for AI assistance using FormType
 export const aiAssistRequestSchema = z.object({
   message: z.string().min(1).max(1000),
-  currentSchema: z.any(), // Use z.any() for FormType compatibility
+  currentSchema: z.any(), // Keep as z.any() for FormType compatibility
 });
 
 // Response schema for AI assistance using FormType
 export const aiAssistResponseSchema = z.object({
   markdown: z.string(),
-  schema: z.any(), // Use z.any() for FormType compatibility
+  schema: z.any(), // Keep as z.any() for FormType compatibility
 });
 
 // FormIO component schema for AI generation
