@@ -12,7 +12,7 @@
     "server"
   ],
   "scripts": {
-    "dev": "concurrently --raw --max-processes 0 --handle-input --default-input-target 0 \"bun run dev:server\" \"bun run dev:client\"",
+    "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
     "dev:server": "bun run --filter 'api' dev",
     "dev:client": "bun run --filter 'web' dev",
     "db:migrate": "bun run --filter 'api' db:migrate",
