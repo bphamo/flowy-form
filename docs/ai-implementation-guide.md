@@ -133,13 +133,64 @@ The implementation includes comprehensive FormIO schema validation supporting:
 ## Configuration
 
 ### Environment Variables
+
+The AI assistant feature requires proper environment variable configuration with Zod validation for type safety.
+
+#### Required Environment Variables
+
+Add these variables to your `.env` file:
+
 ```bash
-# Optional: Enable real AI assistance
+# AI Configuration (Required for AI assistant feature)
 OPENAI_API_KEY=your_openai_api_key_here
 
 # Optional: Use custom OpenAI-compatible endpoint
 OPENAI_BASE_URL=https://api.openai.com/v1
 ```
+
+#### Environment Validation
+
+The server uses Zod schemas to validate all environment variables at startup:
+
+```typescript
+// server/src/lib/env.ts
+const envSchema = z.object({
+  // AI Configuration (Optional)
+  OPENAI_API_KEY: z.string().optional(),
+  OPENAI_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
+  
+  // Other required configuration...
+  DATABASE_URL: z.string().min(1, 'Database URL is required'),
+  JWT_SECRET: z.string().min(32, 'JWT secret must be at least 32 characters'),
+  // ... more validation
+});
+
+export const env = envSchema.parse(process.env);
+export const isAiEnabled = (): boolean => !!env.OPENAI_API_KEY;
+```
+
+#### Environment Files
+
+**Root `.env.example`:**
+```bash
+# AI Configuration (Optional - for AI assistant feature)
+OPENAI_API_KEY=
+OPENAI_BASE_URL=https://api.openai.com/v1
+```
+
+**Server `.env.example`:**
+```bash
+# AI Configuration (Optional - for AI assistant feature)
+OPENAI_API_KEY=
+OPENAI_BASE_URL=https://api.openai.com/v1
+```
+
+#### Production Setup
+
+1. **Set OpenAI API Key**: Add your OpenAI API key to the environment
+2. **Validation**: Server validates all environment variables on startup
+3. **Graceful Degradation**: AI features are disabled if API key is not configured
+4. **Type Safety**: Zod ensures proper environment variable types and formats
 
 ### Complexity Limits
 ```typescript

@@ -11,6 +11,7 @@ import {
 } from '../services/ai';
 import { validateFormioSchema, calculateSchemaComplexity, MAX_SCHEMA_COMPLEXITY_FOR_AI } from '../lib/formio-validation';
 import { asyncHandler, validateBody, validateNumericParam } from '../utils/error-handler';
+import { env, isAiEnabled } from '../lib/env';
 import * as versionsService from '../services/versions';
 import { db } from '../db/index';
 
@@ -44,7 +45,7 @@ aiRoutes.post('/form-assist/:formId/:versionId',
     const requestData = await validateBody(c, aiAssistRequestSchema);
 
     // Check if OpenAI API key is configured
-    if (!process.env.OPENAI_API_KEY) {
+    if (!isAiEnabled()) {
       return c.json({ error: 'AI assistance is not configured. Please contact your administrator.' }, 503);
     }
 
@@ -151,7 +152,7 @@ aiRoutes.get('/limits',
     return c.json({
       data: {
         maxComplexity: MAX_SCHEMA_COMPLEXITY_FOR_AI,
-        aiEnabled: !!process.env.OPENAI_API_KEY
+        aiEnabled: isAiEnabled()
       }
     });
   }, 'get AI limits')

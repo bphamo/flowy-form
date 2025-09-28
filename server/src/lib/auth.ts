@@ -3,13 +3,14 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import * as dotenv from 'dotenv';
 import { db } from '../db/index';
 import { accounts, sessions, users, verificationTokens } from '../db/schema';
+import { env } from './env'; // Import validated environment variables
 
 dotenv.config();
 
 export const auth = betterAuth({
-  baseURL: process.env.BASE_URL || 'http://localhost:3001',
-  secret: process.env.BETTER_AUTH_SECRET || 'your-secret-key',
-  trustedOrigins: [(process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/$/, '')],
+  baseURL: env.BASE_URL,
+  secret: env.BETTER_AUTH_SECRET,
+  trustedOrigins: [env.CLIENT_URL.replace(/\/$/, '')],
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema: {
@@ -21,8 +22,8 @@ export const auth = betterAuth({
   }),
   socialProviders: {
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     },
   },
   session: {
