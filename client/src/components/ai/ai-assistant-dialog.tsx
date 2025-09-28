@@ -3,9 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { X, Wand2, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import type { FormType } from '@formio/react';
-import { aiService, type AiAssistResponse, type AiLimits } from '@/lib/ai-service';
+import { useAiFormAssist, useAiLimits, calculateSchemaComplexity } from '@/lib/ai-hooks';
 import { toast } from 'sonner';
-import './ai-assistant-dialog.css';
 
 interface AiAssistantDialogProps {
   isOpen: boolean;
@@ -27,11 +26,11 @@ export const AiAssistantDialog = ({
   onReject,
 }: AiAssistantDialogProps) => {
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [response, setResponse] = useState<AiAssistResponse | null>(null);
-  const [limits, setLimits] = useState<AiLimits | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Use AI SDK hooks
+  const { requestAssistance, response, isLoading, error, clearResponse } = useAiFormAssist(formId, versionId);
+  const { limits, loadLimits } = useAiLimits();
 
   // Load AI limits when dialog opens
   useEffect(() => {
@@ -40,26 +39,12 @@ export const AiAssistantDialog = ({
       // Focus the textarea when dialog opens
       setTimeout(() => textareaRef.current?.focus(), 100);
     }
-  }, [isOpen]);
-
-  const loadLimits = async () => {
-    try {
-      const limitsData = await aiService.getLimits();
-      setLimits(limitsData);
-      
-      if (!limitsData.aiEnabled) {
-        setError('AI assistance is not configured. Please contact your administrator.');
-      }
-    } catch (err) {
-      setError('Failed to load AI configuration');
-      console.error('Failed to load AI limits:', err);
-    }
-  };
+  }, [isOpen, loadLimits]);
 
   const checkComplexity = () => {
     if (!limits) return { isValid: true, complexity: 0 };
     
-    const complexity = aiService.calculateSchemaComplexity(currentSchema);
+    const complexity = calculateSchemaComplexity(currentSchema);
     const isValid = complexity <= limits.maxComplexity;
     
     return { isValid, complexity };
@@ -84,24 +69,18 @@ export const AiAssistantDialog = ({
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    setResponse(null);
-
     try {
-      const result = await aiService.requestAssistance(formId, versionId, {
+      await requestAssistance({
         message: message.trim(),
         currentSchema,
       });
-
-      setResponse(result);
-      toast.success('AI assistance generated successfully!');
+      
+      if (response) {
+        toast.success('AI assistance generated successfully!');
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to get AI assistance';
-      setError(errorMessage);
       toast.error(errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -114,15 +93,20 @@ export const AiAssistantDialog = ({
   };
 
   const handleReject = () => {
-    setResponse(null);
+    // Clear response since we're using the hook state
     onReject();
     toast.info('AI suggestion rejected');
   };
 
+  const handleTryAgain = () => {
+    // Clear response and reset form
+    clearResponse();
+    setMessage('');
+  };
+
   const handleClose = () => {
     setMessage('');
-    setResponse(null);
-    setError(null);
+    // Response is managed by the hook
     onClose();
   };
 
@@ -131,9 +115,11 @@ export const AiAssistantDialog = ({
   if (!isOpen) return null;
 
   return (
-    <div className="ai-assistant-overlay">
-      <div className="ai-assistant-dialog">
-        <div className="ai-assistant-header">
+    <div className="position-fixed top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center p-3" 
+         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1050 }}>
+      <div className="bg-white rounded shadow-lg d-flex flex-column" 
+           style={{ maxWidth: '600px', width: '100%', maxHeight: '80vh', overflow: 'hidden' }}>
+        <div className="px-4 py-3 border-bottom d-flex justify-content-between align-items-center bg-light">
           <div className="d-flex align-items-center">
             <Wand2 size={20} className="me-2 text-primary" />
             <h5 className="mb-0">AI Form Assistant</h5>
@@ -143,7 +129,7 @@ export const AiAssistantDialog = ({
           </Button>
         </div>
 
-        <div className="ai-assistant-body">
+        <div className="p-4 overflow-auto flex-grow-1">
           {!limits?.aiEnabled && (
             <Alert variant="warning" className="mb-3">
               <AlertTriangle size={16} className="me-2" />
@@ -216,7 +202,7 @@ export const AiAssistantDialog = ({
               </div>
             </Form>
           ) : (
-            <div className="ai-response">
+            <div className="animate__animated animate__fadeInUp" style={{ animationDuration: '0.3s' }}>
               {response.warnings && response.warnings.length > 0 && (
                 <Alert variant="warning" className="mb-3">
                   <AlertTriangle size={16} className="me-2" />
@@ -235,7 +221,8 @@ export const AiAssistantDialog = ({
                   AI Suggestion
                 </h6>
                 <div 
-                  className="ai-markdown-content"
+                  className="bg-light p-3 rounded border-start border-success border-4"
+                  style={{ fontSize: '0.9rem', lineHeight: '1.5' }}
                   dangerouslySetInnerHTML={{ 
                     __html: response.markdown.replace(/\n/g, '<br>') 
                   }}
@@ -248,7 +235,7 @@ export const AiAssistantDialog = ({
                   Reject
                 </Button>
                 <div>
-                  <Button variant="outline-primary" onClick={() => setResponse(null)} className="me-2">
+                  <Button variant="outline-primary" onClick={handleTryAgain} className="me-2">
                     Try Again
                   </Button>
                   <Button variant="success" onClick={handleAccept}>
