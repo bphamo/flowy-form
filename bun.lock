@@ -65,6 +65,7 @@
       "name": "api",
       "version": "1.0.0",
       "dependencies": {
+        "@ai-sdk/openai": "^2.0.38",
         "@formio/core": "^1.2.0",
         "@formio/react": "^6.1.0",
         "@hono/node-server": "^1.19.0",
@@ -79,7 +80,7 @@
       },
       "devDependencies": {
         "@types/jest": "^30.0.0",
-        "@types/node": "^24.3.0",
+        "@types/node": "^24.5.2",
         "@types/supertest": "^6.0.3",
         "drizzle-kit": "^0.31.4",
         "jest": "^30.1.1",
@@ -92,6 +93,8 @@
   },
   "packages": {
     "@ai-sdk/gateway": ["@ai-sdk/gateway@1.0.30", "", { "dependencies": { "@ai-sdk/provider": "2.0.0", "@ai-sdk/provider-utils": "3.0.10" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-QdrSUryr/CLcsCISokLHOImcHj1adGXk1yy4B3qipqLhcNc33Kj/O/3crI790Qp85oDx7sc4vm7R4raf9RA/kg=="],
+
+    "@ai-sdk/openai": ["@ai-sdk/openai@2.0.38", "", { "dependencies": { "@ai-sdk/provider": "2.0.0", "@ai-sdk/provider-utils": "3.0.10" }, "peerDependencies": { "zod": "^3.25.76 || ^4.1.8" } }, "sha512-aPK5jSz5/UkbYnh59/Yy5ic3JsOrz7Gt6TJdB8ggYDYEUHJ9FHEKoRKz8DEHh3Zaf3yngxZLkdP4JSbroK3jsQ=="],
 
     "@ai-sdk/provider": ["@ai-sdk/provider@2.0.0", "", { "dependencies": { "json-schema": "^0.4.0" } }, "sha512-6o7Y2SeO9vFKB8lArHXehNuusnpddKPk7xqL7T2/b+OvXMRIXUO1rR4wcv1hAFUAT9avGZshty3Wlua/XA7TvA=="],
 

@@ -1,24 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // AI service for form development assistance using Vercel AI SDK and OpenAI with tool calling
+import { createOpenAI } from '@ai-sdk/openai';
 import type { FormType } from '@formio/react';
 import { generateText } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+import { aiAssistRequestSchema, aiAssistResponseSchema } from '../lib/ai/schemas';
+import { FORMIO_EXPERT_SYSTEM_PROMPT, createUserPrompt, formatMarkdownResponse } from '../lib/ai/templates';
+import { aiTools } from '../lib/ai/tools';
+import { isSchemaTooBigForAI, validateAISolution } from '../lib/ai/utils';
 import { env, isAiEnabled } from '../lib/env';
 import { calculateSchemaComplexity } from '../lib/formio-validation';
-import {
-  aiAssistRequestSchema,
-  aiAssistResponseSchema,
-} from '../lib/ai/schemas';
-import {
-  FORMIO_EXPERT_SYSTEM_PROMPT,
-  createUserPrompt,
-  formatMarkdownResponse,
-} from '../lib/ai/templates';
-import {
-  isSchemaTooBigForAI,
-  validateAISolution,
-} from '../lib/ai/utils';
-import { aiTools } from '../lib/ai/tools';
 
 export type AiAssistRequest = {
   message: string;
@@ -38,7 +28,7 @@ const getOpenAIClient = () => {
   if (!isAiEnabled()) {
     throw new Error('OpenAI API key not configured');
   }
-  
+
   return createOpenAI({
     apiKey: env.OPENAI_API_KEY!,
     baseURL: env.OPENAI_BASE_URL,
@@ -49,9 +39,7 @@ const getOpenAIClient = () => {
 export const generateAIAssistance = async (request: AiAssistRequest): Promise<AiAssistResponse> => {
   // Check if current schema is too complex
   if (isSchemaTooBigForAI(request.currentSchema)) {
-    throw new Error(
-      `Form is too complex for AI assistance. AI assistance is limited to forms with up to 50 components.`,
-    );
+    throw new Error(`Form is too complex for AI assistance. AI assistance is limited to forms with up to 50 components.`);
   }
 
   // Ensure AI is enabled
@@ -61,16 +49,15 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
 
   try {
     const client = getOpenAIClient();
-    
+
     // Prepare context about the current form
     const currentComplexity = calculateSchemaComplexity(request.currentSchema);
     const currentComponents = request.currentSchema.components || [];
-    
+
     // Generate the AI response using Vercel AI SDK with tool calling
     const { text, toolResults } = await generateText({
       model: client('gpt-4o-mini'),
       temperature: 0.3,
-      maxTokens: 3000,
       system: FORMIO_EXPERT_SYSTEM_PROMPT(currentComplexity),
       prompt: createUserPrompt(request.message, currentComponents),
       tools: aiTools,
@@ -110,9 +97,9 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     if (toolResults) {
       for (const result of toolResults) {
         if (result.toolName === 'validateSchema') {
-          toolUsage.push(`Schema validation: ${(result.result as any)?.summary || 'completed'}`);
+          toolUsage.push(`Schema validation: ${(result.output as any)?.summary || 'completed'}`);
         } else if (result.toolName === 'reduceComplexity') {
-          toolUsage.push(`Complexity analysis: ${(result.result as any)?.summary || 'completed'}`);
+          toolUsage.push(`Complexity analysis: ${(result.output as any)?.summary || 'completed'}`);
         }
       }
     }
@@ -126,30 +113,23 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     }
 
     // Format the markdown response with tool usage information
-    const markdown = formatMarkdownResponse(
-      explanation,
-      calculateSchemaComplexity(updatedSchema),
-      warnings
-    );
+    const markdown = formatMarkdownResponse(explanation, calculateSchemaComplexity(updatedSchema), warnings);
 
     // Add tool usage information to response
-    const enhancedMarkdown = toolUsage.length > 0 
-      ? `${markdown}\n\n### Tool Usage:\n${toolUsage.map(usage => `- ${usage}`).join('\n')}`
-      : markdown;
+    const enhancedMarkdown = toolUsage.length > 0 ? `${markdown}\n\n### Tool Usage:\n${toolUsage.map((usage) => `- ${usage}`).join('\n')}` : markdown;
 
     return {
       markdown: enhancedMarkdown,
       schema: updatedSchema,
     };
-
   } catch (error) {
     console.error('AI generation error:', error);
-    
+
     // Re-throw the error for proper handling at the API level
     if (error instanceof Error) {
       throw error;
     }
-    
+
     throw new Error('AI service encountered an unexpected error');
   }
 };
