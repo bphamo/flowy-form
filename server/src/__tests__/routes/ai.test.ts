@@ -3,9 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals
 import aiRoutes from '../../routes/ai';
 import { mockAuthMiddleware, mockFormWriteCheckMiddleware } from '../helpers';
 
-// Mock the Vercel AI SDK
+// Mock the Vercel AI SDK with tool support
 jest.mock('ai', () => ({
   generateObject: jest.fn(),
+  tool: jest.fn().mockImplementation((toolConfig) => toolConfig),
 }));
 
 jest.mock('ai/openai', () => ({
@@ -172,7 +173,7 @@ describe('AI Routes', () => {
       expect(data.error).toContain('too complex for AI assistance');
     });
 
-    it('should successfully generate AI assistance', async () => {
+    it('should successfully generate AI assistance with tool calling', async () => {
       const { isAiEnabled } = require('../../lib/env');
       isAiEnabled.mockReturnValue(true);
       
@@ -186,6 +187,60 @@ describe('AI Routes', () => {
         message: 'Add an email field',
         currentSchema: mockSchema
       });
+      
+      const mockAIResponseWithTools = {
+        markdown: `## AI Form Assistant (Tool-Enhanced)
+
+Added an email field to your form using validation tools.
+
+### Changes Made:
+- Updated form structure using AI validation tools
+- Current complexity: 2 components
+- AI processing with tools: ✅ Complete
+
+### Tools Used:
+- **Schema Validation**: Verified FormIO compatibility and component structure
+- **Complexity Analysis**: Ensured form stays within manageable limits`,
+        schema: {
+          ...mockSchema,
+          components: [
+            ...mockSchema.components,
+            {
+              type: 'email',
+              key: 'email_address',
+              label: 'Email Address',
+              input: true,
+              validate: {
+                required: true,
+                pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+              }
+            }
+          ]
+        }
+      };
+      
+      generateAIAssistance.mockResolvedValue(mockAIResponseWithTools);
+      validateAISolution.mockReturnValue({ valid: true });
+
+      const res = await app.request('/form-assist/1/version1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Add an email field',
+          currentSchema: mockSchema
+        })
+      });
+
+      const data = await res.json() as TestResponse;
+      expect(res.status).toBe(200);
+      expect(data.data.markdown).toContain('Tool-Enhanced');
+      expect(data.data.markdown).toContain('Schema Validation');
+      expect(data.data.markdown).toContain('Complexity Analysis');
+      expect(data.data.schema.components).toHaveLength(2);
+      expect(data.data.schema.components[1].type).toBe('email');
+    });
       
       const mockAIResponse = {
         markdown: 'Added an email field to your form.',

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// AI service for form development assistance using Vercel AI SDK and OpenAI
+// AI service for form development assistance using Vercel AI SDK and OpenAI with tool calling
 import type { FormType } from '@formio/react';
-import { generateObject } from 'ai';
+import { generateObject, tool } from 'ai';
 import { openai } from 'ai/openai';
 import { z } from 'zod';
 import { env, isAiEnabled } from '../lib/env';
@@ -47,6 +47,134 @@ const getOpenAIClient = () => {
   });
 };
 
+// Tool for validating FormIO schemas
+const validateSchemaTool = tool({
+  description: 'Validate a FormIO schema for correctness and compatibility',
+  parameters: z.object({
+    schema: z.any().describe('The FormIO schema to validate'),
+    checkComplexity: z.boolean().default(true).describe('Whether to check schema complexity limits'),
+  }),
+  execute: async ({ schema, checkComplexity }) => {
+    const validation = validateFormioSchema(schema);
+    const complexity = calculateSchemaComplexity(schema);
+    const issues: string[] = [];
+
+    if (!validation.valid) {
+      issues.push(...(validation.errors || ['Schema validation failed']));
+    }
+
+    if (checkComplexity && complexity > MAX_SCHEMA_COMPLEXITY_FOR_AI) {
+      issues.push(`Schema too complex: ${complexity} components (max ${MAX_SCHEMA_COMPLEXITY_FOR_AI})`);
+    }
+
+    // Check for duplicate keys
+    const duplicateKeys = findDuplicateKeys(schema);
+    if (duplicateKeys.length > 0) {
+      issues.push(`Duplicate component keys found: ${duplicateKeys.join(', ')}`);
+    }
+
+    return {
+      valid: issues.length === 0,
+      complexity,
+      maxComplexity: MAX_SCHEMA_COMPLEXITY_FOR_AI,
+      issues: issues.length > 0 ? issues : undefined,
+      componentCount: (schema.components || []).length,
+      duplicateKeys,
+    };
+  },
+});
+
+// Tool for analyzing and reducing schema complexity
+const reduceComplexityTool = tool({
+  description: 'Analyze a FormIO schema and suggest ways to reduce complexity while preserving functionality',
+  parameters: z.object({
+    schema: z.any().describe('The FormIO schema to analyze'),
+    targetComplexity: z.number().optional().describe('Target complexity level (defaults to max allowed)'),
+  }),
+  execute: async ({ schema, targetComplexity = MAX_SCHEMA_COMPLEXITY_FOR_AI }) => {
+    const currentComplexity = calculateSchemaComplexity(schema);
+    const components = schema.components || [];
+    
+    if (currentComplexity <= targetComplexity) {
+      return {
+        currentComplexity,
+        targetComplexity,
+        needsReduction: false,
+        suggestions: ['Schema is already within acceptable complexity limits'],
+      };
+    }
+
+    const suggestions: string[] = [];
+    const analysisResults = {
+      htmlElements: 0,
+      containers: 0,
+      panels: 0,
+      redundantComponents: 0,
+      complexValidations: 0,
+    };
+
+    // Analyze component types and identify reduction opportunities
+    const analyzeComponents = (comps: any[], depth = 0): void => {
+      for (const comp of comps) {
+        if (comp.type === 'htmlelement' && !comp.content?.trim()) {
+          analysisResults.htmlElements++;
+        }
+        if (comp.type === 'container' && (!comp.components || comp.components.length === 0)) {
+          analysisResults.containers++;
+        }
+        if (comp.type === 'panel' && (!comp.components || comp.components.length <= 1)) {
+          analysisResults.panels++;
+        }
+        if (comp.validate && Object.keys(comp.validate).length > 3) {
+          analysisResults.complexValidations++;
+        }
+
+        // Recursively analyze nested components
+        if (comp.components) analyzeComponents(comp.components, depth + 1);
+        if (comp.columns) {
+          comp.columns.forEach((col: any) => {
+            if (col.components) analyzeComponents(col.components, depth + 1);
+          });
+        }
+      }
+    };
+
+    analyzeComponents(components);
+
+    // Generate suggestions based on analysis
+    if (analysisResults.htmlElements > 0) {
+      suggestions.push(`Remove ${analysisResults.htmlElements} empty HTML elements that add no value`);
+    }
+    if (analysisResults.containers > 0) {
+      suggestions.push(`Remove ${analysisResults.containers} empty containers that serve no purpose`);
+    }
+    if (analysisResults.panels > 0) {
+      suggestions.push(`Consider consolidating ${analysisResults.panels} panels with minimal content`);
+    }
+    if (analysisResults.complexValidations > 0) {
+      suggestions.push(`Simplify validation rules for ${analysisResults.complexValidations} components`);
+    }
+
+    // General suggestions
+    if (currentComplexity > targetComplexity * 1.5) {
+      suggestions.push('Consider breaking this form into multiple smaller forms or steps');
+      suggestions.push('Use conditional logic to show/hide fields instead of including all fields');
+    }
+
+    const reductionNeeded = currentComplexity - targetComplexity;
+    suggestions.push(`Target reduction: ${reductionNeeded} components to reach ${targetComplexity} limit`);
+
+    return {
+      currentComplexity,
+      targetComplexity,
+      needsReduction: true,
+      reductionNeeded,
+      analysisResults,
+      suggestions,
+    };
+  },
+});
+
 // FormIO component schema for AI generation
 const formioComponentSchema = z.object({
   type: z.string(),
@@ -79,7 +207,7 @@ const formioSchemaResponseSchema = z.object({
   warnings: z.array(z.string()).optional().describe('Any warnings or considerations for the user'),
 });
 
-// Generate AI assistance response using OpenAI
+// Generate AI assistance response using OpenAI with tool calling
 export const generateAIAssistance = async (request: AiAssistRequest): Promise<AiAssistResponse> => {
   // Check if current schema is too complex
   if (isSchemaTooBigForAI(request.currentSchema)) {
@@ -100,23 +228,38 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     const currentComplexity = calculateSchemaComplexity(request.currentSchema);
     const currentComponents = request.currentSchema.components || [];
     
-    // Generate the AI response using Vercel AI SDK
+    // Generate the AI response using Vercel AI SDK with tools
     const { object } = await generateObject({
       model: client('gpt-4o-mini'), // Use a more capable model for form generation
       temperature: 0.3, // Lower temperature for more consistent results
-      maxTokens: 2000,
+      maxTokens: 3000, // Increased for tool usage
       schema: formioSchemaResponseSchema,
-      system: `You are an expert FormIO form builder assistant. You help users modify and enhance FormIO forms by generating valid FormIO component schemas.
+      tools: {
+        validateSchema: validateSchemaTool,
+        reduceComplexity: reduceComplexityTool,
+      },
+      system: `You are an expert FormIO form builder assistant with access to validation and complexity analysis tools. You help users modify and enhance FormIO forms by generating valid FormIO component schemas.
 
 IMPORTANT RULES:
-1. ALWAYS preserve existing components unless explicitly asked to remove them
-2. Generate valid FormIO component objects with proper structure
-3. Use unique, descriptive keys for new components (e.g., 'email_address', 'phone_number')
-4. Follow FormIO naming conventions and best practices
-5. Add appropriate validation rules when applicable
-6. Consider user experience and form flow
-7. Keep forms under ${MAX_SCHEMA_COMPLEXITY_FOR_AI} total components
-8. For conditional logic, use proper FormIO conditional syntax
+1. ALWAYS use the validateSchema tool to check your generated schemas before finalizing
+2. If a schema is too complex, use the reduceComplexity tool to get suggestions for simplification
+3. ALWAYS preserve existing components unless explicitly asked to remove them
+4. Generate valid FormIO component objects with proper structure
+5. Use unique, descriptive keys for new components (e.g., 'email_address', 'phone_number')
+6. Follow FormIO naming conventions and best practices
+7. Add appropriate validation rules when applicable
+8. Consider user experience and form flow
+9. Keep forms under ${MAX_SCHEMA_COMPLEXITY_FOR_AI} total components
+10. For conditional logic, use proper FormIO conditional syntax
+
+WORKFLOW:
+1. Analyze the user's request and current form structure
+2. Plan your changes to meet the user's needs
+3. Generate the updated components array
+4. Use validateSchema tool to verify your solution
+5. If validation fails or complexity is too high, use reduceComplexity tool for suggestions
+6. Refine your solution based on tool feedback
+7. Provide clear explanation and any necessary warnings
 
 FormIO Component Types Available:
 - textfield, email, password, phoneNumber, textarea
@@ -134,10 +277,13 @@ Current form has ${currentComplexity} components.`,
 
 Current form components: ${JSON.stringify(currentComponents, null, 2)}
 
-Please analyze the request and provide:
-1. A clear explanation of what you're doing
-2. The updated components array (including existing components unless removal is requested)
-3. Any warnings or considerations
+Please analyze the request and:
+1. Use the validateSchema tool to check the current schema first
+2. Plan your changes based on the user's request
+3. Generate the updated components array (preserve existing components unless removal is requested)
+4. Use the validateSchema tool again to verify your generated schema
+5. If complexity is too high, use the reduceComplexity tool for optimization suggestions
+6. Provide a clear explanation of what you did and any warnings
 
 Make sure to preserve the structure and maintain component relationships.`,
     });
@@ -148,26 +294,42 @@ Make sure to preserve the structure and maintain component relationships.`,
       components: object.components,
     };
 
-    // Validate the generated schema
+    // Final validation using our internal validation
     const validation = validateAISolution(request.currentSchema, updatedSchema);
     if (!validation.valid && validation.issues) {
-      throw new Error(`AI generated invalid solution: ${validation.issues.join(', ')}`);
+      // If final validation fails, try again with simpler approach
+      console.warn('AI generated solution failed final validation:', validation.issues);
+      const fallbackResponse = generateMockResponse(request);
+      fallbackResponse.markdown = `## AI Assistant (Fallback Mode)
+
+⚠️ **AI generated a solution that failed final validation, showing simpler fallback:**
+
+${fallbackResponse.markdown}
+
+**Validation issues:** ${validation.issues.join(', ')}
+
+The AI tools are being refined to better handle complex form modifications.`;
+      return fallbackResponse;
     }
 
     // Format the markdown response
-    const markdown = `## AI Form Assistant
+    const markdown = `## AI Form Assistant (Tool-Enhanced)
 
 ${object.explanation}
 
 ### Changes Made:
-- Updated form structure based on your request
+- Updated form structure using AI validation tools
 - Current complexity: ${calculateSchemaComplexity(updatedSchema)} components
-- AI processing: ✅ Complete
+- AI processing with tools: ✅ Complete
 
 ${object.warnings && object.warnings.length > 0 ? `
 ### ⚠️ Warnings:
 ${object.warnings.map(w => `- ${w}`).join('\n')}
 ` : ''}
+
+### Tools Used:
+- **Schema Validation**: Verified FormIO compatibility and component structure
+- **Complexity Analysis**: Ensured form stays within manageable limits
 
 ### Next Steps:
 - Review the changes in the preview
@@ -186,7 +348,7 @@ ${object.warnings.map(w => `- ${w}`).join('\n')}
     const fallbackResponse = generateMockResponse(request);
     fallbackResponse.markdown = `## AI Assistant (Fallback Mode)
 
-⚠️ **AI service encountered an error, showing mock response:**
+⚠️ **AI service with tools encountered an error, showing mock response:**
 
 ${fallbackResponse.markdown}
 

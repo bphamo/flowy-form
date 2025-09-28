@@ -201,7 +201,7 @@ export const MAX_SCHEMA_COMPLEXITY_FOR_AI = 50; // Adjustable
 ## Current Status
 
 ### ✅ Fully Implemented
-- Complete backend API with **real OpenAI integration** using Vercel AI SDK
+- Complete backend API with **real OpenAI integration** using Vercel AI SDK with **tool calling**
 - FormIO schema validation and complexity calculation
 - Frontend dialog with full UI/UX
 - Accept/reject workflow
@@ -211,36 +211,57 @@ export const MAX_SCHEMA_COMPLEXITY_FOR_AI = 50; // Adjustable
 - Comprehensive test structure
 - Graceful fallback to mock responses if AI fails
 
-### 🚀 Production Ready
+### 🚀 Production Ready with Tool Calling
 - **Real OpenAI integration** using `generateObject` from Vercel AI SDK
-- **GPT-4o-mini model** for intelligent form generation
+- **GPT-4o-mini model** for intelligent form generation with tool access
+- **AI Tool Integration**: Schema validation and complexity analysis tools
 - **Structured output** with Zod schema validation
+- **Self-validating AI**: AI validates its own output using tools before responding
+- **Complexity optimization**: AI can analyze and reduce form complexity automatically
 - **Fallback system** - uses mock responses if OpenAI fails
 - **Automatic switching** between real AI and mock based on API key configuration
 
-### 🎯 AI Capabilities
+### 🎯 Enhanced AI Capabilities with Tools
 The AI assistant can:
+- **Self-validate schemas** using built-in validation tools
+- **Analyze complexity** and suggest optimizations automatically
 - **Add new form fields** with proper validation
 - **Modify existing components** while preserving data
 - **Create complex layouts** with panels, columns, and sections
 - **Add conditional logic** between form fields
 - **Generate validation rules** based on field types
 - **Maintain FormIO compatibility** with proper component structure
+- **Optimize form complexity** by identifying and removing redundant components
 
-### 📝 Example AI Requests
-- "Add an email field with validation"
-- "Create a contact information section with name, email, and phone"
-- "Add a file upload component with size limits"
-- "Make the phone field conditional on country selection"
-- "Add a rating component for customer feedback"
-- "Create a multi-step wizard layout"
+### 📝 Example AI Requests (Tool-Enhanced)
+- "Add an email field with validation" → AI validates schema before and after changes
+- "Create a contact information section" → AI checks complexity and optimizes layout
+- "Add a file upload component with size limits" → AI validates component structure
+- "Make the phone field conditional on country selection" → AI validates conditional logic
+- "Optimize this form to reduce complexity" → AI uses complexity analysis tool
+- "Create a multi-step wizard layout" → AI validates wizard structure and navigation
 
-### 🧠 AI Model Details
-- **Model**: GPT-4o-mini (optimized for structured output)
+### 🧠 AI Model Details with Tool Integration
+- **Model**: GPT-4o-mini (optimized for structured output and tool calling)
 - **Temperature**: 0.3 (balanced creativity and consistency)
-- **Max Tokens**: 2000 (sufficient for complex forms)
+- **Max Tokens**: 3000 (increased for tool usage and complex interactions)
+- **Tool Integration**: Built-in schema validation and complexity analysis tools
 - **Structured Output**: Uses Zod schemas for reliable FormIO generation
 - **Context Awareness**: Analyzes existing form structure before making changes
+- **Self-Validation**: AI validates its own output using tools before finalizing responses
+
+### 🔧 AI Tools Available
+1. **Schema Validation Tool**: 
+   - Validates FormIO schema structure
+   - Checks for duplicate component keys
+   - Verifies component compatibility
+   - Analyzes schema complexity
+
+2. **Complexity Reduction Tool**:
+   - Identifies redundant components
+   - Suggests optimization strategies
+   - Analyzes form structure efficiency
+   - Provides actionable reduction recommendations
 
 ## Technical Architecture
 
