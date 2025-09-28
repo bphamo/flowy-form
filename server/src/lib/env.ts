@@ -5,7 +5,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   // Server configuration
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.string().regex(/^\d+$/).transform(Number).default('3001'),
+  PORT: z.string().regex(/^\d+$/).transform(Number).default(() => 3001),
   BASE_URL: z.string().url().default('http://localhost:3001'),
   CLIENT_URL: z.string().url().default('http://localhost:3000'),
 

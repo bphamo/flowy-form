@@ -74,7 +74,7 @@ aiRoutes.post('/form-assist/:formId/:versionId',
         // Still try to return the response, but with warnings
         return c.json({
           data: {
-            markdown: aiResponse.markdown + '\n\n⚠️ **Warning**: This solution may have issues:\n' + validation.issues?.map(issue => `- ${issue}`).join('\n'),
+            markdown: aiResponse.markdown + '\n\n⚠️ **Warning**: This solution may have issues:\n' + validation.issues?.map((issue: string) => `- ${issue}`).join('\n'),
             schema: aiResponse.schema,
             warnings: validation.issues
           }
