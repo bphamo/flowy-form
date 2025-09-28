@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // AI service for form development assistance
-// Note: This is a mock implementation for development. 
+// Note: This is a mock implementation for development.
 // Replace with actual AI integration when OpenAI SDK is properly configured.
 import { z } from 'zod';
-import { FormioSchema, formioSchema, validateFormioSchema, calculateSchemaComplexity, MAX_SCHEMA_COMPLEXITY_FOR_AI } from '../lib/formio-validation';
+import { calculateSchemaComplexity, FormioSchema, formioSchema, MAX_SCHEMA_COMPLEXITY_FOR_AI, validateFormioSchema } from '../lib/formio-validation';
 
 // Request schema for AI assistance
 export const aiAssistRequestSchema = z.object({
@@ -29,7 +30,9 @@ export const isSchemaTooBigForAI = (schema: FormioSchema): boolean => {
 export const generateAIAssistance = async (request: AiAssistRequest): Promise<AiAssistResponse> => {
   // Check if current schema is too complex
   if (isSchemaTooBigForAI(request.currentSchema)) {
-    throw new Error(`Form is too complex for AI assistance (${calculateSchemaComplexity(request.currentSchema)} components). AI assistance is limited to forms with up to ${MAX_SCHEMA_COMPLEXITY_FOR_AI} components.`);
+    throw new Error(
+      `Form is too complex for AI assistance (${calculateSchemaComplexity(request.currentSchema)} components). AI assistance is limited to forms with up to ${MAX_SCHEMA_COMPLEXITY_FOR_AI} components.`,
+    );
   }
 
   // Mock AI response - in production, this would connect to OpenAI
@@ -55,7 +58,7 @@ This is a development placeholder that demonstrates the AI interface. To enable 
 - **Complexity**: ${calculateSchemaComplexity(request.currentSchema)} components
 - **AI Limit**: ${MAX_SCHEMA_COMPLEXITY_FOR_AI} components max
 - **Status**: ${isSchemaTooBigForAI(request.currentSchema) ? '❌ Too complex' : '✅ Suitable for AI'}`,
-    
+
     schema: {
       ...request.currentSchema,
       // Add a demonstration component to show the interface works
@@ -75,14 +78,14 @@ This is a development placeholder that demonstrates the AI interface. To enable 
             <small class="text-muted">Request: "${request.message}"</small>
           </div>`,
           input: false,
-          label: 'AI Generated Content (Demo)'
-        }
-      ]
-    }
+          label: 'AI Generated Content (Demo)',
+        },
+      ],
+    },
   };
 
   // Simulate AI processing delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return mockResponse;
 };
@@ -90,44 +93,44 @@ This is a development placeholder that demonstrates the AI interface. To enable 
 // Validate that an AI-generated solution is viable
 export const validateAISolution = (originalSchema: FormioSchema, newSchema: FormioSchema): { valid: boolean; issues?: string[] } => {
   const issues: string[] = [];
-  
+
   // Check if the new schema is valid
   const validation = validateFormioSchema(newSchema);
   if (!validation.valid) {
     issues.push(...(validation.errors || ['Schema validation failed']));
   }
-  
+
   // Check complexity
   const complexity = calculateSchemaComplexity(newSchema);
   if (complexity > MAX_SCHEMA_COMPLEXITY_FOR_AI * 2) {
     issues.push(`Solution is too complex (${complexity} components)`);
   }
-  
+
   // Check for breaking changes (e.g., removing existing fields without clear intent)
   const originalKeys = extractAllComponentKeys(originalSchema);
   const newKeys = extractAllComponentKeys(newSchema);
-  
-  const removedKeys = originalKeys.filter(key => !newKeys.includes(key));
+
+  const removedKeys = originalKeys.filter((key) => !newKeys.includes(key));
   if (removedKeys.length > 0) {
     issues.push(`Solution removes existing form fields: ${removedKeys.join(', ')}. This may cause data loss.`);
   }
-  
+
   // Check for duplicate keys
   const duplicateKeys = findDuplicateKeys(newSchema);
   if (duplicateKeys.length > 0) {
     issues.push(`Solution contains duplicate component keys: ${duplicateKeys.join(', ')}`);
   }
-  
+
   return {
     valid: issues.length === 0,
-    issues: issues.length > 0 ? issues : undefined
+    issues: issues.length > 0 ? issues : undefined,
   };
 };
 
 // Helper function to extract all component keys from a schema
 const extractAllComponentKeys = (schema: FormioSchema): string[] => {
   const keys: string[] = [];
-  
+
   const extractFromComponents = (components: any[]) => {
     for (const component of components) {
       if (component.key) {
@@ -154,7 +157,7 @@ const extractAllComponentKeys = (schema: FormioSchema): string[] => {
       }
     }
   };
-  
+
   extractFromComponents(schema.components || []);
   return keys;
 };
@@ -164,7 +167,7 @@ const findDuplicateKeys = (schema: FormioSchema): string[] => {
   const keys = extractAllComponentKeys(schema);
   const duplicates: string[] = [];
   const seen = new Set<string>();
-  
+
   for (const key of keys) {
     if (seen.has(key)) {
       duplicates.push(key);
@@ -172,6 +175,6 @@ const findDuplicateKeys = (schema: FormioSchema): string[] => {
       seen.add(key);
     }
   }
-  
+
   return duplicates;
 };
