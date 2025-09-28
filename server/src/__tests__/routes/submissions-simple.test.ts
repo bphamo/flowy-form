@@ -334,19 +334,6 @@ describe('Submissions Routes', () => {
   describe('Advanced Edge Cases and Security', () => {
     describe('Large Submission Data Handling', () => {
       it('should handle extremely large submission payloads', async () => {
-        const largeSubmissionData = {
-          formId: 1,
-          versionSha: 'abc123',
-          data: {
-            description: 'A'.repeat(100000), // 100KB of text
-            files: Array.from({ length: 100 }, (_, i) => ({
-              name: `file_${i}.txt`,
-              size: 1024 * 1024, // 1MB files
-              data: 'B'.repeat(1000),
-            })),
-          },
-        };
-
         const validatePayloadSize = (data: any) => {
           const maxSize = 10 * 1024 * 1024; // 10MB limit
           const serialized = JSON.stringify(data);
@@ -903,11 +890,6 @@ describe('Submissions Routes', () => {
     });
 
     it('should handle concurrent status updates', async () => {
-      const baseSubmission = {
-        ...mockSubmissionWithForm.submission,
-        updatedAt: new Date('2024-01-01'),
-      };
-
       // Simulate optimistic locking check
       const checkOptimisticLock = (submissionId: number, expectedTimestamp: Date) => {
         const currentTimestamp = new Date('2024-01-02'); // Newer timestamp indicates concurrent update
