@@ -2,6 +2,7 @@ import { createFileRoute, Link, useLoaderData, useRouter } from '@tanstack/react
 import { toast } from 'sonner';
 
 import { PageHeader } from '@/components/common/page-header';
+import type { SubmissionStatus } from '@/components/common/submission-status-badge';
 import { SubmissionStatusBadge } from '@/components/common/submission-status-badge';
 import { SubmissionStatusDropdown } from '@/components/common/submission-status-dropdown';
 import AppLayout from '@/layouts/app-layout';
@@ -9,7 +10,6 @@ import { api } from '@/lib/api';
 import { requireAuth } from '@/lib/auth-utils';
 import { type BreadcrumbItem } from '@/types';
 import type { SubmissionDetail } from '@/types/api';
-import type { SubmissionStatus } from '@/components/common/submission-status-badge';
 import { ArrowLeft, Calendar, FileText, User, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Alert, Badge, Button, Card, Col, Container, Row } from 'react-bootstrap';
@@ -40,18 +40,18 @@ function SubmissionDetail() {
     submission: SubmissionDetail;
   };
   const router = useRouter();
-  
+
   const [submission, setSubmission] = useState<SubmissionDetail>(initialSubmission);
 
   const handleStatusChange = async (newStatus: SubmissionStatus) => {
     try {
       const response = await api.submissions.updateStatus(submission.id, { status: newStatus });
-      
-      setSubmission(prev => ({
+
+      setSubmission((prev) => ({
         ...prev,
         status: response.data.status,
       }));
-      
+
       toast.success(`Status updated to ${newStatus.toLowerCase().replace('_', ' ')}`);
 
       // Refresh the page data to ensure consistency
@@ -151,11 +151,7 @@ function SubmissionDetail() {
                     <div>
                       <div className="fw-semibold text-dark small">Status</div>
                       {submission.isFormOwner ? (
-                        <SubmissionStatusDropdown
-                          currentStatus={submission.status}
-                          onStatusChange={handleStatusChange}
-                          size="normal"
-                        />
+                        <SubmissionStatusDropdown currentStatus={submission.status} onStatusChange={handleStatusChange} size="normal" />
                       ) : (
                         <SubmissionStatusBadge status={submission.status} size="normal" />
                       )}

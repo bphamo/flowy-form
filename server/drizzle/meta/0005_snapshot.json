@@ -94,12 +94,8 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -227,12 +223,8 @@
           "name": "form_versions_form_id_forms_id_fk",
           "tableFrom": "form_versions",
           "tableTo": "forms",
-          "columnsFrom": [
-            "form_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["form_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -240,12 +232,8 @@
           "name": "form_versions_created_by_users_id_fk",
           "tableFrom": "form_versions",
           "tableTo": "users",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -255,9 +243,7 @@
         "form_versions_version_sha_unique": {
           "name": "form_versions_version_sha_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "version_sha"
-          ]
+          "columns": ["version_sha"]
         }
       },
       "policies": {},
@@ -338,12 +324,8 @@
           "name": "forms_created_by_users_id_fk",
           "tableFrom": "forms",
           "tableTo": "users",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -351,12 +333,8 @@
           "name": "forms_updated_by_users_id_fk",
           "tableFrom": "forms",
           "tableTo": "users",
-          "columnsFrom": [
-            "updated_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["updated_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -484,12 +462,8 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -499,9 +473,7 @@
         "sessions_token_unique": {
           "name": "sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -551,12 +523,8 @@
           "name": "submission_tokens_submission_id_submissions_id_fk",
           "tableFrom": "submission_tokens",
           "tableTo": "submissions",
-          "columnsFrom": [
-            "submission_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["submission_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -566,9 +534,7 @@
         "submission_tokens_token_unique": {
           "name": "submission_tokens_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -644,12 +610,8 @@
           "name": "submissions_form_id_forms_id_fk",
           "tableFrom": "submissions",
           "tableTo": "forms",
-          "columnsFrom": [
-            "form_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["form_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -657,12 +619,8 @@
           "name": "submissions_version_sha_form_versions_version_sha_fk",
           "tableFrom": "submissions",
           "tableTo": "form_versions",
-          "columnsFrom": [
-            "version_sha"
-          ],
-          "columnsTo": [
-            "version_sha"
-          ],
+          "columnsFrom": ["version_sha"],
+          "columnsTo": ["version_sha"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -670,12 +628,8 @@
           "name": "submissions_created_by_users_id_fk",
           "tableFrom": "submissions",
           "tableTo": "users",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -683,12 +637,8 @@
           "name": "submissions_updated_by_users_id_fk",
           "tableFrom": "submissions",
           "tableTo": "users",
-          "columnsFrom": [
-            "updated_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["updated_by"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -756,9 +706,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -821,12 +769,7 @@
     "public.submission_status": {
       "name": "submission_status",
       "schema": "public",
-      "values": [
-        "SUBMITTED",
-        "REVIEWING",
-        "PENDING_UPDATES",
-        "COMPLETED"
-      ]
+      "values": ["SUBMITTED", "REVIEWING", "PENDING_UPDATES", "COMPLETED"]
     }
   },
   "schemas": {},

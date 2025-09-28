@@ -948,7 +948,7 @@ describe('Submissions Routes', () => {
     it('should determine if status is actionable by user', () => {
       const isStatusActionable = (status: string, isFormOwner: boolean) => {
         if (!isFormOwner) return false;
-        
+
         // Form owners can always update status
         return true;
       };
@@ -964,9 +964,9 @@ describe('Submissions Routes', () => {
         if (!isFormOwner) return [];
 
         const allStatuses = ['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED'];
-        
+
         // For MVP, allow changing to any status except current one
-        return allStatuses.filter(status => status !== currentStatus);
+        return allStatuses.filter((status) => status !== currentStatus);
       };
 
       expect(getAvailableStatusOptions('SUBMITTED', true)).toEqual(['REVIEWING', 'PENDING_UPDATES', 'COMPLETED']);
@@ -988,8 +988,8 @@ describe('Submissions Routes', () => {
 
       const validateSubmissionResponse = (submission: any) => {
         const requiredFields = ['id', 'formId', 'data', 'status', 'createdAt'];
-        
-        requiredFields.forEach(field => {
+
+        requiredFields.forEach((field) => {
           if (!(field in submission)) {
             throw new Error(`Missing required field: ${field}`);
           }
@@ -1003,7 +1003,7 @@ describe('Submissions Routes', () => {
       };
 
       expect(() => validateSubmissionResponse(submissionWithStatus)).not.toThrow();
-      
+
       const incompleteSubmission: any = { ...submissionWithStatus };
       delete incompleteSubmission.status;
       expect(() => validateSubmissionResponse(incompleteSubmission)).toThrow('Missing required field: status');
@@ -1017,7 +1017,7 @@ describe('Submissions Routes', () => {
       ];
 
       const validateFormSubmissionsList = (submissions: any[]) => {
-        submissions.forEach(submission => {
+        submissions.forEach((submission) => {
           if (!submission.status) {
             throw new Error('Status field missing from submission');
           }
@@ -1042,7 +1042,7 @@ describe('Submissions Routes', () => {
 
       const filterSubmissionsByStatus = (submissions: any[], status?: string) => {
         if (!status) return submissions;
-        return submissions.filter(sub => sub.status === status);
+        return submissions.filter((sub) => sub.status === status);
       };
 
       expect(filterSubmissionsByStatus(allSubmissions, 'SUBMITTED')).toHaveLength(2);

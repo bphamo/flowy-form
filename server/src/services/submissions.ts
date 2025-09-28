@@ -136,10 +136,10 @@ export const updateSubmissionStatus = async (
 ) => {
   return await db
     .update(submissions)
-    .set({ 
-      status, 
+    .set({
+      status,
       updatedBy,
-      updatedAt: new Date() 
+      updatedAt: new Date(),
     })
     .where(eq(submissions.id, submissionId))
     .returning();

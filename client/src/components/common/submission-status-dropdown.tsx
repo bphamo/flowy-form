@@ -1,7 +1,7 @@
+import { CheckCircle, Clock, FileText, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { SubmissionStatus, SubmissionStatusBadge } from './submission-status-badge';
-import { CheckCircle, Clock, FileText, RefreshCw } from 'lucide-react';
 
 interface SubmissionStatusDropdownProps {
   currentStatus: SubmissionStatus;
@@ -10,12 +10,7 @@ interface SubmissionStatusDropdownProps {
   size?: 'normal' | 'small';
 }
 
-export function SubmissionStatusDropdown({
-  currentStatus,
-  onStatusChange,
-  disabled = false,
-  size = 'normal',
-}: SubmissionStatusDropdownProps) {
+export function SubmissionStatusDropdown({ currentStatus, onStatusChange, disabled = false, size = 'normal' }: SubmissionStatusDropdownProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const statusOptions: Array<{
@@ -68,9 +63,9 @@ export function SubmissionStatusDropdown({
       <Dropdown.Toggle
         as="div"
         className="cursor-pointer"
-        style={{ 
+        style={{
           cursor: disabled ? 'not-allowed' : 'pointer',
-          opacity: disabled ? 0.6 : 1 
+          opacity: disabled ? 0.6 : 1,
         }}
         disabled={disabled || isLoading}
       >
@@ -80,8 +75,8 @@ export function SubmissionStatusDropdown({
       <Dropdown.Menu>
         <Dropdown.Header>Change Status</Dropdown.Header>
         {statusOptions
-          .filter(option => option.value !== currentStatus)
-          .map(option => (
+          .filter((option) => option.value !== currentStatus)
+          .map((option) => (
             <Dropdown.Item
               key={option.value}
               onClick={() => handleStatusChange(option.value)}

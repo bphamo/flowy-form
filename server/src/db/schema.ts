@@ -1,12 +1,7 @@
 import { boolean, index, integer, jsonb, pgEnum, pgTable, serial, text, timestamp, unique } from 'drizzle-orm/pg-core';
 
 // Submission status enum
-export const submissionStatusEnum = pgEnum('submission_status', [
-  'SUBMITTED',
-  'REVIEWING', 
-  'PENDING_UPDATES',
-  'COMPLETED'
-]);
+export const submissionStatusEnum = pgEnum('submission_status', ['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED']);
 
 // BetterAuth users table
 export const users = pgTable('users', {

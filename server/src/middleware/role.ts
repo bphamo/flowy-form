@@ -30,11 +30,11 @@ export const submissionStatusUpdateCheckMiddleware = async (c: Context, next: Ne
   try {
     const submissionId = parseInt(c.req.param('id'));
     const user = c.get('user');
-    
+
     if (!user) {
       return c.json({ error: 'Authentication required' }, 401);
     }
-    
+
     if (isNaN(submissionId)) {
       return c.json({ error: 'Invalid submission ID' }, 400);
     }
