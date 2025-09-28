@@ -3,6 +3,24 @@ import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals
 import aiRoutes from '../../routes/ai';
 import { mockAuthMiddleware, mockFormWriteCheckMiddleware } from '../helpers';
 
+// Mock the Vercel AI SDK
+jest.mock('ai', () => ({
+  generateObject: jest.fn(),
+}));
+
+jest.mock('ai/openai', () => ({
+  openai: jest.fn(),
+}));
+
+// Mock the environment validation
+jest.mock('../../lib/env', () => ({
+  env: {
+    OPENAI_API_KEY: 'test-key',
+    OPENAI_BASE_URL: 'https://api.openai.com/v1',
+  },
+  isAiEnabled: jest.fn(),
+}));
+
 // Mock the AI service
 jest.mock('../../services/ai', () => ({
   generateAIAssistance: jest.fn(),
@@ -84,8 +102,9 @@ describe('AI Routes', () => {
     };
 
     it('should return error when OpenAI API key is not configured', async () => {
-      // Remove API key
-      delete process.env.OPENAI_API_KEY;
+      // Mock AI as disabled
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(false);
 
       const res = await app.request('/form-assist/1/version1', {
         method: 'POST',
@@ -104,7 +123,8 @@ describe('AI Routes', () => {
     });
 
     it('should return error for non-existent version', async () => {
-      process.env.OPENAI_API_KEY = 'test-key';
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(true);
       
       const { getVersionBySha } = require('../../services/versions');
       getVersionBySha.mockResolvedValue([]);
@@ -126,7 +146,8 @@ describe('AI Routes', () => {
     });
 
     it('should return error for complex schemas', async () => {
-      process.env.OPENAI_API_KEY = 'test-key';
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(true);
       
       const { getVersionById } = require('../../services/versions');
       const { isSchemaTooBigForAI, calculateSchemaComplexity } = require('../../services/ai');
@@ -152,7 +173,8 @@ describe('AI Routes', () => {
     });
 
     it('should successfully generate AI assistance', async () => {
-      process.env.OPENAI_API_KEY = 'test-key';
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(true);
       
       const { getVersionBySha } = require('../../services/versions');
       const { generateAIAssistance, validateAISolution, isSchemaTooBigForAI } = require('../../services/ai');
@@ -250,7 +272,8 @@ describe('AI Routes', () => {
 
   describe('GET /limits', () => {
     it('should return AI limits with API key configured', async () => {
-      process.env.OPENAI_API_KEY = 'test-key';
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(true);
 
       const res = await app.request('/limits');
       const data = await res.json() as TestResponse;
@@ -261,7 +284,8 @@ describe('AI Routes', () => {
     });
 
     it('should return AI limits without API key', async () => {
-      delete process.env.OPENAI_API_KEY;
+      const { isAiEnabled } = require('../../lib/env');
+      isAiEnabled.mockReturnValue(false);
 
       const res = await app.request('/limits');
       const data = await res.json() as TestResponse;
