@@ -14,6 +14,7 @@ describe('Submissions Routes', () => {
       getFormSubmissions: jest.fn(),
       getFormByIdForSubmission: jest.fn(),
       createSubmission: jest.fn(),
+      updateSubmissionStatus: jest.fn(),
     };
 
     mockCrypto = {
@@ -333,19 +334,6 @@ describe('Submissions Routes', () => {
   describe('Advanced Edge Cases and Security', () => {
     describe('Large Submission Data Handling', () => {
       it('should handle extremely large submission payloads', async () => {
-        const largeSubmissionData = {
-          formId: 1,
-          versionSha: 'abc123',
-          data: {
-            description: 'A'.repeat(100000), // 100KB of text
-            files: Array.from({ length: 100 }, (_, i) => ({
-              name: `file_${i}.txt`,
-              size: 1024 * 1024, // 1MB files
-              data: 'B'.repeat(1000),
-            })),
-          },
-        };
-
         const validatePayloadSize = (data: any) => {
           const maxSize = 10 * 1024 * 1024; // 10MB limit
           const serialized = JSON.stringify(data);
@@ -728,6 +716,321 @@ describe('Submissions Routes', () => {
 
         expect(() => validateFileSubmissions([oversizedFile])).toThrow('exceeds maximum size');
       });
+    });
+  });
+
+  describe('PUT /api/submissions/:id/status', () => {
+    const mockSubmissionWithForm = {
+      submission: {
+        id: 1,
+        formId: 1,
+        versionSha: 'abc123',
+        data: { name: 'John Doe' },
+        status: 'SUBMITTED',
+        createdBy: 'user1',
+        updatedBy: 'user1',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+      },
+      form: {
+        id: 1,
+        name: 'Test Form',
+        createdBy: 'owner1',
+        isPublic: true,
+      },
+      creator: {
+        id: 'user1',
+        name: 'John Doe',
+        email: 'john@example.com',
+      },
+    };
+
+    const validStatusValues = ['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED'] as const;
+
+    it('should update submission status for form owner', async () => {
+      mockSubmissionsService.getSubmissionById.mockResolvedValue([mockSubmissionWithForm]);
+      mockSubmissionsService.updateSubmissionStatus.mockResolvedValue([
+        {
+          ...mockSubmissionWithForm.submission,
+          status: 'REVIEWING',
+          updatedAt: new Date('2024-01-02'),
+        },
+      ]);
+
+      const submissionData = await mockSubmissionsService.getSubmissionById(null, 1);
+      expect(submissionData[0].form.createdBy).toBe('owner1');
+
+      const result = await mockSubmissionsService.updateSubmissionStatus(null, 1, 'REVIEWING', 'owner1');
+      expect(result[0].status).toBe('REVIEWING');
+      expect(mockSubmissionsService.updateSubmissionStatus).toHaveBeenCalledWith(null, 1, 'REVIEWING', 'owner1');
+    });
+
+    it('should validate submission ID parameter', () => {
+      const validateSubmissionId = (id: string) => {
+        const submissionId = parseInt(id);
+        if (isNaN(submissionId)) {
+          throw new Error('Invalid submission ID');
+        }
+        return submissionId;
+      };
+
+      expect(() => validateSubmissionId('invalid')).toThrow('Invalid submission ID');
+      expect(() => validateSubmissionId('123')).not.toThrow();
+      expect(validateSubmissionId('123')).toBe(123);
+    });
+
+    it('should validate status values', () => {
+      const validateStatus = (status: string) => {
+        if (!validStatusValues.includes(status as any)) {
+          throw new Error('Invalid status value');
+        }
+        return status;
+      };
+
+      validStatusValues.forEach((status) => {
+        expect(() => validateStatus(status)).not.toThrow();
+      });
+
+      expect(() => validateStatus('INVALID_STATUS')).toThrow('Invalid status value');
+      expect(() => validateStatus('')).toThrow('Invalid status value');
+      expect(() => validateStatus('submitted')).toThrow('Invalid status value'); // case sensitive
+    });
+
+    it('should require authentication', () => {
+      const checkAuthentication = (userId: string | null) => {
+        if (!userId) {
+          throw new Error('Authentication required');
+        }
+        return true;
+      };
+
+      expect(() => checkAuthentication('user1')).not.toThrow();
+      expect(() => checkAuthentication(null)).toThrow('Authentication required');
+      expect(() => checkAuthentication('')).toThrow('Authentication required');
+    });
+
+    it('should verify form ownership for status updates', () => {
+      const checkFormOwnership = (formOwnerId: string, currentUserId: string) => {
+        if (formOwnerId !== currentUserId) {
+          throw new Error('Access denied. Only form owners can update submission status.');
+        }
+        return true;
+      };
+
+      expect(() => checkFormOwnership('owner1', 'owner1')).not.toThrow();
+      expect(() => checkFormOwnership('owner1', 'user2')).toThrow('Only form owners can update submission status');
+    });
+
+    it('should handle submission not found', async () => {
+      mockSubmissionsService.getSubmissionById.mockResolvedValue([]);
+
+      const result = await mockSubmissionsService.getSubmissionById(null, 999);
+      expect(result).toEqual([]);
+    });
+
+    it('should handle status update failure', async () => {
+      mockSubmissionsService.updateSubmissionStatus.mockResolvedValue([]);
+
+      const result = await mockSubmissionsService.updateSubmissionStatus(null, 1, 'REVIEWING', 'owner1');
+      expect(result).toEqual([]);
+    });
+
+    it('should update submission timestamp when status changes', async () => {
+      const originalTimestamp = new Date('2024-01-01');
+      const updatedTimestamp = new Date('2024-01-02');
+
+      mockSubmissionsService.updateSubmissionStatus.mockResolvedValue([
+        {
+          ...mockSubmissionWithForm.submission,
+          status: 'REVIEWING',
+          updatedAt: updatedTimestamp,
+        },
+      ]);
+
+      const result = await mockSubmissionsService.updateSubmissionStatus(null, 1, 'REVIEWING', 'owner1');
+      expect(result[0].updatedAt).toEqual(updatedTimestamp);
+      expect(result[0].updatedAt).not.toEqual(originalTimestamp);
+    });
+
+    it('should track who updated the status', async () => {
+      mockSubmissionsService.updateSubmissionStatus.mockResolvedValue([
+        {
+          ...mockSubmissionWithForm.submission,
+          status: 'COMPLETED',
+          updatedBy: 'owner1',
+        },
+      ]);
+
+      const result = await mockSubmissionsService.updateSubmissionStatus(null, 1, 'COMPLETED', 'owner1');
+      expect(result[0].updatedBy).toBe('owner1');
+    });
+
+    it('should validate status transitions', () => {
+      const validateStatusTransition = (currentStatus: string, newStatus: string) => {
+        const validTransitions: Record<string, string[]> = {
+          SUBMITTED: ['REVIEWING', 'PENDING_UPDATES', 'COMPLETED'],
+          REVIEWING: ['SUBMITTED', 'PENDING_UPDATES', 'COMPLETED'],
+          PENDING_UPDATES: ['REVIEWING', 'COMPLETED'],
+          COMPLETED: ['REVIEWING'], // Allow reopening if needed
+        };
+
+        if (!validTransitions[currentStatus]?.includes(newStatus)) {
+          throw new Error(`Invalid status transition from ${currentStatus} to ${newStatus}`);
+        }
+        return true;
+      };
+
+      // Valid transitions
+      expect(() => validateStatusTransition('SUBMITTED', 'REVIEWING')).not.toThrow();
+      expect(() => validateStatusTransition('REVIEWING', 'PENDING_UPDATES')).not.toThrow();
+      expect(() => validateStatusTransition('PENDING_UPDATES', 'COMPLETED')).not.toThrow();
+      expect(() => validateStatusTransition('COMPLETED', 'REVIEWING')).not.toThrow();
+
+      // Note: For MVP, we might allow any transition, but this shows how validation could work
+    });
+
+    it('should handle concurrent status updates', async () => {
+      // Simulate optimistic locking check
+      const checkOptimisticLock = (submissionId: number, expectedTimestamp: Date) => {
+        const currentTimestamp = new Date('2024-01-02'); // Newer timestamp indicates concurrent update
+        if (expectedTimestamp < currentTimestamp) {
+          throw new Error('Submission was updated by another user. Please refresh and try again.');
+        }
+        return true;
+      };
+
+      const oldTimestamp = new Date('2024-01-01');
+      const newerTimestamp = new Date('2024-01-03');
+
+      expect(() => checkOptimisticLock(1, newerTimestamp)).not.toThrow();
+      expect(() => checkOptimisticLock(1, oldTimestamp)).toThrow('updated by another user');
+    });
+  });
+
+  describe('Status Badge and Display Logic', () => {
+    it('should map status values to display properties', () => {
+      const getStatusDisplayProps = (status: string) => {
+        const statusMap: Record<string, { color: string; label: string; icon?: string }> = {
+          SUBMITTED: { color: 'primary', label: 'Submitted' },
+          REVIEWING: { color: 'warning', label: 'Under Review' },
+          PENDING_UPDATES: { color: 'info', label: 'Pending Updates' },
+          COMPLETED: { color: 'success', label: 'Completed' },
+        };
+
+        return statusMap[status] || { color: 'secondary', label: 'Unknown' };
+      };
+
+      expect(getStatusDisplayProps('SUBMITTED')).toEqual({ color: 'primary', label: 'Submitted' });
+      expect(getStatusDisplayProps('REVIEWING')).toEqual({ color: 'warning', label: 'Under Review' });
+      expect(getStatusDisplayProps('PENDING_UPDATES')).toEqual({ color: 'info', label: 'Pending Updates' });
+      expect(getStatusDisplayProps('COMPLETED')).toEqual({ color: 'success', label: 'Completed' });
+      expect(getStatusDisplayProps('INVALID')).toEqual({ color: 'secondary', label: 'Unknown' });
+    });
+
+    it('should determine if status is actionable by user', () => {
+      const isStatusActionable = (status: string, isFormOwner: boolean) => {
+        if (!isFormOwner) return false;
+
+        // Form owners can always update status
+        return true;
+      };
+
+      expect(isStatusActionable('SUBMITTED', true)).toBe(true);
+      expect(isStatusActionable('REVIEWING', true)).toBe(true);
+      expect(isStatusActionable('SUBMITTED', false)).toBe(false);
+      expect(isStatusActionable('REVIEWING', false)).toBe(false);
+    });
+
+    it('should filter available status options based on current status', () => {
+      const getAvailableStatusOptions = (currentStatus: string, isFormOwner: boolean) => {
+        if (!isFormOwner) return [];
+
+        const allStatuses = ['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED'];
+
+        // For MVP, allow changing to any status except current one
+        return allStatuses.filter((status) => status !== currentStatus);
+      };
+
+      expect(getAvailableStatusOptions('SUBMITTED', true)).toEqual(['REVIEWING', 'PENDING_UPDATES', 'COMPLETED']);
+      expect(getAvailableStatusOptions('REVIEWING', true)).toEqual(['SUBMITTED', 'PENDING_UPDATES', 'COMPLETED']);
+      expect(getAvailableStatusOptions('SUBMITTED', false)).toEqual([]);
+    });
+  });
+
+  describe('Status Integration with Existing Endpoints', () => {
+    it('should include status field in submission retrieval', () => {
+      const submissionWithStatus = {
+        id: 1,
+        formId: 1,
+        data: { name: 'John Doe' },
+        status: 'REVIEWING',
+        createdAt: new Date(),
+        isFormOwner: true,
+      };
+
+      const validateSubmissionResponse = (submission: any) => {
+        const requiredFields = ['id', 'formId', 'data', 'status', 'createdAt'];
+
+        requiredFields.forEach((field) => {
+          if (!(field in submission)) {
+            throw new Error(`Missing required field: ${field}`);
+          }
+        });
+
+        if (!(['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED'] as const).includes(submission.status)) {
+          throw new Error(`Invalid status value: ${submission.status}`);
+        }
+
+        return true;
+      };
+
+      expect(() => validateSubmissionResponse(submissionWithStatus)).not.toThrow();
+
+      const incompleteSubmission: any = { ...submissionWithStatus };
+      delete incompleteSubmission.status;
+      expect(() => validateSubmissionResponse(incompleteSubmission)).toThrow('Missing required field: status');
+    });
+
+    it('should include status in form submissions list', () => {
+      const formSubmissions = [
+        { id: 1, status: 'SUBMITTED', data: { name: 'User 1' } },
+        { id: 2, status: 'REVIEWING', data: { name: 'User 2' } },
+        { id: 3, status: 'COMPLETED', data: { name: 'User 3' } },
+      ];
+
+      const validateFormSubmissionsList = (submissions: any[]) => {
+        submissions.forEach((submission) => {
+          if (!submission.status) {
+            throw new Error('Status field missing from submission');
+          }
+          if (!(['SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED'] as const).includes(submission.status)) {
+            throw new Error(`Invalid status: ${submission.status}`);
+          }
+        });
+        return true;
+      };
+
+      expect(() => validateFormSubmissionsList(formSubmissions)).not.toThrow();
+    });
+
+    it('should support filtering submissions by status', () => {
+      const allSubmissions = [
+        { id: 1, status: 'SUBMITTED' },
+        { id: 2, status: 'REVIEWING' },
+        { id: 3, status: 'PENDING_UPDATES' },
+        { id: 4, status: 'COMPLETED' },
+        { id: 5, status: 'SUBMITTED' },
+      ];
+
+      const filterSubmissionsByStatus = (submissions: any[], status?: string) => {
+        if (!status) return submissions;
+        return submissions.filter((sub) => sub.status === status);
+      };
+
+      expect(filterSubmissionsByStatus(allSubmissions, 'SUBMITTED')).toHaveLength(2);
+      expect(filterSubmissionsByStatus(allSubmissions, 'REVIEWING')).toHaveLength(1);
+      expect(filterSubmissionsByStatus(allSubmissions, 'COMPLETED')).toHaveLength(1);
+      expect(filterSubmissionsByStatus(allSubmissions)).toHaveLength(5);
     });
   });
 });

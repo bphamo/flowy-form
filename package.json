@@ -3,26 +3,33 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "packages": [
+    "client",
+    "server"
+  ],
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "dev": "concurrently \"bun run dev:server\" \"bun run dev:client\"",
-    "dev:server": "cd server && bun run dev",
-    "dev:client": "cd client && bun run dev",
+    "dev:server": "bun run --filter 'api' dev",
+    "dev:client": "bun run --filter 'web' dev",
+    "db:migrate": "bun run --filter 'api' db:migrate",
     "build": "bun run build:server && bun run build:client",
     "build:server": "cd server && bun run build",
     "build:client": "cd client && bun run build",
     "start": "bun run start:server",
     "start:server": "cd server && bun run start",
-    "install:all": "bun install && cd client && bun install && cd ../server && bun install",
     "format": "bunx prettier --write .",
     "format:check": "bunx prettier --check .",
-    "lint": "bunx prettier --check .",
     "types": "cd client && bun run types",
-    "db:generate": "cd server && bun run db:generate",
-    "db:migrate": "cd server && bun run db:migrate",
-    "db:studio": "cd server && bun run db:studio"
+    "prepare": "husky"
   },
   "devDependencies": {
-    "concurrently": "^9.0.1"
+    "concurrently": "^9.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3"
   },
   "dependencies": {
     "prettier": "^3.6.2",

@@ -2,8 +2,8 @@ import { serve } from '@hono/node-server';
 import dotenv from 'dotenv';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
 
+import { logger } from 'hono/logger';
 import { auth } from './lib/auth';
 import formRoutes from './routes/forms';
 import settingsRoutes from './routes/settings';
@@ -15,8 +15,14 @@ dotenv.config();
 
 const app = new Hono();
 
-// Middleware
-app.use('*', logger());
+// Middleware - Custom logger (uncomment if you want HTTP request logging)
+app.use(
+  '*',
+  logger((message) => {
+    console.log(message);
+  }),
+);
+
 app.use(
   '*',
   cors({
@@ -40,11 +46,14 @@ app.route('/api/submissions', submissionRoutes);
 app.route('/api/settings', settingsRoutes);
 app.route('/api', versionRoutes);
 
+// Catch all for API routes that does not exist
+app.all('/api/*', (c) => {
+  return c.json({ error: 'API route not found' }, 404);
+});
+
+// Start server
 const port = parseInt(process.env.PORT || '3001');
 
-console.log(`Server is running on port ${port}`);
-
-serve({
-  fetch: app.fetch,
-  port,
-});
+// Start server (migrations should be run separately with `bun run db:migrate`)
+console.info(`Server is running on port ${port}`);
+serve({ fetch: app.fetch, port });

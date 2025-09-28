@@ -1,0 +1,2 @@
+CREATE TYPE "public"."submission_status" AS ENUM('SUBMITTED', 'REVIEWING', 'PENDING_UPDATES', 'COMPLETED');--> statement-breakpoint
+ALTER TABLE "submissions" ADD COLUMN "status" "submission_status" DEFAULT 'SUBMITTED' NOT NULL;
