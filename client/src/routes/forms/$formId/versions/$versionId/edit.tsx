@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { LoadingSpinner } from '@/components/common/loading-spinner';
 import { PageHeader } from '@/components/common/page-header';
+import { AiAssistantDialog } from '@/components/ai/ai-assistant-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { api } from '@/lib/api';
 import { requireAuth } from '@/lib/auth-utils';
@@ -13,7 +14,7 @@ import { type BreadcrumbItem } from '@/types';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { FormBuilder, type FormType } from '@formio/react';
-import { ArrowLeft, Code, Save } from 'lucide-react';
+import { ArrowLeft, Code, Save, Wand2 } from 'lucide-react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 
 // Move INITIAL_SCHEMA to constants file to avoid re-importing
@@ -65,6 +66,10 @@ function EditFormVersion() {
   const formBuilderRef = useRef<FormioFormBuilder>(null);
   const [processing, setProcessing] = useState(false);
   const [description, setDescription] = useState(version.description || '');
+
+  // AI Assistant state
+  const [isAiDialogOpen, setIsAiDialogOpen] = useState(false);
+  const [currentSchema, setCurrentSchema] = useState<FormType>(initialBuilderSchema.current);
 
   // Track component lifecycle
   useEffect(() => {
@@ -167,7 +172,41 @@ function EditFormVersion() {
 
     setHasUnsavedChanges(true);
     autoSaveDebounce.execute();
+    
+    // Update current schema for AI assistant
+    if (formBuilderRef.current) {
+      setCurrentSchema(formBuilderRef.current.instance.schema);
+    }
   }, [autoSaveDebounce]);
+
+  // AI Assistant handlers
+  const handleOpenAiAssistant = useCallback(() => {
+    if (formBuilderRef.current) {
+      setCurrentSchema(formBuilderRef.current.instance.schema);
+    }
+    setIsAiDialogOpen(true);
+  }, []);
+
+  const handleCloseAiAssistant = useCallback(() => {
+    setIsAiDialogOpen(false);
+  }, []);
+
+  const handleAcceptAiSuggestion = useCallback((newSchema: FormType) => {
+    if (formBuilderRef.current) {
+      // Update the form builder with the new schema
+      formBuilderRef.current.instance.form = newSchema;
+      formBuilderRef.current.instance.rebuild();
+      
+      // Mark as having unsaved changes and trigger auto-save
+      setHasUnsavedChanges(true);
+      setCurrentSchema(newSchema);
+      autoSaveDebounce.execute();
+    }
+  }, [autoSaveDebounce]);
+
+  const handleRejectAiSuggestion = useCallback(() => {
+    // Nothing to do - just close the dialog
+  }, []);
 
   const handleUpdateVersionDetails = async () => {
     if (!form || !version) return;
@@ -345,6 +384,16 @@ function EditFormVersion() {
                   <p className="text-muted small mb-0">Drag and drop components to build your form</p>
                 </div>
                 <div className="d-flex align-items-center gap-2">
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    onClick={handleOpenAiAssistant}
+                    className="d-flex align-items-center"
+                    disabled={processing}
+                  >
+                    <Wand2 size={14} className="me-1" />
+                    AI Assistant
+                  </Button>
                   {hasUnsavedChanges && (autoSaveDebounce.isPending() || isManualSaving) && (
                     <span className="d-flex align-items-center badge bg-warning text-dark">
                       <Spinner className="me-1" animation="border" role="status" size="sm" />
@@ -383,6 +432,17 @@ function EditFormVersion() {
           </Card>
         </Container>
       </div>
+
+      {/* AI Assistant Dialog */}
+      <AiAssistantDialog
+        isOpen={isAiDialogOpen}
+        onClose={handleCloseAiAssistant}
+        currentSchema={currentSchema}
+        formId={form.id}
+        versionId={version.versionSha}
+        onAccept={handleAcceptAiSuggestion}
+        onReject={handleRejectAiSuggestion}
+      />
     </AppLayout>
   );
 }

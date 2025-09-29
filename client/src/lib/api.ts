@@ -29,6 +29,32 @@ import type {
   UpdateVersionRequest,
   UpdateVersionResponse,
 } from '../types/api';
+import type { FormType } from '@formio/react';
+
+// AI-related types
+export interface AiAssistRequest {
+  message: string;
+  currentSchema: FormType;
+}
+
+export interface AiAssistResponse {
+  markdown: string;
+  schema: FormType;
+  previewId: string;
+  warnings?: string[];
+}
+
+export interface AiLimits {
+  maxComplexity: number;
+  aiEnabled: boolean;
+}
+
+export interface SchemaValidation {
+  valid: boolean;
+  errors?: string[];
+  complexity: number;
+  exceedsAILimit: boolean;
+}
 
 class ApiClient {
   private baseURL: string;
@@ -148,6 +174,24 @@ class ApiClient {
       this.request<DeleteAccountResponse>('/settings/profile', {
         method: 'DELETE',
       }),
+  };
+
+  // AI methods
+  ai = {
+    requestAssistance: (formId: number, versionId: string, request: AiAssistRequest) =>
+      this.request<{ data: AiAssistResponse }>(`/ai/form-assist/${formId}/${versionId}`, {
+        method: 'POST',
+        body: JSON.stringify(request),
+      }).then(data => data.data),
+
+    validateSchema: (schema: FormType) =>
+      this.request<{ data: SchemaValidation }>('/ai/validate-schema', {
+        method: 'POST',
+        body: JSON.stringify({ schema }),
+      }).then(data => data.data),
+
+    getLimits: () =>
+      this.request<{ data: AiLimits }>('/ai/limits').then(data => data.data),
   };
 }
 
