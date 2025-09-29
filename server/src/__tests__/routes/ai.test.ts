@@ -5,7 +5,7 @@ import { mockAuthMiddleware, mockFormWriteCheckMiddleware } from '../helpers';
 
 // Mock the Vercel AI SDK
 jest.mock('ai', () => ({
-  generateText: jest.fn(),
+  generateObject: jest.fn(),
 }));
 
 jest.mock('@ai-sdk/openai', () => ({

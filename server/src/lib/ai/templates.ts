@@ -23,17 +23,7 @@ WORKFLOW:
 4. Use validateSchema tool again to verify your solution
 5. If validation fails or complexity is too high, use reduceComplexity tool for suggestions
 6. Refine your solution based on tool feedback
-7. Provide your final response in JSON format
-
-RESPONSE FORMAT:
-Always respond with a JSON code block containing:
-\`\`\`json
-{
-  "components": [...], 
-  "explanation": "Clear explanation of changes made",
-  "warnings": ["Any warnings or limitations to mention"]
-}
-\`\`\`
+7. Provide your structured response with explanation, components, and warnings
 
 FormIO Component Types Available:
 - textfield, email, password, phoneNumber, textarea
@@ -58,21 +48,21 @@ Please follow this workflow:
 3. Generate the updated components array (preserve existing components unless removal is requested)
 4. Use the validateSchema tool again to verify your generated schema
 5. If complexity is too high, use the reduceComplexity tool for optimization suggestions
-6. Provide your final response in the required JSON format
+6. Provide your structured response with clear explanation and any warnings
 
-Make sure to preserve the structure and maintain component relationships. Your response must be a JSON code block with components, explanation, and warnings.`;
+Make sure to preserve the structure and maintain component relationships. Your response will be automatically structured with components, explanation, and warnings fields.`;
 
 // Markdown response template
 export const formatMarkdownResponse = (
   explanation: string,
   complexity: number,
   warnings?: string[]
-) => `## AI Form Assistant (Tool-Enhanced)
+) => `## AI Form Assistant (Structured Output)
 
 ${explanation}
 
 ### Changes Made:
-- Updated form structure using AI validation tools
+- Updated form structure using AI with structured output
 - Current complexity: ${complexity} components
 - AI processing with tools: ✅ Complete
 
@@ -81,9 +71,10 @@ ${warnings && warnings.length > 0 ? `
 ${warnings.map(w => `- ${w}`).join('\n')}
 ` : ''}
 
-### Tools Used:
-- **Schema Validation**: Verified FormIO compatibility and component structure
-- **Complexity Analysis**: Ensured form stays within manageable limits
+### Processing Method:
+- **Structured Output**: Using generateObject for reliable schema generation
+- **Tool Integration**: Schema validation and complexity analysis
+- **Type Safety**: Full FormType compatibility with Zod validation
 
 ### Next Steps:
 - Review the changes in the preview
