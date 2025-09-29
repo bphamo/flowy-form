@@ -1,12 +1,24 @@
-// AI service for form development assistance using Vercel AI SDK and OpenAI with structured output
-import { createOpenAI } from '@ai-sdk/openai';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// AI service for form development assistance using Vercel AI SDK and OpenAI with tool calling
 import type { FormType } from '@formio/react';
-import { generateObject } from 'ai';
-import { aiAssistRequestSchema, aiAssistResponseSchema, formioSchemaResponseSchema } from '../lib/ai/schemas';
-import { FORMIO_EXPERT_SYSTEM_PROMPT, createUserPrompt, formatMarkdownResponse } from '../lib/ai/templates';
-import { isSchemaTooBigForAI, validateAISolution } from '../lib/ai/utils';
+import { generateText } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { env, isAiEnabled } from '../lib/env';
 import { calculateSchemaComplexity } from '../lib/formio-validation';
+import {
+  aiAssistRequestSchema,
+  aiAssistResponseSchema,
+} from '../lib/ai/schemas';
+import {
+  FORMIO_EXPERT_SYSTEM_PROMPT,
+  createUserPrompt,
+  formatMarkdownResponse,
+} from '../lib/ai/templates';
+import {
+  isSchemaTooBigForAI,
+  validateAISolution,
+} from '../lib/ai/utils';
+import { aiTools } from '../lib/ai/tools';
 
 export type AiAssistRequest = {
   message: string;
@@ -19,7 +31,7 @@ export type AiAssistResponse = {
 };
 
 // Export schemas for use in routes
-export { aiAssistRequestSchema, aiAssistResponseSchema, formioSchemaResponseSchema };
+export { aiAssistRequestSchema, aiAssistResponseSchema };
 
 // OpenAI client configuration
 const getOpenAIClient = () => {
@@ -33,11 +45,13 @@ const getOpenAIClient = () => {
   });
 };
 
-// Generate AI assistance response using OpenAI with structured output and tools
+// Generate AI assistance response using OpenAI with tool calling
 export const generateAIAssistance = async (request: AiAssistRequest): Promise<AiAssistResponse> => {
   // Check if current schema is too complex
   if (isSchemaTooBigForAI(request.currentSchema)) {
-    throw new Error(`Form is too complex for AI assistance. AI assistance is limited to forms with up to 50 components.`);
+    throw new Error(
+      `Form is too complex for AI assistance. AI assistance is limited to forms with up to 50 components.`,
+    );
   }
 
   // Ensure AI is enabled
@@ -47,62 +61,95 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
 
   try {
     const client = getOpenAIClient();
-
+    
     // Prepare context about the current form
     const currentComplexity = calculateSchemaComplexity(request.currentSchema);
     const currentComponents = request.currentSchema.components || [];
-
-    // Generate the AI response using Vercel AI SDK with structured output
-    const { object, usage } = await generateObject({
+    
+    // Generate the AI response using Vercel AI SDK with tool calling
+    const { text, toolResults } = await generateText({
       model: client('gpt-4o-mini'),
       temperature: 0.3,
-      schema: formioSchemaResponseSchema,
+      maxTokens: 3000,
       system: FORMIO_EXPERT_SYSTEM_PROMPT(currentComplexity),
       prompt: createUserPrompt(request.message, currentComponents),
+      tools: aiTools,
     });
 
-    // Create the updated schema from the AI response
-    const updatedSchema: FormType = {
-      ...request.currentSchema,
-      components: (object.components || request.currentSchema.components) as FormType['components'],
-    };
+    // Parse the AI response to extract the schema
+    let updatedSchema: FormType;
+    let explanation = text;
+    let warnings: string[] = [];
+
+    try {
+      // The AI should provide a JSON response with the updated schema
+      // Look for JSON in the response
+      const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+      if (jsonMatch) {
+        const jsonResponse = JSON.parse(jsonMatch[1]);
+        updatedSchema = {
+          ...request.currentSchema,
+          components: jsonResponse.components || request.currentSchema.components,
+        };
+        explanation = jsonResponse.explanation || text;
+        warnings = jsonResponse.warnings || [];
+      } else {
+        // Fallback: use original schema if no valid JSON found
+        console.warn('AI did not provide valid JSON response, using original schema');
+        updatedSchema = request.currentSchema;
+        warnings.push('AI response did not contain valid schema updates');
+      }
+    } catch (parseError) {
+      console.warn('Failed to parse AI JSON response:', parseError);
+      updatedSchema = request.currentSchema;
+      warnings.push('AI response parsing failed, no changes applied');
+    }
+
+    // Collect tool usage information
+    const toolUsage: string[] = [];
+    if (toolResults) {
+      for (const result of toolResults) {
+        if (result.toolName === 'validateSchema') {
+          toolUsage.push(`Schema validation: ${(result.result as any)?.summary || 'completed'}`);
+        } else if (result.toolName === 'reduceComplexity') {
+          toolUsage.push(`Complexity analysis: ${(result.result as any)?.summary || 'completed'}`);
+        }
+      }
+    }
 
     // Final validation using our internal validation
     const validation = validateAISolution(request.currentSchema, updatedSchema);
-    const validationWarnings: string[] = [];
-
     if (!validation.valid && validation.issues) {
+      // If final validation fails, add to warnings but don't fail completely
       console.warn('AI generated solution failed final validation:', validation.issues);
-      validationWarnings.push(`Validation issues: ${validation.issues.join(', ')}`);
+      warnings.push(`Validation issues: ${validation.issues.join(', ')}`);
     }
 
-    // Combine warnings from AI response and validation
-    const allWarnings = [...(object.warnings || []), ...validationWarnings];
-
-    // Format the markdown response
+    // Format the markdown response with tool usage information
     const markdown = formatMarkdownResponse(
-      object.explanation,
+      explanation,
       calculateSchemaComplexity(updatedSchema),
-      allWarnings.length > 0 ? allWarnings : undefined,
+      warnings
     );
 
-    // Add tool usage information if available
-    const enhancedMarkdown = usage
-      ? `${markdown}\n\n### API Usage:\n- Tokens used: ${usage.totalTokens}\n- Model: GPT-4o-mini with structured output`
+    // Add tool usage information to response
+    const enhancedMarkdown = toolUsage.length > 0 
+      ? `${markdown}\n\n### Tool Usage:\n${toolUsage.map(usage => `- ${usage}`).join('\n')}`
       : markdown;
 
     return {
       markdown: enhancedMarkdown,
       schema: updatedSchema,
     };
+
   } catch (error) {
     console.error('AI generation error:', error);
-
+    
     // Re-throw the error for proper handling at the API level
     if (error instanceof Error) {
       throw error;
     }
-
+    
     throw new Error('AI service encountered an unexpected error');
   }
 };
