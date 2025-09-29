@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // AI service for form development assistance using Vercel AI SDK and OpenAI with structured output
 import { createOpenAI } from '@ai-sdk/openai';
 import type { FormType } from '@formio/react';
 import { generateObject } from 'ai';
 import { aiAssistRequestSchema, aiAssistResponseSchema, formioSchemaResponseSchema } from '../lib/ai/schemas';
 import { FORMIO_EXPERT_SYSTEM_PROMPT, createUserPrompt, formatMarkdownResponse } from '../lib/ai/templates';
-import { aiTools } from '../lib/ai/tools';
 import { isSchemaTooBigForAI, validateAISolution } from '../lib/ai/utils';
 import { env, isAiEnabled } from '../lib/env';
 import { calculateSchemaComplexity } from '../lib/formio-validation';
@@ -54,27 +52,25 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
     const currentComplexity = calculateSchemaComplexity(request.currentSchema);
     const currentComponents = request.currentSchema.components || [];
 
-    // Generate the AI response using Vercel AI SDK with structured output and tools
-    const { object, usage, warnings } = await generateObject({
+    // Generate the AI response using Vercel AI SDK with structured output
+    const { object, usage } = await generateObject({
       model: client('gpt-4o-mini'),
       temperature: 0.3,
-      maxTokens: 3000,
       schema: formioSchemaResponseSchema,
       system: FORMIO_EXPERT_SYSTEM_PROMPT(currentComplexity),
       prompt: createUserPrompt(request.message, currentComponents),
-      tools: aiTools,
     });
 
     // Create the updated schema from the AI response
     const updatedSchema: FormType = {
       ...request.currentSchema,
-      components: object.components || request.currentSchema.components,
+      components: (object.components || request.currentSchema.components) as FormType['components'],
     };
 
     // Final validation using our internal validation
     const validation = validateAISolution(request.currentSchema, updatedSchema);
     const validationWarnings: string[] = [];
-    
+
     if (!validation.valid && validation.issues) {
       console.warn('AI generated solution failed final validation:', validation.issues);
       validationWarnings.push(`Validation issues: ${validation.issues.join(', ')}`);
@@ -85,15 +81,15 @@ export const generateAIAssistance = async (request: AiAssistRequest): Promise<Ai
 
     // Format the markdown response
     const markdown = formatMarkdownResponse(
-      object.explanation, 
-      calculateSchemaComplexity(updatedSchema), 
-      allWarnings.length > 0 ? allWarnings : undefined
+      object.explanation,
+      calculateSchemaComplexity(updatedSchema),
+      allWarnings.length > 0 ? allWarnings : undefined,
     );
 
     // Add tool usage information if available
-    const enhancedMarkdown = usage ? 
-      `${markdown}\n\n### API Usage:\n- Tokens used: ${usage.totalTokens}\n- Model: GPT-4o-mini with structured output` : 
-      markdown;
+    const enhancedMarkdown = usage
+      ? `${markdown}\n\n### API Usage:\n- Tokens used: ${usage.totalTokens}\n- Model: GPT-4o-mini with structured output`
+      : markdown;
 
     return {
       markdown: enhancedMarkdown,
